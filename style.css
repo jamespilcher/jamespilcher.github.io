@@ -1,0 +1,228 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: blue;
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 12px 14px;
+    text-decoration: none;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+li a:hover:not(.active){
+    background-color: #45a049;
+}
+
+a.active {
+    background-color: lightblue;
+    color : black;
+
+}
+
+div.main {
+    background-image: url("tetris.png");
+    width: 100%;
+    height:1000px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-attachment: fixed;
+    background-size: 95% 95%;
+    background-color: white;
+}
+
+div.greydiv{
+    width: 35%;
+    margin: auto;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #c7c7c7;
+    padding: 100px 200px;
+    font-family: Arial;
+    font-size: 12px;
+    display: block;
+    text-align: center;
+    align-items: center;
+    box-shadow: 5px 5px grey;
+}
+
+.playbutton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 20px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-family: Arial;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+
+
+form{
+    display: inline-block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    font-size: 16px;
+}
+
+input[type=text], input[type=password], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0px;
+    display: inline-block;
+    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: Arial;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+#logout{
+    background-color: red;
+    padding: 5px 5px;
+    margin: auto;
+}
+
+.error{
+    font-size: 12px;
+    color: red;
+    font-style: italic;
+    align-self: right;
+}
+
+h2{
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.playbtn{
+    display:inline-block;
+}
+audio { display:none;}
+
+
+#gameOver{
+    font-family: 'Brush Script MT';
+    font-weight: bold;
+    font-size: 22px;
+    color : red;
+}
+#tetrisTitle{
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 26px;
+}
+
+#score{
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+table {
+    margin: 0 auto;
+    border-spacing: 2px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+
+}
+
+td {
+    background-color: pink;
+    font-size: 14px;
+    border: 1px solid;
+}
+
+th {
+    background-color: blue;
+    color : white;
+    font-size: 20px;
+    border: 1px solid black;
+    padding: 10px ;
+}
+
+#tetris-pressplay{
+    background-repeat: no-repeat;
+    line-height: 0px;
+    text-align: center;
+    position: relative;
+    margin: auto auto;
+    width : 300px;
+}
+
+#tetris-bg{
+    background-image: url("tetris-grid-bg.png");
+    background-repeat: no-repeat;
+    line-height: 0px;
+    text-align: left;
+    position: relative;
+    margin: auto auto;
+    width : 300px;
+    height : 600px;
+    background-color: rgb(255, 123, 222);
+}
+
+
+div.block {
+    width: 30px;
+    height: 30px;
+    box-shadow:0px 0px 0px 1px black inset;
+    display: inline-block;
+}
+
+#lightBlue {
+    background-color: lightblue;
+}
+#blue {
+    background-color: blue;
+}
+#orange {
+    background-color: orange;
+}
+#yellow {
+    background-color: yellow;
+}
+#green {
+    background-color: green;
+}
+#purple {
+    background-color: purple;
+}
+#red {
+    background-color: red;
+}
