@@ -291,7 +291,8 @@
                     }
                     else{
                         document.getElementById('gameOver').innerHTML = "GAME OVER";
-                        document.getElementById('load-bg').innerHTML = "<form action='/index.html' method='post'><input type='submit' class='playbtn' name='play' value = 'Play Again'></form>";
+                        document.getElementById('load-bg').innerHTML = "<button class='playbtn' onClick='window.location.reload();'>Refresh Page</button>"
+//"<form action='/index.html' method='post'><input type='submit' class='playbtn' name='play' value = 'Play Again'></form>";
                         //submitscore
                     }
                 }
