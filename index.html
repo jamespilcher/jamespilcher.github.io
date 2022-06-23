@@ -5,11 +5,6 @@
     <link rel="stylesheet" type="text/css" href="res\style.css">
 </head>
 <body>
-    <ul>
-        <li name="home" style="float:left"><a href="index.php">Home</a></li>
-        <li name="tetris" style="float:right"><a class="active" href="tetris.php">Play Tetris</a></li>
-        <li name="leaderboard" style="float:right"><a href="leaderboard.php">Leaderboard</a></li>
-    </ul>
     
     <div class="main">
         <div class="greydiv">
@@ -20,7 +15,7 @@
             </div>
 
             <div id="tetris-pressplay">
-                <form action="/tetris.php" method="post">
+                <form action="/index.html" method="post">
                         <input type="submit" class="playbtn" name="play" value = "Play">
                 </form>
             </div>
@@ -296,7 +291,7 @@
                     }
                     else{
                         document.getElementById('gameOver').innerHTML = "GAME OVER";
-                        document.getElementById('load-bg').innerHTML = "<form action='/tetris.php' method='post'><input type='submit' class='playbtn' name='play' value = 'Play Again'></form>";
+                        document.getElementById('load-bg').innerHTML = "<form action='/index.html' method='post'><input type='submit' class='playbtn' name='play' value = 'Play Again'></form>";
                         //submitscore
                     }
                 }
