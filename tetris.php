@@ -1,14 +1,3 @@
-<?php
-    session_start();
-    $_SESSION["errRegMessage"] = "";
-
-    if (empty($_SESSION["user"])){ 
-        ?>
-        <meta http-equiv="Refresh" content="0; url='index.php'" />
-        <?php
-    }
-    else{
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,10 +24,6 @@
                         <input type="submit" class="playbtn" name="play" value = "Play">
                 </form>
             </div>
-            <?php
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                if (isset($_POST['play'])) {
-            ?>
             <script>
                 document.getElementById('load-bg').innerHTML = "<div id='tetris-bg'> </div>"
                 document.getElementById('tetris-pressplay').innerHTML = "<audio autoplay='true' loop src='res/ocean-man.mp3'></audio>";
@@ -313,10 +298,6 @@
                         document.getElementById('gameOver').innerHTML = "GAME OVER";
                         document.getElementById('load-bg').innerHTML = "<form action='/tetris.php' method='post'><input type='submit' class='playbtn' name='play' value = 'Play Again'></form>";
                         //submitscore
-                        const xhr = new XMLHttpRequest();
-                        xhr.open("POST", "leaderboard.php");
-                        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                        xhr.send("score="+score);
                     }
                 }
                 var I0 = [
@@ -541,11 +522,6 @@
                 gameLoop();
 
             </script>
-            <?php  
-                }
-            }
-        }
-        ?>
 
 
         </div>
