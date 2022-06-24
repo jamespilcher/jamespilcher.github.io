@@ -9,6 +9,14 @@ const origin = [gridWidth / 2,1]
 const world = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(0));
 // assume aspect ratio of tile is 2:1
 // 64 to 32
+
+
+const $ = _ => document.querySelector(_)
+
+const $c = _ => document.createElement(_)
+
+let canvas, bg, fg, cf, ntiles, tileWidth, tileHeight, map, tools, tool, activeTool, isPlacing
+
 const texture = new Image()
 texture.src = "textures/01_130x66_130x230.png"
 texture.onload = _ => init()
