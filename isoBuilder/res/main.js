@@ -1,9 +1,11 @@
 
-const gridWidth = 20
-const gridHeight = 12
-const tileheight = 32
-const tilewidth = 64
-const origin = [gridWidth / 2,1]
+const gridWidth = 16
+const gridHeight = 16
+const buildLimit = 16
+
+const tileheight = 16
+const tilewidth = 32
+const origin = [gridWidth / 2, 1]
 
 // 5 is the number of rows and 4 is the number of columns.
 const world = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(0));
@@ -11,58 +13,13 @@ const world = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(
 // 64 to 32
 
 
-const $ = _ => document.querySelector(_)
 
-const $c = _ => document.createElement(_)
+window.onload = function(){
+    var canvas = document.getElementById('plane');
+    var ctx = canvas.getContext('2d');
+    var img = new Image();   // Create new img element
+    var img = document.getElementById("kitty");
+    ctx.drawImage(img, 10, 10, 150, 180);
+    ctx.drawImage(img,0,0)
+  }
 
-let canvas, bg, fg, cf, ntiles, tileWidth, tileHeight, map, tools, tool, activeTool, isPlacing
-
-const texture = new Image()
-texture.src = "textures/01_130x66_130x230.png"
-texture.onload = _ => init()
-
-const init = () => {
-
-	tool = [0,0]
-
-	map = [
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],
-		[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]]
-	]
-
-	canvas = $("#bg")
-	canvas.width = 910
-	canvas.height = 666
-	w = 910
-	h = 462
-	texWidth = 12
-	texHeight = 6
-	bg = canvas.getContext("2d")
-	ntiles = 7
-	tileWidth = 128
-	tileHeight = 64
-	bg.translate(w/2,tileHeight*2)
-
-	loadHashState(document.location.hash.substring(1))
-
-	drawMap()
-
-	fg = $('#fg')
-	fg.width = canvas.width
-	fg.height = canvas.height
-	cf = fg.getContext('2d')
-	cf.translate(w/2,tileHeight*2)
-	fg.addEventListener('mousemove', viz)
-	fg.addEventListener('contextmenu', e => e.preventDefault())
-	fg.addEventListener('mouseup', unclick)
-	fg.addEventListener('mousedown', click)
-	fg.addEventListener('touchend', click)
-	fg.addEventListener('pointerup', click)
-
-	tools = $('#tools')
-}
