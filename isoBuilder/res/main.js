@@ -1,7 +1,6 @@
-
 const gridWidth = 18
 const gridHeight = 18
-const buildLimit = 15
+const buildLimit = 12
 
 const moveCanvasRight = 500
 const tileHeight = 48  // 42 * 1  672  this is too big. the gap above the textures!
@@ -12,18 +11,25 @@ const numOfTransparentBlocks = 2 // air and shadow..
 const world = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(0)));
 world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(2));
 
+//make a lighting array???, value = opacity... then we fill it with black cubes. maybe NOT
+// copy minecrafts lighting.
+// then we can add torches!
+// shadows for each FACE. go to each block, see what blocks are above/below, draw black shape on its 3 faces..
+// :)
+// shadows are still a bit funny...
+// draw shadows around the block every time the block is drawn!
 
 //world[LAYERNUM][Y][X]
-
+var paintMode = false;
+var paintModeLayer = 0;
 const texture = new Image()
-texture.src = "res/textures/blocks.png"
+texture.src = "res/textures/blocks2.png"
 texture.onload = _ => init()
 const canvas = document.getElementById('world');
 const ctx = canvas.getContext('2d');
-
 const init = () => {
-    world[1][0][0] = 2
-    world[1][1][0] = 2
+    world[1][0][0] = 5
+    world[1][1][0] = 5
 
     drawWorld();
 }
@@ -61,7 +67,7 @@ const drawShadowBlock = (x,y,layerNum) => {            //draw layer, treat shado
         }
 
         if (world[i][y][x] > 1){  //if there is a solid block above the air block.
-            shadowStrength = 1 - i/(buildLimit+1)
+            shadowStrength = 1 - (i-layerNum)/(i-layerNum+3) // 3 is arbritrary
             drawImageTile(x,y,layerNum, 1,shadowStrength); //draw shadow 1=shadow;
             break;
         }
@@ -76,15 +82,20 @@ function getMousePos(evt) {
       y: (evt.clientY - rect.top)
     };
   }
+canvas.addEventListener('mousemove', function(evt) {
 
+    return false;
+  }, false);
 //left click
 canvas.addEventListener('click', function(evt) {
     var mousePos = getMousePos(evt);
     gridPos = to_grid_coordinate(mousePos.x, mousePos.y)
     block = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
-    where = projectDownward(block, gridPos)
+    console.log("click")
+    where = posOfNextBlock(block, gridPos)
     //console.log('Mouse position: ' + grid.x_grid + ',' + grid.y_grid);
     placeBlock(where.x, where.y, where.layer)
+
     return false;
   }, false);
 
@@ -124,7 +135,7 @@ function to_grid_coordinate(x,y) {
     }
   }
 
-const projectDownward = (block, gridPos) => {
+const posOfNextBlock = (block, gridPos) => {
     x_new = block.x
     y_new = block.y
     layer_new = block.layer
@@ -134,8 +145,6 @@ const projectDownward = (block, gridPos) => {
     left = gridPos.left 
     x_ideal = block.x - block.layer
     y_ideal = block.y - block.layer
-    console.log(x,y)
-    console.log(x_ideal, y_ideal)
 
     if (x == x_ideal && y == y_ideal){
         layer_new += 1
@@ -182,7 +191,7 @@ const selectedBlock = (x, y, left) => {
     //top check
     for (i = buildLimit-1; i >= 0; i--) {
         if ( (y+i < gridHeight) && (x+i < gridWidth) && (y+i >= 0) && (x+i >= 0) &&
-        (world[i][y+i][x+i] > 1)){
+        (world[i][y+i][x+i] > 1)){ //block isnt transparent.
             topX = x+i
             topY = y+i
             topLayer = i
@@ -199,7 +208,7 @@ const selectedBlock = (x, y, left) => {
 
     for (i = buildLimit-1; i >= 1; i--) {
         if ( (y+i-1 < gridHeight) && (x+i-1 < gridWidth) && (y+i-1 >= 0) && (x+i-1 >= 0) &&
-        (world[i][y+i-1][x+i-1] > 1)){
+        (world[i][y+i-1][x+i-1] > 1)){ //block isnt transparent.
             bottomX = x+i-1
             bottomY = y+i-1
             bottomLayer = i
@@ -243,7 +252,6 @@ const selectedBlock = (x, y, left) => {
         }
     }
     if ((topLayer >= bottomLayer) && (topLayer >= rightLayer) && (topLayer >= leftLayer)){
-        console.log("top wins")
 
         return {
             left : new_left,
@@ -253,7 +261,6 @@ const selectedBlock = (x, y, left) => {
         }
     }
     else if ((rightLayer > topLayer) && (rightLayer >= bottomLayer) && (rightLayer > leftLayer)){
-        console.log("right wins")
         return {
             left : new_left,
             x: rightX,  //why is it offset by -1 and -2??
@@ -262,7 +269,6 @@ const selectedBlock = (x, y, left) => {
         }
     }
     else if ((leftLayer > topLayer) && (leftLayer >= bottomLayer) &&(leftLayer > rightLayer)){
-        console.log("left wins")
 
         return {
             left : new_left,
@@ -272,7 +278,6 @@ const selectedBlock = (x, y, left) => {
         }
     }
     else{
-        console.log("bottom wins")
         return {
             left : left,
             x: bottomX,  //why is it offset by -1 and -2??
@@ -287,9 +292,9 @@ const selectedBlock = (x, y, left) => {
 
 
 
-const placeBlock = (x, y,z=1) => {
-    randomBlock = Math.floor(Math.random() * (3)) + 2;
-    if( (x >= 0) && (y >= 0) && (x < gridWidth) && (y < gridHeight) && (z < buildLimit) ){
+const placeBlock = (x, y,z=1, paintMode=false) => {
+    randomBlock = Math.floor(Math.random() * (3)) + 3;
+    if( (x >= 0) && (y >= 0) && (z > 0) && (x < gridWidth) && (y < gridHeight) && (z < buildLimit) ){
         world[z][y][x] = randomBlock
     }
     drawWorld()
@@ -322,5 +327,20 @@ document.onkeydown = function(e){
     e.preventDefault();
     if(e.keyCode == 32){
         rotateWorld90();
+    }
+    if(e.keyCode == 81){
+        console.log("q")
+        paintModeLayer = 0;
+        paintMode = true;        
+    }
+
 }
+
+document.onkeyup = function(e){
+    e.preventDefault();
+    if(e.keyCode == 81){
+        console.log("q")
+        paintMode = false;        
+    }
+
 }
