@@ -1,0 +1,39 @@
+features:
+- copy world data to clipboard
+- email world data to account
+- host a gallery with all the premade worlds!
+
+Building:
+when you hold q and hold click, a red grid
+appears and you can quickly place
+lots of blocks at once
+
+when you hold q and hold right click a red grid
+appears and u can quickly delete lots of blocks
+
+top down pov, a separate canvas, just draw rectangles:
+think css radar.
+take a pixel from the middle top of the block. make a rectangle of that colour. maybe diamond shape canvas
+
+green background, maybe just a colour
+referencing the heigh of the block.
+just so you know what you are doing.
+block is in the right place etc.
+last block you place can be red, the rest
+can be blue?
+^inside the draw world function
+
+
+
+load assets
+
+
+js modules:
+
+tool bar
+
+user interaction (placing + removing blocks)
+
+world rendering, lighting, shadows, minimap
+
+block data
