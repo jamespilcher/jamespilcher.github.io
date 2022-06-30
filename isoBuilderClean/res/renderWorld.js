@@ -1,8 +1,12 @@
+currentBlockCoords = {left: false, x : 0, y : 0, layer : 0};
+nextBlockCoords = {x : 0, y : 0, layer : 0};
+currentBlock = "air"
+
 const tileHeight = 48  // 42 * 1  672  this is too big. the gap above the textures!
 const tileWidth = 48   //         736
 
-const gridWidth = 15
-const gridHeight = 15
+const gridWidth = 18
+const gridHeight = 18
 const buildLimit = 12
 
 
@@ -15,6 +19,8 @@ blockSpacing = 4 //FOR TOOLBAR
 
 const canvas = document.getElementById('world');
 const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled=false
+
 
 
 
@@ -38,10 +44,23 @@ const init = () => {
 
 
 const world = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("air")));
-world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("grid"));
+world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("grass"));
 
 const drawWorld = () =>{   
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    fontSize = 18
+    textOffset = 5
+    ctx.font = fontSize + "px Serif";
+    ctx.fillStyle = "red";
+    ctx.textAlign = "left";
+    block = "Current Block: " + currentBlock
+    currentCoord = "Current Coordinates: " + currentBlockCoords.x + ", " + currentBlockCoords.y + ", " + currentBlockCoords.layer
+    nextCoord = "Next Coordinates: " + nextBlockCoords.x + ", " + nextBlockCoords.y + ", " + nextBlockCoords.layer
+    ctx.fillText(block, textOffset, 20);
+    ctx.fillText(currentCoord, textOffset, 40);
+    ctx.fillText(nextCoord, textOffset, 60);
+
+
     for (layerNum = 0; layerNum < world.length; layerNum++){
         for (y = 0; y < gridHeight; y++){
             for (x = 0; x < gridWidth; x++){
@@ -56,7 +75,12 @@ const drawWorld = () =>{
     }
 }
 
-const drawImageTile = (x,y,layerNum, block, alpha = 1) => {
+const drawImageTile = (x,y,layerNum, block, alpha=1) => {
+    if (block["blockName"] == "highlight"){
+        console.log("drawn highlight")
+        console.log(x,y,layerNum)
+
+    }
 	ctx.save();
     ctx.globalAlpha = alpha;
 	ctx.translate((y-x) * tileWidth/2+centerGrid,(x+y)*tileHeight/4+(buildLimit-layerNum)*tileHeight/2);  //THE +500 AND +50 NEED TO CHANGE

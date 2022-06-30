@@ -6,21 +6,25 @@ html, body {
 
   }
   
-  canvas {
-    display: block;
-    position: absolute;
-    border: 1px solid black;
+canvas {
+  image-rendering: pixelated;
 
-  }
-  #toolbar{
-    border: 1px solid black;
-    background-color: rgb(65, 129, 151);
-  }
-  #main {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      height: 100%;
-      width: 100%;
-  }
+  display: block;
+  position: absolute;
+  border: 1px solid black;
+
+}
+#toolbar{
+  image-rendering: pixelated;
+
+  border: 1px solid black;
+  background-color: rgb(65, 129, 151);
+}
+#main {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+}

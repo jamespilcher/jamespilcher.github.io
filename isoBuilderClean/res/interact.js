@@ -1,7 +1,15 @@
-let lastMousePosition
 
-currentBlock = "stone1"
-
+//use this function
+lastMousePosition = {x: 0, y:0}
+function updateCoordInfo(mousePos){
+    gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
+    currentBlockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
+    nextBlockCoords = posOfNextBlock(currentBlockCoords, gridPos)
+    drawWorld()
+    if (currentBlockCoords.x >= 0 && currentBlockCoords.y >= 0 && currentBlockCoords.layer >= 0){
+        drawImageTile(currentBlockCoords.x,currentBlockCoords.y,currentBlockCoords.layer, blockData["highlight"])
+    }
+}
 
 function getMousePos(evt, c) {
     var rect = c.getBoundingClientRect();
@@ -13,6 +21,19 @@ function getMousePos(evt, c) {
   }
 canvas.addEventListener('mousemove', function(evt) {
     lastMousePosition = getMousePos(evt, canvas);
+    gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
+    newCurrentCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
+    newNextCoords = posOfNextBlock(newCurrentCoords, gridPos)
+
+    if (!((currentBlockCoords.x == newCurrentCoords.x) && (currentBlockCoords.y == newCurrentCoords.y) && 
+        (currentBlockCoords.layer == newCurrentCoords.layer) ) || 
+        !((nextBlockCoords.x == newNextCoords.x) && (nextBlockCoords.y == newNextCoords.y) && 
+        (nextBlockCoords.layer == newNextCoords.layer) 
+        )){
+        console.log("not equal")
+        updateCoordInfo(lastMousePosition)
+    }
+        //placeBlockAtCoordinates(nextBlockCoords.x, nextBlockCoords.y, nextBlockCoords.layer, true)
     return false;
   }, false);
 //left click
@@ -20,23 +41,22 @@ canvas.addEventListener('mousemove', function(evt) {
 function UserPlaceBlock(evt){
     var mousePos = getMousePos(evt,canvas);
     gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
-    blockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
-    where = posOfNextBlock(blockCoords, gridPos)
-    //console.log('Mouse position: ' + grid.x_grid + ',' + grid.y_grid);
-    console.log(where.x, where.y, where.layer)
-    placeBlockAtCoordinates(where.x, where.y, where.layer)
-
+    currentBlockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
+    nextBlockCoords = posOfNextBlock(currentBlockCoords, gridPos)
+    placeBlockAtCoordinates(nextBlockCoords.x, nextBlockCoords.y, nextBlockCoords.layer)
+    updateCoordInfo(mousePos)
     return false;
   }
 
 //right click
 function UserDeleteBlock(evt){
-    evt.preventDefault() 
+    evt.preventDefault(evt) 
     var mousePos = getMousePos(evt,canvas);
     gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
     blockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
     //console.log('Mouse position: ' + grid.x_grid + ',' + grid.y_grid);
     deleteBlockAtCoordinates(blockCoords.x, blockCoords.y, blockCoords.layer)
+    updateCoordInfo(mousePos)
     return false;
 }
 
@@ -116,9 +136,9 @@ const posOfNextBlock = (blockCoords, gridPos) => {
 const selectedBlock = (x, y, left) => {
     new_left = true
 
-    topX=0
-    topY=0
-    topLayer=0
+    topX=-1
+    topY=-1
+    topLayer=-1
     //top check
     for (i = buildLimit-1; i >= 0; i--) {
         if ( (y+i < gridHeight) && (x+i < gridWidth) && (y+i >= 0) && (x+i >= 0) &&
@@ -132,9 +152,9 @@ const selectedBlock = (x, y, left) => {
         }
     }
 
-    bottomX=0
-    bottomY=0
-    bottomLayer=0
+    bottomX=-1
+    bottomY=-1
+    bottomLayer=-1
     //bottom check
 
     for (i = buildLimit-1; i >= 1; i--) {
@@ -150,9 +170,9 @@ const selectedBlock = (x, y, left) => {
     }
 
     //left check
-    leftX = 0
-    leftY = 0
-    leftLayer = 0
+    leftX = -1
+    leftY = -1
+    leftLayer = -1
     if (left){
 
         for (i = buildLimit-1; i >= 0; i--) {
@@ -166,9 +186,9 @@ const selectedBlock = (x, y, left) => {
             }
         }
     }
-    rightX = 0
-    rightY = 0
-    rightLayer = 0
+    rightX = -1
+    rightY = -1
+    rightLayer = -1
     if (!left){
         for (i = buildLimit-1; i >= 0; i--) {
             if ((y+i < gridHeight) && (x+i-1 < gridWidth) && (y+i >= 0) && (x+i-1 >= 0) && 
@@ -210,30 +230,33 @@ const selectedBlock = (x, y, left) => {
     }
     else{
         return {
-            left : left,
+            left : new_left,
             x: bottomX,  //why is it offset by -1 and -2??
             y: bottomY,
             layer: bottomLayer,
         }
     }
 
-
   };
 //////////////////////////////////////
 
 
 
-const placeBlockAtCoordinates = (x, y,z=1, paintMode=false) => {
+const placeBlockAtCoordinates = (x, y,z=1) => {
+
     if( (x >= 0) && (y >= 0) && (z > 0) && (x < gridWidth) && (y < gridHeight) && (z < buildLimit) ){
         world[z][y][x] = currentBlock
     }
     drawWorld()
+
   };
 
 const deleteBlockAtCoordinates = (y, x, layer) => {
     if (layer != 0){
         world[layer][x][y] = "air"
     }
+
+
     drawWorld()
   };
 
@@ -251,26 +274,5 @@ const rotateWorld90 = () => {
         world[i] = rotateLayer90(world[i]);
     }
     drawWorld()
+    updateCoordInfo(lastMousePosition)
   }
-
-document.onkeydown = function(e){
-    e.preventDefault();
-    if(e.keyCode == 32){
-        rotateWorld90();
-    }
-    if(e.keyCode == 81){
-        console.log("q")
-        paintModeLayer = 0;
-        paintMode = true;        
-    }
-
-}
-
-document.onkeyup = function(e){
-    e.preventDefault();
-    if(e.keyCode == 81){
-        console.log("q")
-        paintMode = false;        
-    }
-
-}

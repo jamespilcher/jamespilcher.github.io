@@ -1,7 +1,6 @@
-selectedBlock = ""
 const toolCanvas = document.getElementById('toolbar');
 const toolCtx = toolCanvas.getContext('2d');
-
+toolCtx.imageSmoothingEnabled=false
 
 toolCanvas.style.left = 0
 toolCanvas.width = (tileWidth + blockSpacing) * toolWidth + blockSpacing
