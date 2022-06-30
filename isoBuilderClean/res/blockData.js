@@ -89,4 +89,11 @@ blockData = {
         "isPlacable" : false,
         "isCube" : true
     },
+    "face" : {
+        "blockName" : "face",
+        "texturePos" : 12,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
 }
