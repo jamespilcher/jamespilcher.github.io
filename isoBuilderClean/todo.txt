@@ -37,3 +37,41 @@ user interaction (placing + removing blocks)
 world rendering, lighting, shadows, minimap
 
 block data
+
+dont need shadows on lamps or glass!
+
+human face texture
+
+add support for 2d blocks
+
+base block + solid invisible block (textureheight=tileHeight, but could be 2 * tileheight!, meaning you could have doors)
+
+hold a and move mouse over place
+hold s and move mouse over delete
+
+func_bring up red grid
+
+COMMENT EVERYTHING! =D, then do the fast block placing stuff.
+
+block data:
+- have shadows
+- cast shadows
+
+last block touched.
+on mouse move,
+on click update last mouse position
+on right click update last mosue postition
+^put it in mouse location? idk
+
+
+place a red highlight on next block location!
+
+
+blockChange, red highlight next block location!
+
+minimap first
+
+func on mouse move,
+check if newblock differs from current block. if it does, then update current block, redraw everything. red box somehwere...
+
+trello everyhting
