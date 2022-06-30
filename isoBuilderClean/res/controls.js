@@ -11,7 +11,7 @@ document.onkeydown = function(e){
     }
     if(e.keyCode == 81){
         console.log("q")
-        paintModeLayer = 0;
+        paintModeLayer = 0;s
         paintMode = true;        
     }
 
