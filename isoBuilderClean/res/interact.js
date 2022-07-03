@@ -3,11 +3,25 @@
 lastMousePosition = {x: 0, y:0}
 function updateCoordInfo(mousePos){
     gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
+    prevCurrentBlockCoords = {
+        x:  currentBlockCoords.x,
+        y:  currentBlockCoords.y,
+        z:  currentBlockCoords.layer
+    }
+    prevNextBlockCoords = {
+        x:  nextBlockCoords.x,
+        y:  nextBlockCoords.y,
+        z:  nextBlockCoords.layer
+    }
     currentBlockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
     nextBlockCoords = posOfNextBlock(currentBlockCoords, gridPos)
-    drawWorld()
-    if (currentBlockCoords.x >= 0 && currentBlockCoords.y >= 0 && currentBlockCoords.layer >= 0){
-        drawImageTile(currentBlockCoords.x,currentBlockCoords.y,currentBlockCoords.layer, blockData["highlight"])
+    if (nextBlockCoords.x != prevNextBlockCoords.x || nextBlockCoords.y != prevNextBlockCoords.y ||
+        nextBlockCoords.layer != prevNextBlockCoords.z || currentBlockCoords.x != prevCurrentBlockCoords.x || 
+        currentBlockCoords.y != prevCurrentBlockCoords.y || currentBlockCoords.layer != prevCurrentBlockCoords.z){
+        drawWorld()
+        if (nextBlockCoords.x >= 0 && nextBlockCoords.y >= 0 && nextBlockCoords.layer >= 0){
+            drawImageTile(currentBlockCoords.x,currentBlockCoords.y,currentBlockCoords.layer, blockData["highlight"])
+        }
     }
 }
 
@@ -24,39 +38,36 @@ canvas.addEventListener('mousemove', function(evt) {
     gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
     newCurrentCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
     newNextCoords = posOfNextBlock(newCurrentCoords, gridPos)
-
-    if (!((currentBlockCoords.x == newCurrentCoords.x) && (currentBlockCoords.y == newCurrentCoords.y) && 
-        (currentBlockCoords.layer == newCurrentCoords.layer) ) || 
-        !((nextBlockCoords.x == newNextCoords.x) && (nextBlockCoords.y == newNextCoords.y) && 
-        (nextBlockCoords.layer == newNextCoords.layer) 
-        )){
-        console.log("not equal")
-        updateCoordInfo(lastMousePosition)
-    }
+    updateCoordInfo(lastMousePosition)
         //placeBlockAtCoordinates(nextBlockCoords.x, nextBlockCoords.y, nextBlockCoords.layer, true)
     return false;
   }, false);
 //left click
 
-function UserPlaceBlock(evt){
-    var mousePos = getMousePos(evt,canvas);
-    gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
+function UserPlaceBlock(){
+    gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
     currentBlockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
     nextBlockCoords = posOfNextBlock(currentBlockCoords, gridPos)
     placeBlockAtCoordinates(nextBlockCoords.x, nextBlockCoords.y, nextBlockCoords.layer)
-    updateCoordInfo(mousePos)
+    updateCoordInfo(lastMousePosition)
     return false;
   }
 
+function getBlock(){
+    gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
+    blockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
+    currentBlock = world[blockCoords.layer,blockCoords.y,blockCoords.x]
+    return false;
+
+}
+
 //right click
-function UserDeleteBlock(evt){
-    evt.preventDefault(evt) 
-    var mousePos = getMousePos(evt,canvas);
-    gridPos = layerZeroCoordinate(mousePos.x, mousePos.y)
+function UserDeleteBlock(){
+    gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
     blockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
     //console.log('Mouse position: ' + grid.x_grid + ',' + grid.y_grid);
     deleteBlockAtCoordinates(blockCoords.x, blockCoords.y, blockCoords.layer)
-    updateCoordInfo(mousePos)
+    updateCoordInfo(lastMousePosition)
     return false;
 }
 
@@ -255,8 +266,6 @@ const deleteBlockAtCoordinates = (y, x, layer) => {
     if (layer != 0){
         world[layer][x][y] = "air"
     }
-
-
     drawWorld()
   };
 
@@ -276,3 +285,13 @@ const rotateWorld90 = () => {
     drawWorld()
     updateCoordInfo(lastMousePosition)
   }
+
+const fillLayer = () => {
+    layer = nextBlockCoords.layer
+    if (layer < buildLimit){
+        world[layer] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(currentBlock));
+    }
+    drawWorld()
+    updateCoordInfo(lastMousePosition)
+
+}

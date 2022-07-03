@@ -11,8 +11,8 @@ const buildLimit = 12
 
 
 //tool bar settings
-toolWidth = 2
-toolHeight = 10
+toolWidth = 3
+toolHeight = 7
 blockSpacing = 4 //FOR TOOLBAR
 
 
@@ -34,7 +34,7 @@ const centerGrid = (canvas.width- tileWidth) / 2
 
 
 const texture = new Image()
-texture.src = "res/textures/blocks.png"
+texture.src = "res/textures/textures.png"
 
 texture.onload = _ => init()
 const init = () => {
@@ -42,9 +42,8 @@ const init = () => {
     drawWorld();
 }
 
-
 const world = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("air")));
-world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("grass"));
+world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("grid"));
 
 const drawWorld = () =>{   
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -76,11 +75,6 @@ const drawWorld = () =>{
 }
 
 const drawImageTile = (x,y,layerNum, block, alpha=1) => {
-    if (block["blockName"] == "highlight"){
-        console.log("drawn highlight")
-        console.log(x,y,layerNum)
-
-    }
 	ctx.save();
     ctx.globalAlpha = alpha;
 	ctx.translate((y-x) * tileWidth/2+centerGrid,(x+y)*tileHeight/4+(buildLimit-layerNum)*tileHeight/2);  //THE +500 AND +50 NEED TO CHANGE
@@ -93,11 +87,11 @@ const calcShadow = (x,y,layerNum) => {            //draw layer, treat shadow as 
     //only called on air blocks anyway
 
     for (i = layerNum; i < buildLimit; i++) {
-        if (world[layerNum-1][y][x] == "air"){  //dont draw a floating shadow
+        if (world[layerNum-1][y][x] == "air"){  //if receive shdows
             break;
         }
 
-        if (blockData[world[i][y][x]]["isSolid"]){  //if there is a solid block above the air block.
+        if (blockData[world[i][y][x]]["isSolid"]){  //if cast shadows
             shadowStrength = 1 - (i-layerNum)/(i-layerNum+3) // 3 is arbritrary
             drawImageTile(x,y,layerNum, blockData["shadow"],shadowStrength); //draw shadow 1=shadow;
             break;

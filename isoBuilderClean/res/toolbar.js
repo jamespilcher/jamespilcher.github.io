@@ -25,7 +25,6 @@ const genToolBar = () =>{   //this could use some work. sort by groupType maybe.
 
         j = counter % toolWidth
         if (blockData[block]["isPlacable"]){
-            console.log(i,j)
             toolBar[i][j] = block
         }
         else{continue}
@@ -71,4 +70,6 @@ const UserSelectBlock = (evt) =>{   //this could use some work. sort by groupTyp
     if (blockData[currentBlock]["isPlacable"]){
         drawToolBlock(blockData["highlight"],blockX,blockY)
     }
+    drawWorld()
+
 }

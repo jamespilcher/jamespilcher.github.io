@@ -96,4 +96,88 @@ blockData = {
         "isPlacable" : true,
         "isCube" : true
     },
+    "body" : {
+        "blockName" : "body",
+        "texturePos" : 13,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "roof" : {
+        "blockName" : "roof",
+        "texturePos" : 14,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "roofslab" : {
+        "blockName" : "roofslab",
+        "texturePos" : 15,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "water" : {
+        "blockName" : "water",
+        "texturePos" : 16,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "lily" : {
+        "blockName" : "lily",
+        "texturePos" : 17,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "chalk" : {
+        "blockName" : "chalk",
+        "texturePos" : 18,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "campfire" : {
+        "blockName" : "campfire",
+        "texturePos" : 19,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : false
+    },
+    "flower" : {
+        "blockName" : "flower",
+        "texturePos" : 20,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : false
+    },
+    "woodplanks" : {
+        "blockName" : "woodplanks",
+        "texturePos" : 21,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "glass" : {
+        "blockName" : "glass",
+        "texturePos" : 22,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "soil" : {
+        "blockName" : "soil",
+        "texturePos" : 23,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
+    "wildflowers" : {
+        "blockName" : "wildflowers",
+        "texturePos" : 24,
+        "isSolid" : true,
+        "isPlacable" : true,
+        "isCube" : true
+    },
 }
