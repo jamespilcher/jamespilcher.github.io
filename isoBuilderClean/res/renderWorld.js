@@ -9,6 +9,7 @@ const gridWidth = 18
 const gridHeight = 18
 const buildLimit = 12
 
+lightSpread = 3
 
 //tool bar settings
 toolWidth = 3
@@ -34,7 +35,7 @@ const centerGrid = (canvas.width- tileWidth) / 2
 
 
 const texture = new Image()
-texture.src = "res/textures/textures.png"
+texture.src = "res/textures/blocks.png"
 
 texture.onload = _ => init()
 const init = () => {
@@ -43,6 +44,8 @@ const init = () => {
 }
 
 const world = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("air")));
+const shadow = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill(0)));
+
 world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("grid"));
 
 const drawWorld = () =>{   
@@ -64,11 +67,14 @@ const drawWorld = () =>{
         for (y = 0; y < gridHeight; y++){
             for (x = 0; x < gridWidth; x++){
                 block = world[layerNum][y][x];
-                if (block == "air"){ //only draw shadows on air blocks
-                    calcShadow(x,y,layerNum)
+                drawImageTile(x,y,layerNum, blockData[block]); //draw the right cube.
+                if (blockData[block]["shadowsOnBottom"]){ //only draw shadows on air blocks
+                    shadowStrength = calcShadow(x,y,layerNum)
+                    if (shadowStrength){
+                        drawImageTile(x,y,layerNum, blockData["shadow"],shadowStrength); //draw the right cube.
+                    }
                     continue
                 }
-                drawImageTile(x,y,layerNum, blockData[block]); //draw the right cube.
             }
         }
     }
@@ -86,15 +92,20 @@ const drawImageTile = (x,y,layerNum, block, alpha=1) => {
 const calcShadow = (x,y,layerNum) => {            //draw layer, treat shadow as a 'bottom slab'. force these slabs where the shadows should be.
     //only called on air blocks anyway
 
-    for (i = layerNum; i < buildLimit; i++) {
-        if (world[layerNum-1][y][x] == "air"){  //if receive shdows
-            break;
-        }
+    shadowStrength = 0
+    if (!blockData[world[layerNum-1][y][x]]["receiveShadows"]){  //if block below doesnt receive shadows.
+        return 0;
+    }
+    //check if lighting block is near
 
-        if (blockData[world[i][y][x]]["isSolid"]){  //if cast shadows
+    // go up until we find the first item that casts shadows
+    for (i = layerNum; i < buildLimit; i++) {
+        if (blockData[world[i][y][x]]["castShadows"]){  //if block above cast shadows
             shadowStrength = 1 - (i-layerNum)/(i-layerNum+3) // 3 is arbritrary
-            drawImageTile(x,y,layerNum, blockData["shadow"],shadowStrength); //draw shadow 1=shadow;
+            //shadow[layerNum][y][x] = shadowStrength
+            //drawImageTile(x,y,layerNum, blockData["shadow"],shadowStrength); //draw shadow 1=shadow;
             break;
         }
     }
+    return shadowStrength
 }
