@@ -5,15 +5,15 @@ currentBlock = "air"
 const tileHeight = 48  // 42 * 1  672  this is too big. the gap above the textures!
 const tileWidth = 48   //         736
 
-const gridWidth = 18
-const gridHeight = 18
-const buildLimit = 12
+const gridWidth = 12
+const gridHeight = 12
+const buildLimit = 8
 
 lightSpread = 3
 
 //tool bar settings
-toolWidth = 3
-toolHeight = 7
+toolWidth = 11
+toolHeight = 2
 blockSpacing = 4 //FOR TOOLBAR
 
 
@@ -25,12 +25,8 @@ ctx.imageSmoothingEnabled=false
 
 
 
-canvas.width = tileWidth * (gridWidth+2)
-canvas.height = tileHeight * (gridHeight)
-
-toolPosition = ((tileWidth + blockSpacing) * toolWidth + blockSpacing)
-
-canvas.style.left = toolPosition + "px"
+canvas.width = tileWidth * (gridWidth)
+canvas.height = tileHeight * (gridHeight - 2)
 const centerGrid = (canvas.width- tileWidth) / 2
 
 
@@ -50,7 +46,7 @@ world[0] = new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("gr
 
 const drawWorld = () =>{   
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    fontSize = 18
+/*     fontSize = 18
     textOffset = 5
     ctx.font = fontSize + "px Serif";
     ctx.fillStyle = "red";
@@ -60,7 +56,7 @@ const drawWorld = () =>{
     nextCoord = "Next Coordinates: " + nextBlockCoords.x + ", " + nextBlockCoords.y + ", " + nextBlockCoords.layer
     ctx.fillText(block, textOffset, 20);
     ctx.fillText(currentCoord, textOffset, 40);
-    ctx.fillText(nextCoord, textOffset, 60);
+    ctx.fillText(nextCoord, textOffset, 60); */
 
 
     for (layerNum = 0; layerNum < world.length; layerNum++){

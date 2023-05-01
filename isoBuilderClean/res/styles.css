@@ -1,29 +1,14 @@
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background-color: lightblue;
-
-  }
-  
 canvas {
   image-rendering: pixelated;
-
   display: block;
-  position: absolute;
-
 }
 #toolbar{
   image-rendering: pixelated;
-
-  border: 1px solid black;
-  background-color: rgb(65, 129, 151);
 }
 #main {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -48px;
 }
