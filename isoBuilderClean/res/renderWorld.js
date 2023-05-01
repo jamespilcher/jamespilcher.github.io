@@ -5,8 +5,8 @@ currentBlock = "air"
 const tileHeight = 48  // 42 * 1  672  this is too big. the gap above the textures!
 const tileWidth = 48   //         736
 
-const gridWidth = 12
-const gridHeight = 12
+const gridWidth = 14
+const gridHeight = 14
 const buildLimit = 8
 
 lightSpread = 3
@@ -26,7 +26,7 @@ ctx.imageSmoothingEnabled=false
 
 
 canvas.width = tileWidth * (gridWidth)
-canvas.height = tileHeight * (gridHeight - 2)
+canvas.height = tileHeight * (gridHeight - 3)
 const centerGrid = (canvas.width- tileWidth) / 2
 
 
