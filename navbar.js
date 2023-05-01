@@ -8,8 +8,6 @@ document.write(`
         <li><a href="/about.html">About</a></li>
         <li><a href="/projects.html">Projects</a></li>
         <li><a href="/music.html">Music</a></li>
-
-
     </ul>
 </nav>
 
