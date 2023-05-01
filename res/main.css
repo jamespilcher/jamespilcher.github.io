@@ -11,7 +11,7 @@ body {
     color: #000000;
     font-family: Helvetica, sans-serif;
 
-    max-width: 500px;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -98,4 +98,28 @@ footer li {
 footer a {
     color: #828282;
     text-decoration: none;
+}
+
+/* ------------------------------------------------------------------- */
+
+/* ---------------------------- BLOG LIST ------------------------------- */
+
+
+.blogpost ul {
+    padding: 0;
+    list-style-type: circle;
+}
+.blogpost a {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+    
+}
+
+.blogtitle {
+    text-align: center;
+}
+
+.blogmetadata{
+    color: #828282;
 }
