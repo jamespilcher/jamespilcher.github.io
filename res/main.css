@@ -110,6 +110,10 @@ footer a {
     
 }
 
+.blogpost li{
+    margin: 10px 0;
+}
+
 .blogtitle {
     text-align: center;
 }
