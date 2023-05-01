@@ -1,31 +1,33 @@
 html {
-    font-size: 100%;
     margin: 0 auto;
-    max-width: 650px;
-    padding: 20 0px;
+    font-size: 100%;
 }
 
 body {
-    margin: 1rem 0;
-    padding: 0 1rem;
     font-size: 1rem;
-    background-color: #ffffff;
+    background-color: rgb(255, 240, 225);
     color: #000000;
     font-family: Helvetica, sans-serif;
 }
 
-@media only screen and (max-width: 400px) {
-    body {
-        font-size: 18px;
-    }
+.maxwidth{
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 1rem 1rem;
 }
 
+@media (max-width: 500px){
+    .maxwidth {
+        max-width: none;
+    }
+}
 /* ------------------------------ NAV BAR ----------------------------- */
 
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 1.5rem;
 }
 
 nav ul {
@@ -42,12 +44,11 @@ nav ul.left {
 }
 
 nav li {
-    margin: 0 1em;
+    margin: 0.8rem;
 }
 
 
 nav a {
-    padding: 0.25rem 0;
     color: #000000;
     transition: color 0.1s;
     text-decoration: none;
