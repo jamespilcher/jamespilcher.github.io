@@ -1,72 +1,39 @@
-table {
-    margin: 0 auto;
-    border-spacing: 2px;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-
-}
-
-td {
-    background-color: pink;
-    font-size: 14px;
-    border: 1px solid;
-}
-
-th {
-    background-color: blue;
-    color : white;
-    font-size: 20px;
-    border: 1px solid black;
-    padding: 10px ;
-}
-
-#tetris-pressplay{
-    background-repeat: no-repeat;
-    line-height: 0px;
-    text-align: center;
-    position: relative;
-    margin: auto auto;
-    width : 300px;
-}
-
 #tetris-bg{
-    background-image: url("tetris-grid-bg.png");
     background-repeat: no-repeat;
     line-height: 0px;
     text-align: left;
     margin: auto auto;
     width : 300px;
-    height : 600px;
-    background-color: rgb(255, 123, 222);
+    height : 540px;
     z-index: 100;
+    border-bottom: 2px solid rgb(177, 18, 18);
 }
 
 
 div.block {
     width: 30px;
     height: 30px;
-    box-shadow:0px 0px 0px 1px black inset;
     display: inline-block;
 }
 
 #lightBlue {
-    background-color: lightblue;
+    background-color: hsl(195, 53%, 30%);
 }
 #blue {
-    background-color: blue;
+    background-color: hsl(240, 26%, 23%);
 }
 #orange {
-    background-color: orange;
+    background-color: hsl(39, 64%, 33%);
 }
 #yellow {
-    background-color: yellow;
+    background-color: hsl(60, 20%, 50%);
 }
 #green {
-    background-color: green;
+    background-color: hsl(120, 41%, 23%);
 }
 #purple {
-    background-color: purple;
+    background-color: hsl(300, 20%, 20%);
 }
 #red {
-    background-color: red;
+    background-color: hsl(0, 100%, 20%);
 }

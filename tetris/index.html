@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="res/style.css">
     <link rel="stylesheet" href="../res/main.css">
     <link rel="icon" href="../res/jim.png">
-    <script src="res/tetris.js"></script>
 </head>
 
 <body>
@@ -18,9 +17,14 @@
         <div class="blogtitle">
             <i>Tetrominoes</i>
         </div>
+        <br>
             <div id="tetris-bg"></div>
-            <h2 id="gameOver"></h2>
-            <p id="score"></p>
+            <div class="blogtitle">
+                <p id="score"></p>
+                <div id="gameOver"><button onclick="start();">Play</button>
+                </div>
+            </div>
+            <script src="res/tetris.js"></script>
     </div>
     <script src="../footer.js"></script>
 </body>
