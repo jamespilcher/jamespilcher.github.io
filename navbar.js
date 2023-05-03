@@ -2,7 +2,7 @@ document.write(`
 
 <nav>
     <ul class="left">
-        <a href="../home" class="logo"><span style="color: RGB(230, 40, 40);">JP</span>ilcher</a>
+        <a href="../home" class="logo">JPilcher<img src="../res/jim.png" class="logoimage"/></a>
     </ul>
     <ul>
         <li><a href="../blog">Blog</a></li>

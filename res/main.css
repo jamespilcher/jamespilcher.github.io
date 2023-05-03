@@ -70,6 +70,14 @@ nav div {
     font-weight: bold;
 }
 
+.logoimage {
+    position: absolute;
+    top: 1.4rem;
+    height: 2rem;
+    padding-left: .5rem;
+}
+
+
 /* ----------------------------------------------------------- */
 
 

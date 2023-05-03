@@ -17,7 +17,6 @@ shuffleArray(colours);
 /* Set colours */
 for (i = 0; i < num_posts; i++) {
     posts.item(i).style.color = colours[i];
-    console.log("succ")
 }
 
 /* https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array */
