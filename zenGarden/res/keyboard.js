@@ -35,6 +35,7 @@ for (let row = 0; row < rows; row++) {
 
 
 const pianoKeys = document.querySelectorAll('.grid-item')
+audioUrls = []
 
 function playSound(newUrl) {
     new Audio(newUrl).play()
@@ -53,18 +54,17 @@ function fadeIn(element){
       if (op == 1){
           clearInterval(timer);
       }
-      op += 0.02;
       element.style.opacity = op;
+      op += 0.02;
   }, 25);
 }
 
 function startGrid() {
-
   // fade in bodge
   numOfKeys = pianoKeys.length
   i = 0
-  setInterval(function () {
-    if (i == numOfKeys){
+  var timer = setInterval(function () {
+    if (i == numOfKeys-1){
         clearInterval(timer);
     }
     fadeIn(pianoKeys[i])
@@ -75,7 +75,8 @@ function startGrid() {
   startButton.style.display = 'none';
   pianoKeys.forEach((pianoKey, i) => {
     note = notes[Math.floor(Math.random() * notes.length)];
-    const newUrl = 'res/piano/' + note + '.mp3'
+    const newUrl = 'res/piano/' + note + '.mp3';
+    audioUrls.push(newUrl);
     pianoKey.addEventListener('mouseover', function() {
       growthWorld[i] += 1
       pianoKey.style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
@@ -91,3 +92,18 @@ function startGrid() {
 
 
 // each time you hover over them, the tree grows< think forest!
+
+
+function autoPlayer(){
+  var timer = setInterval(function () {
+    i = Math.floor(Math.random() * pianoKeys.length);
+    if (i == numOfKeys-1){
+      clearInterval(timer);
+    }
+    growthWorld[i] += 1
+    pianoKeys[i].style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
+    randomDegrowth()
+    // grow tree
+    playSound(audioUrls[i])
+  }, 50);
+}
