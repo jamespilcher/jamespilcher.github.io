@@ -69,7 +69,7 @@ function startGrid() {
     }
     fadeIn(pianoKeys[i])
     i += 1
-  }, 10);
+  }, 25);
 
 
   startButton.style.display = 'none';
