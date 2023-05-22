@@ -102,6 +102,7 @@ function playKey(i) {
 }
 
 function autoPlayer(){
+  playSpeed = Math.floor(Math.random() * 245) + 60;
   startButton.innerHTML = `<button id="startButton" onclick="autoPlayer()">Stop</button>`
   var timer = setInterval(function () {
     i = Math.floor(Math.random() * pianoKeys.length);
@@ -109,5 +110,5 @@ function autoPlayer(){
       clearInterval(timer);
     }
     playKey(i)
-  }, 50);
+  }, playSpeed);
 }
