@@ -1,4 +1,5 @@
 
+
 const rows = 6;
 const columns = 8;
 
@@ -26,7 +27,7 @@ for (let row = 0; row < rows; row++) {
     // Create a grid item (div element)
     const gridItem = document.createElement('div');
     gridItem.classList.add('grid-item');
-
+    gridItem.style.opacity = 0;
     // Append the grid item to the grid container
     gridContainer.appendChild(gridItem);
   }
@@ -45,7 +46,19 @@ function randomDegrowth(){
   pianoKeys[randomSquare].style.backgroundColor = 'rgb(50, ' + growthWorld[randomSquare] * 30 + ', 10)';
 }
 
-pianoKeys.forEach((pianoKey, i) => {
+function startGrid() {
+  startButton.style.display = 'none';
+  pianoKeys.forEach((pianoKey, i) => {
+    var op = 0;  // initial opacity
+    var timer = setInterval(function () {
+        if (op == 1){
+            clearInterval(timer);
+        }
+        op += 0.02;
+        pianoKey.style.opacity = op;
+    }, 25);
+
+
     note = notes[Math.floor(Math.random() * notes.length)];
     const newUrl = 'res/piano/' + note + '.mp3'
     pianoKey.addEventListener('mouseover', function() {
@@ -56,6 +69,9 @@ pianoKeys.forEach((pianoKey, i) => {
       playSound(newUrl)
     })
 })
+}
+
+
 
 
 // each time you hover over them, the tree grows< think forest!
