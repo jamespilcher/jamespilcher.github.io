@@ -46,19 +46,34 @@ function randomDegrowth(){
   pianoKeys[randomSquare].style.backgroundColor = 'rgb(50, ' + growthWorld[randomSquare] * 30 + ', 10)';
 }
 
+
+function fadeIn(element){
+  var op = 0;  // initial opacity
+  var timer = setInterval(function () {
+      if (op == 1){
+          clearInterval(timer);
+      }
+      op += 0.02;
+      element.style.opacity = op;
+  }, 25);
+}
+
 function startGrid() {
+
+  // fade in bodge
+  numOfKeys = pianoKeys.length
+  i = 0
+  setInterval(function () {
+    if (i == numOfKeys){
+        clearInterval(timer);
+    }
+    fadeIn(pianoKeys[i])
+    i += 1
+  }, 10);
+
+
   startButton.style.display = 'none';
   pianoKeys.forEach((pianoKey, i) => {
-    var op = 0;  // initial opacity
-    var timer = setInterval(function () {
-        if (op == 1){
-            clearInterval(timer);
-        }
-        op += 0.02;
-        pianoKey.style.opacity = op;
-    }, 25);
-
-
     note = notes[Math.floor(Math.random() * notes.length)];
     const newUrl = 'res/piano/' + note + '.mp3'
     pianoKey.addEventListener('mouseover', function() {
@@ -70,6 +85,7 @@ function startGrid() {
     })
 })
 }
+
 
 
 
