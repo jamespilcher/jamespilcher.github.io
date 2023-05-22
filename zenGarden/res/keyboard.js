@@ -61,6 +61,8 @@ function fadeIn(element){
 
 function startGrid() {
   // fade in bodge
+  startButton.style.display = 'none';
+  twinkle.style.display = 'unset';
   numOfKeys = pianoKeys.length
   i = 0
   var timer = setInterval(function () {
@@ -72,7 +74,6 @@ function startGrid() {
   }, 25);
 
 
-  startButton.style.display = 'none';
   pianoKeys.forEach((pianoKey, i) => {
     note = notes[Math.floor(Math.random() * notes.length)];
     const newUrl = 'res/piano/' + note + '.mp3';
