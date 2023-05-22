@@ -10,12 +10,13 @@ body {
     background-color: rgb(255, 245, 235);
     color: #000000;
     font-family: Helvetica, sans-serif;
-
     max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow-y: scroll;
+
 }
 
 .container {
@@ -31,6 +32,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     z-index: 99;
+
 }
 
 nav ul {
@@ -134,10 +136,10 @@ footer a {
 
 .album {
     width: 100%;
-    overflow: hidden hidden;
+    overflow: auto hidden;
   }
   
-.album  img {
+.album img {
     float: left;
     width: 35%;
     margin-right: 0;
@@ -149,6 +151,8 @@ footer a {
     width: 62%;
     padding: 0;
     margin-top: 0;
+    word-wrap: break-word;
+    padding-bottom:1rem;
 }
 
 .albumtitle h3{

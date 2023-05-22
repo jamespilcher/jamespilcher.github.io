@@ -1,0 +1,16 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+  }
+
+  .grid-item {
+    background-color: #5a4631;
+    text-align: center;
+    height: 50px;
+    transition: background-color .3s;
+  }
+  
+  .grid-item:hover {
+    background-color: #d3d09c;
+  }
