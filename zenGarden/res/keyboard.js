@@ -78,13 +78,12 @@ function startGrid() {
     const newUrl = 'res/piano/' + note + '.mp3';
     audioUrls.push(newUrl);
     pianoKey.addEventListener('mouseover', function() {
-      growthWorld[i] += 1
-      pianoKey.style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
-      randomDegrowth()
-      // grow tree
-      playSound(newUrl)
+      playKey(i)
     })
 })
+    // get element by id 'StartButton'
+
+  startButton.innerHTML = `<button id="startButton" onclick="autoPlayer()">Twinkle</button>`
 }
 
 
@@ -93,17 +92,21 @@ function startGrid() {
 
 // each time you hover over them, the tree grows< think forest!
 
+function playKey(i) {
+  growthWorld[i] += 1
+  pianoKeys[i].style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
+  randomDegrowth()
+  // grow tree
+  playSound(audioUrls[i])
+}
 
 function autoPlayer(){
+  startButton.innerHTML = `<button id="startButton" onclick="autoPlayer()">Stop</button>`
   var timer = setInterval(function () {
     i = Math.floor(Math.random() * pianoKeys.length);
     if (i == numOfKeys-1){
       clearInterval(timer);
     }
-    growthWorld[i] += 1
-    pianoKeys[i].style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
-    randomDegrowth()
-    // grow tree
-    playSound(audioUrls[i])
+    playKey(i)
   }, 50);
 }
