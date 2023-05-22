@@ -62,12 +62,13 @@ function fadeIn(element){
 function startGrid() {
   // fade in bodge
   startButton.style.display = 'none';
-  twinkle.style.display = 'unset';
   numOfKeys = pianoKeys.length
   i = 0
   var timer = setInterval(function () {
     if (i == numOfKeys-1){
         clearInterval(timer);
+        twinkle.style.display = 'unset';
+
     }
     fadeIn(pianoKeys[i])
     i += 1
@@ -83,8 +84,6 @@ function startGrid() {
     })
 })
     // get element by id 'StartButton'
-
-  startButton.innerHTML = `<button id="startButton" onclick="autoPlayer()">Twinkle</button>`
 }
 
 
@@ -103,7 +102,6 @@ function playKey(i) {
 
 function autoPlayer(){
   playSpeed = Math.floor(Math.random() * 180) + 75;
-  startButton.innerHTML = `<button id="startButton" onclick="autoPlayer()">Stop</button>`
   var timer = setInterval(function () {
     i = Math.floor(Math.random() * pianoKeys.length);
     if (i > numOfKeys-4){
