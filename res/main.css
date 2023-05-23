@@ -132,6 +132,15 @@ footer a {
     color: #828282;
 }
 
+.blogimgcontainer{
+    width: 100%;
+    text-align: center;
+}
+
+.blogimg{
+    max-height: 300px;
+}
+
 /* ---------------------------------------ALBUM DISPLAY ------------------------------- */
 
 .album {

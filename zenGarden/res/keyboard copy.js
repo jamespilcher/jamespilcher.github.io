@@ -420,3 +420,87 @@ for (let row = 0; row < rows; row++) {
     gridContainer.appendChild(gridItem);
   }
 }
+
+
+
+
+// SCUFFED EXPERIMENT, SOUNDED BAD:
+
+
+
+// play a random backing track using 2 oscillators
+// 'left hand' will play C, D, E
+// 'right hand' will play G or A
+
+
+
+const leftHand = [261.63, 293.66, 329.63]
+const rightHand = [392.00, 440.00]
+
+function randomLeftHand(){
+  return leftHand[Math.floor(Math.random() * leftHand.length)];
+}
+
+function randomRightHand(){
+  return rightHand[Math.floor(Math.random() * rightHand.length)];
+}
+
+end = false;
+function playBackingTrack(){
+  // Create an AudioContext
+  const audioContext = new AudioContext();
+
+  // Create LeftHand node
+  const leftOscillator = audioContext.createOscillator();
+  leftOscillator.type = 'sine';
+  leftOscillator.frequency.value = randomLeftHand() / 2
+  const leftPanNode = audioContext.createStereoPanner();
+  leftPanNode.pan.value = -.75;
+  leftOscillator.connect(leftPanNode);
+  leftPanNode.connect(audioContext.destination);
+
+  // Create Right Hnad
+  const rightOscillator = audioContext.createOscillator();
+  rightOscillator.type = 'sine';
+  rightOscillator.frequency.value = randomRightHand();
+  rightOscillator.connect(audioContext.destination);
+  const rightPanNode = audioContext.createStereoPanner();
+  rightPanNode.pan.value = .75;
+  rightOscillator.connect(rightPanNode);
+  rightPanNode.connect(audioContext.destination);
+
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = 0.1;
+
+  const gainNode2 = audioContext.createGain();
+  gainNode2.gain.value = -50;
+  leftPanNode.connect(gainNode);
+  rightPanNode.connect(gainNode2);
+
+
+
+  leftOscillator.start();
+  rightOscillator.start();
+
+  BPM = 150;
+  BEAT = BPM / 60;
+
+  var timer = setInterval(function () {
+    if (end){
+        clearInterval(timer);
+    }
+    console.log("looping")
+    leftTarget = randomLeftHand();
+    rightTarget = randomRightHand();
+    console.log("left target: " + leftTarget + "right target: " + rightTarget)
+    // Get the current time
+    currentTime = audioContext.currentTime;
+  
+    leftOscillator.frequency.setValueAtTime(leftOscillator.frequency.value, currentTime + 3.5*BEAT);
+    rightOscillator.frequency.setValueAtTime(rightOscillator.frequency.value, currentTime + 3.5*BEAT);
+
+    // Set the new value using linearRampToValueAtTime()
+    leftOscillator.frequency.linearRampToValueAtTime(leftTarget, currentTime + 4*BEAT);
+    rightOscillator.frequency.linearRampToValueAtTime(rightTarget, currentTime + 4*BEAT);
+  }, BEAT*4*1000);
+};
