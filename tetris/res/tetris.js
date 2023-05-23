@@ -1,4 +1,5 @@
 function start() {
+    document.getElementById('score').style.display = 'unset';
     document.getElementById('gameOver').innerHTML = "";
 
     var score = 0;

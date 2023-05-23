@@ -2,24 +2,18 @@
 
 const rows = 6;
 const columns = 8;
-
-// create a grid of rows by collumns, code goes here
-
-growthWorld = new Array(rows*columns).fill(1)
-
-// size of audio folder
+const gridContainer = document.querySelector('.grid-container');
 const notes = [ "A2", "A3", "A4", "A5", "A6", "A7",
                 "C2", "C3", "C4", "C5", "C6", "C7",
                 "D2", "D3", "D4", "D5", "D6", "D7",
                 "E2", "E3", "E4", "E5", "E6", "E7",
                 "G2", "G3", "G4", "G5", "G6", "G7" ]
 
-// Get the grid container element
-const gridContainer = document.querySelector('.grid-container');
+// For each square, store a 'growth' value (which indicates the amount of green to apply to that square)
+growthWorld = new Array(rows*columns).fill(1)
 
-function playSound(newUrl) {
-  new Audio(newUrl).play()
-}
+// Store the audio urls for each square
+audioUrls = []
 
 // Create the grid dynamically
 for (let row = 0; row < rows; row++) {
@@ -32,10 +26,7 @@ for (let row = 0; row < rows; row++) {
     gridContainer.appendChild(gridItem);
   }
 }
-
-
 const pianoKeys = document.querySelectorAll('.grid-item')
-audioUrls = []
 
 function playSound(newUrl) {
     new Audio(newUrl).play()
@@ -49,6 +40,7 @@ function randomDegrowth(){
 
 
 function fadeIn(element){
+  console.log(element);
   var op = 0;  // initial opacity
   var timer = setInterval(function () {
       if (op == 1){
@@ -63,41 +55,42 @@ function startGrid() {
   // fade in bodge
   startButton.style.display = 'none';
   numOfKeys = pianoKeys.length
+
   i = 0
   var timer = setInterval(function () {
     if (i == numOfKeys-1){
         clearInterval(timer);
         twinkle.style.display = 'unset';
-
     }
-    fadeIn(pianoKeys[i])
+    fadeIn(pianoKeys[i]);
     i += 1
   }, 25);
+  initialiseKeys();
+}
 
-
+// Initialise the notes and audio urls for each square
+function initialiseKeys() {
   pianoKeys.forEach((pianoKey, i) => {
     note = notes[Math.floor(Math.random() * notes.length)];
-    const newUrl = 'res/piano/' + note + '.mp3';
+    newUrl = 'res/piano/' + note + '.mp3';
     audioUrls.push(newUrl);
     pianoKey.addEventListener('mouseover', function() {
       playKey(i)
     })
+    pianoKey.addEventListener('click', function() {
+      playKey(i)
+    })
 })
-    // get element by id 'StartButton'
 }
 
-
-
-
-
-// each time you hover over them, the tree grows< think forest!
-
 function playKey(i) {
+  // Increase 'growth' of the square
   growthWorld[i] += 1
+  // Update colour of the square
   pianoKeys[i].style.backgroundColor = 'rgb(50, ' + growthWorld[i] * 30 + ', 10)'
   randomDegrowth()
-  // grow tree
-  playSound(audioUrls[i])
+  // play sound
+  new Audio(audioUrls[i]).play()
 }
 
 function autoPlayer(){
