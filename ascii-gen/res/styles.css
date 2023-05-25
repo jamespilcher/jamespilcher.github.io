@@ -1,0 +1,22 @@
+canvas {
+    outline: solid black 1px;
+    width: 100%;
+}
+
+.upload-box {
+    width: 100%;
+    text-align: center;
+}
+
+#videoElement{
+    display: 'none';
+}
+
+#asciiOutput {
+    font-size: 5px;
+}
+
+.asciiContainer {
+    width: 100%;
+    text-align: center;
+}
