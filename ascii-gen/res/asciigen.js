@@ -21,6 +21,8 @@ function generateAsciiArt(data) {
   pixelDataSize = 4;
   output = '';
 
+  charIndexCount = 0;
+
   for (let i = 0; i < data.length; i += pixelDataSize) {
     pixelIndex = i / pixelDataSize;
     const r = data[i]*contrast + intercept;
@@ -37,13 +39,26 @@ function generateAsciiArt(data) {
       output += '\n';
     }
     output += asciiChar;
+    charIndexCount += index;
   }
   document.getElementById('asciiOutput').innerHTML = output;
+  averageChar = charIndexCount / (data.length / pixelDataSize);
+  return averageChar;
   // var win = window.open('', '_blank');
   // win.document.write('<html><body><pre style="font-size: 20px; white-space: pre-wrap;">' + output + '</pre></body></html>');
   // win.document.close();
 }
 
+
+const audioContext = new AudioContext();
+const oscillator = audioContext.createOscillator();
+oscillator.type = 'sine';
+oscillator.frequency.value = 440;
+gainNode = audioContext.createGain();
+gainNode.gain.value = 0.04;
+oscillator.connect(gainNode);
+gainNode.connect(audioContext.destination);
+oscillator.start();
 
 const videoElement = document.getElementById('videoElement');
 const  outputWidth = 192;
@@ -72,7 +87,10 @@ navigator.mediaDevices.getUserMedia({ video: true })
       ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
       // Get the image data
       imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      generateAsciiArt(imageData.data)
+      averageChar = generateAsciiArt(imageData.data)
+      targetFreq = averageChar / asciiChars.length * 880 + 220
+      currentTime = audioContext.currentTime;
+      oscillator.frequency.linearRampToValueAtTime(targetFreq, currentTime+0.05);
     }, 50);
   })
   .catch((error) => {
