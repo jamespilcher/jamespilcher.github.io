@@ -13,7 +13,7 @@ function stepFunction(x) {
 
 
 function generateAsciiArt(data) {  
-  // THANK YOU: https://stackoverflow.com/a/37714937
+  // THANK YOU: https://stackoverflow.com/a/37714937 for contrast code
   contrast = 65;
   contrast = (contrast/100) + 1;  //convert to decimal & shift range: [0..2]
   var intercept = 128 * (1 - contrast);
@@ -43,6 +43,7 @@ function generateAsciiArt(data) {
   }
   document.getElementById('asciiOutput').innerHTML = output;
   averageChar = charIndexCount / (data.length / pixelDataSize);
+  
   return averageChar;
   // var win = window.open('', '_blank');
   // win.document.write('<html><body><pre style="font-size: 20px; white-space: pre-wrap;">' + output + '</pre></body></html>');
