@@ -1,5 +1,6 @@
 
 asciiChars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.', ' ']
+//asciiCharsReversed = asciiChars.reverse()
 
 function stepFunction(x) {
   if (x < 0){

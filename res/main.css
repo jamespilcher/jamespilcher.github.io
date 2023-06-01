@@ -70,6 +70,7 @@ nav div {
 .logo {
     font-size: 2rem;
     font-weight: bold;
+    padding-right: 3rem;
 }
 
 .logoimage {
@@ -179,3 +180,4 @@ footer a {
     margin-top: 0.1rem;
     margin-bottom:0.3rem;
 }
+
