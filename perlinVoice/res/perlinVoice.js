@@ -31,7 +31,6 @@ function vectorToPoint(x,y){
     // Calculate the dot product
     const dotProduct = (distanceX * grid[gridX][gridY].x) + (distanceY * grid[gridX][gridY].y);
     
-    dotProduct = 
     // Return the dot product
     return dotProduct;
 
