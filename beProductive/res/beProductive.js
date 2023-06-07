@@ -53,14 +53,24 @@ var utterance = new SpeechSynthesisUtterance();
 
 utterance.text = randomTask;
 
-window.speechSynthesis.onvoiceschanged = () => {
-  voices = window.speechSynthesis.getVoices();
-  utterance.volume = .8; // Range from 0 to 1
-  utterance.rate = getRandomNumber(0.95,1.05);
-  utterance.pitch = getRandomNumber(0.1,1.1);
-  utterance.voice = voices[Math.floor(Math.random() * voices.length)]; // random voice
-  window.speechSynthesis.speak(utterance);
-};
+retrieveVoices();
+
+function retrieveVoices() {
+  var voices = speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    // Voices are available, initiate speech synthesis
+    utterance.volume = .8; // Range from 0 to 1
+    utterance.rate = getRandomNumber(0.95,1.05);
+    utterance.pitch = getRandomNumber(0.1,1.1);
+    utterance.voice = voices[Math.floor(Math.random() * voices.length)]; // random voice
+    window.speechSynthesis.speak(utterance);
+  } else {
+    // Retry retrieving voices after a delay
+    setTimeout(retrieveVoices, 100);
+  }
+}
+
+
 
 window.addEventListener('beforeunload', function() {
   // Cancel any ongoing speech synthesis
