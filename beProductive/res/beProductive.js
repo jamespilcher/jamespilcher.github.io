@@ -44,19 +44,25 @@ randomTask = busyworkTasks[Math.floor(Math.random() * busyworkTasks.length)];
 
 document.getElementById("task").innerHTML = randomTask;
 
+function getRandomNumber(lower, upper){
+    randomNum = ((Math.random() * (upper - lower + 1)) + lower).toFixed(2);
+    return randomNum
+}
 
 var utterance = new SpeechSynthesisUtterance();
-utterance.text = randomTask;
-voices = window.speechSynthesis.getVoices();
 
-utterance.volume = .8; // Range from 0 to 1
-utterance.rate = 1.05; // Range from 0.1 to 10
-utterance.pitch = 1; // Range from 0 to 2
+utterance.text = randomTask;
 
 window.speechSynthesis.onvoiceschanged = () => {
   voices = window.speechSynthesis.getVoices();
-  console.log(voices);
+  utterance.volume = .8; // Range from 0 to 1
+  utterance.rate = getRandomNumber(0.95,1.05);
+  utterance.pitch = getRandomNumber(0.1,1.1);
   utterance.voice = voices[Math.floor(Math.random() * voices.length)]; // random voice
   window.speechSynthesis.speak(utterance);
-  // (67) [SpeechSynthesisVoice, SpeechSynthesisVoice, ...]
 };
+
+window.addEventListener('beforeunload', function() {
+  // Cancel any ongoing speech synthesis
+  speechSynthesis.cancel();
+});
