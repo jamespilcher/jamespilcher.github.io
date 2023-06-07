@@ -40,3 +40,7 @@ const busyworkTasks = [
   "Wipe down a surface. Any surface.",
   "Unistall apps you no longer use.",
 ];
+
+randomTask = busyworkTasks[Math.floor(Math.random() * busyworkTasks.length)];
+
+document.getElementById("task").innerHTML = randomTask;
