@@ -43,3 +43,20 @@ const busyworkTasks = [
 randomTask = busyworkTasks[Math.floor(Math.random() * busyworkTasks.length)];
 
 document.getElementById("task").innerHTML = randomTask;
+
+
+var utterance = new SpeechSynthesisUtterance();
+utterance.text = randomTask;
+voices = window.speechSynthesis.getVoices();
+
+utterance.volume = .8; // Range from 0 to 1
+utterance.rate = 1.05; // Range from 0.1 to 10
+utterance.pitch = 1; // Range from 0 to 2
+
+window.speechSynthesis.onvoiceschanged = () => {
+  voices = window.speechSynthesis.getVoices();
+  console.log(voices);
+  utterance.voice = voices[Math.floor(Math.random() * voices.length)]; // random voice
+  window.speechSynthesis.speak(utterance);
+  // (67) [SpeechSynthesisVoice, SpeechSynthesisVoice, ...]
+};
