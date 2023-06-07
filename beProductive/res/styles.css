@@ -1,0 +1,13 @@
+.taskContainer{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+#task {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+}
