@@ -2,11 +2,8 @@ const canvas = document.getElementById('canvas');
 const description = document.getElementById('artinfo');
 const ctx = canvas.getContext('2d');
 
-// draw image url to canvas
 const img = new Image();
 
-// fetch this url: https://api.artic.edu/api/v1/artworks/search?q=cats&query[term][is_public_domain]=true&fields=id,title,image_id
-// and get the first image_id
 const busyworkTasks = [
     "Sort through your wardrobe and donate clothes you no longer wear.",
     "Clean one room in your home, focusing on dusting, wiping surfaces, and vacuuming.",
@@ -77,7 +74,7 @@ fetch(url)
     console.error('Error:', error);
   });
 
-outputWidth = 500;
+outputWidth = 300;
 img.onload = () => {
     outputHeight = outputWidth * (img.height / img.width);
     if (outputHeight > 400 ){
