@@ -47,7 +47,7 @@ const busyworkTasks = [
   ];
   
 randomTask = busyworkTasks[Math.floor(Math.random() * busyworkTasks.length)];
-numArtworks = 1
+numArtworks = 3
 info = ""
 url = 'https://api.artic.edu/api/v1/artworks/search?q=' + randomTask + '&query[term][is_public_domain]=true&limit=' + numArtworks + '&fields=title,artist_title,image_id'
 fetch(url)
@@ -60,9 +60,9 @@ fetch(url)
   .then(data => {
 
     artwork = (data['data'][Math.floor(Math.random() * numArtworks)]);
-    title = (data['data'][0]['title']);
-    artist = (data['data'][0]['artist_title']);
-    image_id = (data['data'][0]['image_id']);
+    title = (artwork['title']);
+    artist = (artwork['artist_title']);
+    image_id = (artwork['image_id']);
     img.src = 'https://www.artic.edu/iiif/2/' + image_id + '/full/843,/0/default.jpg';
     // Process the retrieved data here
     console.log(title, image_id);
