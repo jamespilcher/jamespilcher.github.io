@@ -254,7 +254,7 @@ function userInputBox() {
   userInput = document.getElementById('messageInput');
   userInput.focus();
   userInput.addEventListener('keydown', function(event) {
-    if (event.keyCode === 13) {
+    if (event.key === "Enter") {
       appendUserReply(userInput.value.trim());
       inputBox.remove();
       appendBotReply()
