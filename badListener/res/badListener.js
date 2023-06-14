@@ -248,7 +248,6 @@ function generateSentence() {
 }
 
 function userInputBox() {
-  // append the bot reply to the conversation div
   conversation.innerHTML += "<div class='message left' id='inputBox'>" + "<b>[YOU]</b><br>" + 
                             "<input type='text' id='messageInput' placeholder='_____________________'></div>";
                   
@@ -264,12 +263,10 @@ function userInputBox() {
 }
 
 function appendUserReply(userInput) {
-  // append the bot reply to the conversation div
   conversation.innerHTML += "<div class='message left'>" + userInput + "</div>";
 }
 
 function appendBotReply() {
-  // append the bot reply to the conversation div
   conversation.innerHTML += "<div class='message right' id='botReplyMessage'>.</div>";
   botReply = generateSentence()
   i = 0
