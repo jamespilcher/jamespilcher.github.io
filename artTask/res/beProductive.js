@@ -110,7 +110,7 @@ function speak() {
     window.speechSynthesis.speak(utterance);
   } else {
     // Retry retrieving voices after a delay
-    setTimeout(retrieveVoices, 100);
+    setTimeout(speak, 100);
   }
 }
 
