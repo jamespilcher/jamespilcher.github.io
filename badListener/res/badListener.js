@@ -51,6 +51,14 @@ const adjs = [
   'discerning',
   'profound',
   'cerebral',
+  'erudite',
+  'scholarly',
+  'learned',
+  'intellectual',
+  'academic',
+  'bookish',
+  'studious',
+  'astute',
   'ruminative',
   'ponderous',
   'judicious',
@@ -62,7 +70,8 @@ const adjs = [
   'philosophical',
   'perceptive',
   'meticulous',
-  'methodical'
+  'methodical',
+  'zelous'
 ];
 const nouns = [
   'intellect',
