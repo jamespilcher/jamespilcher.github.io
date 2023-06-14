@@ -84,10 +84,10 @@ img.onload = () => {
     canvas.width = outputWidth;
     canvas.height = outputHeight;
     
-    ctx.drawImage(img, 0, 0, outputWidth, outputWidth * (img.height / img.width));
+    ctx.drawImage(img, 0, 0, outputWidth, outputHeight);
     description.innerHTML = info;
     document.getElementById("task").innerHTML = randomTask;
-    retrieveVoices();
+    speak();
     }
 
 
@@ -97,11 +97,9 @@ function getRandomNumber(lower, upper){
 }
 
 var utterance = new SpeechSynthesisUtterance();
-
 utterance.text = randomTask;
 
-
-function retrieveVoices() {
+function speak() {
   var voices = speechSynthesis.getVoices();
   if (voices.length > 0) {
     // Voices are available, initiate speech synthesis
