@@ -1,0 +1,28 @@
+.conversation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.message {
+    max-width: 100%;
+    font-family:'Courier New', Courier, monospace;
+    padding: 10px;
+    margin: 10px;
+}
+
+.right {
+    text-align: right;
+}
+
+.left {
+    text-align: left;
+}
+
+canvas {
+    width: 100px;
+    height: 100px;
+}
