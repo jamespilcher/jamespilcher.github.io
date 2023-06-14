@@ -259,7 +259,6 @@ function userInputBox() {
       appendUserReply(userInput.value.trim());
       inputBox.remove();
       appendBotReply()
-      userInputBox();
     }
   });
 }
@@ -278,6 +277,7 @@ function appendBotReply() {
   var timer = setInterval(function () {
     if (i == botReply.length){
       clearInterval(timer);
+      userInputBox();
       botReplyMessage.removeAttribute('id');
       return
     }
