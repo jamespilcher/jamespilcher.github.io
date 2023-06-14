@@ -229,6 +229,10 @@ function generateProduction(symbol) {
   const selectedProduction = production[Math.floor(Math.random() * production.length)];
   // if its a word, add it to the sentence directly
   if (!Array.isArray(selectedProduction)) {
+    // if selectedProduction starts with a vowel, use 'an' instead of 'a'
+    if (selectedProduction[0].match(/[aeiou]/) && sentence[sentence.length - 1] === 'a')  {
+      sentence[sentence.length - 1] = 'an';
+    }
     sentence.push(selectedProduction);
   }
   else{
