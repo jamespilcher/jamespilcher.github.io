@@ -212,8 +212,7 @@ const rules = {
     ['NP', 'VP'],
     ['NP', 'VP', 'PP'],
     ['PP', 'NP', 'VP'],
-    ['PP', 'NP', 'VP', 'C', 'Det', 'Adj', 'Noun', 'Verb'],
-    ['PP', 'NP', 'VP', 'C', 'Det', 'Noun', 'Verb']
+    ['PP', 'NP', 'VP', 'C', 'NP', 'Verb'],
   ],
   NP: [
     ['Det', 'Adj', 'Noun'],
