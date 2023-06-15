@@ -237,10 +237,10 @@ sentence = [];
 function generateProduction(symbol) {
   const production = rules[symbol];
   const selectedProduction = production[Math.floor(Math.random() * production.length)];
-  // if its a word, add it to the sentence directly
+  // if its a word (not a list of symbols), add it to the sentence.
   if (!Array.isArray(selectedProduction)) {
-    // if selectedProduction starts with a vowel, use 'an' instead of 'a'
-    if (selectedProduction[0].match(/[aeiou]/) && sentence[sentence.length - 1] === 'a')  {
+    // if word starts with a vowel, and previous word is a, use 'an' instead of 'a'
+    if (sentence[sentence.length - 1] === 'a' && selectedProduction[0].match(/[aeiou]/))  {
       sentence[sentence.length - 1] = 'an';
     }
     sentence.push(selectedProduction);
@@ -262,7 +262,7 @@ function generateSentence() {
 }
 
 function userInputBox() {
-  conversation.innerHTML += "<div class='message left' id='inputBox'>" + "<b>[YOU]</b><br>" + 
+  conversation.innerHTML += "<div class='message left' id='inputBox'><b>[YOU]</b><br>" + 
                             "<input type='text' id='messageInput' placeholder='_____________________'></div>";
                   
   userInput = document.getElementById('messageInput');
@@ -274,6 +274,8 @@ function userInputBox() {
       appendBotReply()
     }
   });
+  // scroll to bottom of page
+  window.scrollTo(0, document.body.scrollHeight);
 }
 
 function appendUserReply(userInput) {
@@ -285,6 +287,8 @@ function appendBotReply() {
   botReply = generateSentence()
   i = 0
   output = ""
+
+  // type writer effect:
   var timer = setInterval(function () {
     if (i == botReply.length){
       clearInterval(timer);
@@ -297,5 +301,7 @@ function appendBotReply() {
     botReplyMessage.innerHTML = "<i>..." + output + "...</i>";
     i++;
   }, 35);
+  // scroll to bottom of page
+  window.scrollTo(0, document.body.scrollHeight);
 }
 userInputBox();
