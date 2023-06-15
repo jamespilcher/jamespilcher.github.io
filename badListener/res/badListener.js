@@ -97,6 +97,7 @@ const nouns = [
   'puzzle',
   'riddle',
   'enigma',
+  'mystery',
   'paradox',
   'notion',
   'concept',
