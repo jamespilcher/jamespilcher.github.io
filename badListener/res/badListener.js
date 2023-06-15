@@ -211,7 +211,9 @@ const rules = {
   S: [
     ['NP', 'VP'],
     ['NP', 'VP', 'PP'],
-    ['PP', 'NP', 'VP',]
+    ['PP', 'NP', 'VP'],
+    ['PP', 'NP', 'VP', 'C', 'Det', 'Adj', 'Noun', 'Verb'],
+    ['PP', 'NP', 'VP', 'C', 'Det', 'Noun', 'Verb']
   ],
   NP: [
     ['Det', 'Adj', 'Noun'],
@@ -224,6 +226,7 @@ const rules = {
   PP: [
     ['Prep', 'Det', 'Location'],
   ],
+  C: ['-'],
   Prep: preps,
   Location: locations,
   Det: dets,
