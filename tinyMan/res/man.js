@@ -239,27 +239,16 @@ for (var i = 0; i < numMen; i++) {
     new Man(randomX, randomY);
 }
 
-canvas.addEventListener('click', function (e) { // get the mouse click coordinates
+// touch move event
+canvas.addEventListener('touchmove', function (e) {
     e.preventDefault();
+    var touch = e.touches[0];
+    player.updateRotation();
     var rect = canvas.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-    var manX = x - manSize / 2; // Center the man horizontally
-    var manY = y - manSize / 2; // Center the man vertically
-
-    man = new Man(x, y);
-}
-);
-
-canvas.addEventListener('contextmenu', function (e) { // get the mouse click coordinates
-    e.preventDefault();
-    var rect = canvas.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    var y = e.clientY - rect.top;
-    var manX = x - bombSize / 2; // Center the man horizontally
-    var manY = y - bombSize / 2; // Center the man vertically
-
-    bomb = new Bomb(x, y);
+    var x = touch.pageX - rect.left;
+    var y = touch.pageY - rect.top;
+    player.x = x;
+    player.y = y;
 }
 );
 
