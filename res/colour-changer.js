@@ -1,8 +1,6 @@
 // Old code from university project...
 // Ignore the spaghetti...
 
-
-var posts = document.getElementById("posts").getElementsByTagName("a");
 const num_posts = posts.length;
 colours = [];
 
