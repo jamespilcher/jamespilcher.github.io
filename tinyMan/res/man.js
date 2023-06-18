@@ -18,10 +18,11 @@ class Man {
       this.moveTimer = null;
       this.turnTimer = null;
       this.thinkTimer = null;
-
-      this.image.src = "res/man-export.png";
+      var colours = ["blue", "green", "yellow", "red", "cyan", "purple"];
+      this.image.src = "res/men/man-" + colours[Math.floor(Math.random() * colours.length)] + ".png";
+      console.log(this.image.src);
       
-        const self = this; // Store reference to 'this'
+      const self = this; // Store reference to 'this'
 
       this.image.onload = function() {
         self.turn();
