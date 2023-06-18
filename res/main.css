@@ -181,3 +181,8 @@ footer a {
     margin-bottom:0.3rem;
 }
 
+.clickable {
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}
