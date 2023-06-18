@@ -1,13 +1,12 @@
 #manZone {
     height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 canvas {
     background-color: #f4e9d8;
-    width: 350px;
-    height: 350px;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
 }
