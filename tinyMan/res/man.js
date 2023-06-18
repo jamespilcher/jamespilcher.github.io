@@ -19,7 +19,8 @@ class Man {
       this.turnTimer = null;
       this.thinkTimer = null;
 
-      this.image.src = "res/man.png";
+      this.image.src = "res/man-export.png";
+      
         const self = this; // Store reference to 'this'
 
       this.image.onload = function() {
