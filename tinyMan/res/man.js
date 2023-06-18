@@ -75,8 +75,9 @@ class Man {
             // ensure greater than 0, less than height and width
             var newX = self.x + Math.cos(self.rotation - Math.PI / 2) * 2;
             var newY = self.y + Math.sin(self.rotation - Math.PI / 2) * 2;
+            // turn around if hit wall
             if (newX < 0 || newX > canvas.width || newY < 0 || newY > canvas.height) {
-                self.rotation = self.rotation + Math.PI;
+                self.rotation = self.rotation + Math.PI + 0.03; // some random amount
                 return;
             }
             self.x = newX;
