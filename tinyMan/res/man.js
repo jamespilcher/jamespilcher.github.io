@@ -285,7 +285,7 @@ function drawFig(x, y, rotation, image) {
 // main, draw men function
 // each frame check and see if you need to run from bombs
 
-player = new Player(0, 0);
+player = new Player(-100, -100);
 
 setInterval(function () {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
