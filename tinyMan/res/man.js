@@ -216,7 +216,7 @@ class Man {
         this.rotation = Math.atan2(bombY - self.y, bombX - self.x) + 3 * Math.PI / 2;
         this.runTimer = setInterval(function () {
             self.rotation += self.rotationPertubation;
-            const speedMultiplier = 1.7;
+            const speedMultiplier = 1.5;
             var newX = self.x + Math.cos(self.rotation - Math.PI / 2) * self.speed * speedMultiplier;
             var newY = self.y + Math.sin(self.rotation - Math.PI / 2) * self.speed * speedMultiplier;
 /*             if (newX < 0 || newX > canvas.width || newY < 0 || newY > canvas.height) {
