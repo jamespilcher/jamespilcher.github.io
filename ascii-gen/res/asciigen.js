@@ -97,4 +97,5 @@ navigator.mediaDevices.getUserMedia({ video: true })
   })
   .catch((error) => {
     console.error('Error accessing webcam:', error);
+    asciiOutput.innerHTML = 'Error accessing webcam';
   });

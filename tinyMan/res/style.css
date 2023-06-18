@@ -1,0 +1,13 @@
+#manZone {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas {
+    background-color: #bfb19c;
+    width: 350px;
+    height: 350px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
