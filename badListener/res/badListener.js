@@ -299,7 +299,6 @@ function appendBotReply() {
       return
     }
     output += botReply.charAt(i);
-    console.log(output);
     botReplyMessage.innerHTML = "<i>..." + output + "...</i>";
     i++;
   }, 35);

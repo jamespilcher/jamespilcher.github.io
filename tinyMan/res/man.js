@@ -20,7 +20,6 @@ class Man {
       this.thinkTimer = null;
       var colours = ["blue", "green", "yellow", "red", "cyan", "purple"];
       this.image.src = "res/men/man-" + colours[Math.floor(Math.random() * colours.length)] + ".png";
-      console.log(this.image.src);
       
       const self = this; // Store reference to 'this'
 
