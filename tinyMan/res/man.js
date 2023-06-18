@@ -35,7 +35,7 @@ class Player {
         this.y = y;
         this.rotation = 0;
         this.image = new Image();
-        this.image.src = "res/men/man-red.png"
+        this.image.src = "res/cow2.png"
         this.placeBombTrail();
 
     }
@@ -189,7 +189,7 @@ class Man {
                         closestBomb = bombs[i];
                     }
                 }
-                if (closestBombDist < 85) {
+                if (closestBombDist < 90) {
                     // clear previous states
                     clearInterval(self.thinkTimer); // don't pick a new state, instead run!
                     self.thinkTimer = null;
@@ -216,7 +216,7 @@ class Man {
         this.rotation = Math.atan2(bombY - self.y, bombX - self.x) + 3 * Math.PI / 2;
         this.runTimer = setInterval(function () {
             self.rotation += self.rotationPertubation;
-            const speedMultiplier = 1.5;
+            const speedMultiplier = 1.7;
             var newX = self.x + Math.cos(self.rotation - Math.PI / 2) * self.speed * speedMultiplier;
             var newY = self.y + Math.sin(self.rotation - Math.PI / 2) * self.speed * speedMultiplier;
 /*             if (newX < 0 || newX > canvas.width || newY < 0 || newY > canvas.height) {
