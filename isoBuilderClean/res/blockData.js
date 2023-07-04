@@ -231,7 +231,7 @@ blockData = {
         "texturePos" : 22,
         "isSolid" : true,
         "isPlacable" : true,
-        "shadowsOnBottom" : true,
+        "shadowsOnBottom" : false,
         "receiveShadows" : false,
         "castShadows" : false,
         "blockLight" : false

@@ -76,10 +76,11 @@ const drawWorld = () =>{
     }
 }
 
+
 const drawImageTile = (x,y,layerNum, block, alpha=1) => {
 	ctx.save();
     ctx.globalAlpha = alpha;
-	ctx.translate((y-x) * tileWidth/2+centerGrid,(x+y)*tileHeight/4+(buildLimit-layerNum)*tileHeight/2);  //THE +500 AND +50 NEED TO CHANGE
+	ctx.translate((y-x) * tileWidth/2+centerGrid,(x+y)*tileHeight/4+(buildLimit-layerNum)*tileHeight/2);
 	blockPos = block["texturePos"]*tileWidth
     ctx.drawImage(texture, blockPos, 0, tileWidth, tileHeight,0,0,tileWidth,tileHeight);
     ctx.restore();
