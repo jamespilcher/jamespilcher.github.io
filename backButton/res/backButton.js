@@ -58,5 +58,5 @@ function megaBack() {
             goBack();
         }
         times += 1;
-    }, 75);
+    }, 115);
 }
