@@ -1,0 +1,14 @@
+.container {
+    text-align: center;
+    justify-content: center;
+    
+}
+
+#score {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+canvas {
+    width: 300px;
+    height: 300px;
+}
