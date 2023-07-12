@@ -6,7 +6,7 @@ document.write(`
     </ul>
     <ul>
         <li><a href="../blog">Blog</a></li>
-        <li><a href="../projects">Fun.js</a></li>
+        <li><a href="../projects">codeArt</a></li>
         <li><a href="../music">Music</a></li>
     </ul>
 </nav>
