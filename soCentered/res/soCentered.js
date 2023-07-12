@@ -24,6 +24,13 @@ function genQuestion() {
     
     targX = (x1 + x2) / 2;
     targY = (y1 + y2) / 2;
+
+    // half chance of rotating target 90 degrees:
+    if (Math.random() < 0.5) {
+        targX = (y1 + y2) / 2;
+        targY = (x1 + x2) / 2;
+    }
+
     
     ctx.rect(x1-squareSize/2,y1-squareSize/2,squareSize,squareSize);
     
