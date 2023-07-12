@@ -8,9 +8,20 @@ numQuestions = 3;
 var targX = 0;
 var targY = 0;
 var totalScore = 0;
+endScreen = document.getElementById("endScreen");
 endScore = document.getElementById("score");
+playAgain = document.getElementById("playAgain");
+playAgain.style.display = "unset";
+endScreen.style.display = "none";
 
 genQuestion();
+
+function again(){
+    numAnswered = 0;
+    totalScore = 0;
+    endScreen.style.display = "none";
+    genQuestion();
+}
 
 function genQuestion() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,7 +76,7 @@ canvas.addEventListener('mousedown', function (e) { // get the mouse move coordi
         else{
             totalScore = Math.round(totalScore/numQuestions);
             endScore.innerHTML = "Average number of units away from the centre: " + totalScore;
-            again.style.display = "block";
+            endScreen.style.display = "unset";
         }
     }
     // dont do anything else
