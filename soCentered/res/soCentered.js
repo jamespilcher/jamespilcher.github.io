@@ -65,6 +65,7 @@ canvas.addEventListener('mousedown', function (e) { // get the mouse move coordi
         else{
             totalScore = Math.round(totalScore/numQuestions);
             endScore.innerHTML = "Average number of units away from the centre: " + totalScore;
+            again.style.display = "block";
         }
     }
     // dont do anything else
