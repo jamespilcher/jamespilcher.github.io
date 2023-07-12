@@ -54,7 +54,7 @@ function megaBack() {
     times = 0;
     preloadImages();
     var timer = setInterval(function () {
-        if (imagesLoaded === numImages) { // annoying hack to make sure everything is loaded. TODO LEARN ASYNC AWAIT JS
+        if (imagesLoaded === numImages) { // annoying hack to make sure everything is loaded. JAMES, LEARN ASYNC AWAIT
             goBack();
         }
         times += 1;
