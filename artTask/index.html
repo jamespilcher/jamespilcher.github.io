@@ -21,8 +21,12 @@
             <p id="task"></p>
             <canvas id="canvas"></canvas>
             <div class="blogmetadata">
-                <i id="artinfo">loading...</i>
+                <i id="artinfo">
+                    <button id="genArtTask" onclick="generateTask()">Generate Task</button>
+                </i>
             </div>
+            <br>
+            <button id="newArtTask" onclick="generateTask()">New Task</button>
         </div>
 
     </div>
