@@ -1,8 +1,8 @@
 const canvas = document.getElementById('canvas');
 const description = document.getElementById('artinfo');
 const ctx = canvas.getContext('2d');
-const content = document.getElementById('content');
 const load = document.getElementById('genArtTask');
+const task = document.getElementById('task');
 const newTask = document.getElementById('newArtTask');
 newTask.style.display = 'none';
 
@@ -52,8 +52,9 @@ const busyworkTasks = [
 
 function generateTask(){
   newTask.style.display = 'none';
-  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   description.innerHTML = "loading...";
+  task.innerHTML = "";
 
   const img = new Image();
     
@@ -88,8 +89,8 @@ function generateTask(){
   outputWidth = 300;
   img.onload = () => {
       outputHeight = outputWidth * (img.height / img.width);
-      if (outputHeight > 400 ){
-          outputHeight = 400;
+      if (outputHeight > 300 ){
+          outputHeight = 300;
           outputWidth = outputHeight * (img.width / img.height);
       }
       canvas.width = outputWidth;
