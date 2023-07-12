@@ -176,6 +176,11 @@ footer a {
     margin-bottom: 0;
 }
 
+.albumdesc {
+    font-size: 0.87rem;
+    line-height: 1rem;
+}
+
 .albumtext hr{
     margin-top: 0.1rem;
     margin-bottom:0.3rem;
