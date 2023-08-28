@@ -1,6 +1,7 @@
 html {
     margin: 0 auto;
     font-size: 100%;   
+    cursor: cell;
 }
 
 body {
