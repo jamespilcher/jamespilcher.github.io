@@ -70,7 +70,7 @@ setInterval(function() {
     for (i = 0; i < mousePositions.length; i++) {
         size = getSize(i);
         ctx.fillStyle = "rgba(90, 140, 90, 0.8)";
-        ctx.fillRect(mousePositions[i].x - size/2, mousePositions[i].y - size/2, size, size);
+        ctx.fillRect(mousePositions[i].x - 2, mousePositions[i].y + 7, size, size);
     }
     // 
 }
