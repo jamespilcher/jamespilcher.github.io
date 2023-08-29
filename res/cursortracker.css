@@ -1,0 +1,9 @@
+html {
+    cursor: none;
+}
+#cursortracker {
+    cursor: none;
+    z-index: -1;
+    position: sticky;
+    pointer-events: none;
+}
