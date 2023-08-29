@@ -7,11 +7,13 @@
 <head>
     <title>codeArt</title>
     <link rel="stylesheet" href="../res/main.css">
-    <link rel="stylesheet" href="res/styles.css">
+    <link rel="stylesheet" href="../res/cursortracker.css">
     <link rel="icon" href="../res/jim.png">
 </head>
 
 <body>
+    <canvas id="cursortracker"></canvas>
+    <script src="../res/cursortracker.js"></script>
     <script src="../navbar.js"></script>
     <div class="container">
         <h2>codeArt</h2>
@@ -76,12 +78,11 @@
     </div>
     <script src="randomProject.js"></script>
     <script src="../footer.js"></script>
-    <canvas id="cursortracker"></canvas>
-    <script src="../res/cursortracker.js"></script>
+    <script> 
+        var posts = document.querySelectorAll('.project a')
+    </script>
+    <script src="../res/colour-changer.js"></script>
 </body>
-<script> 
-var posts = document.querySelectorAll('.project a')
-</script>
-<script src="../res/colour-changer.js"></script>
+
 
 </html>

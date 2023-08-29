@@ -9,4 +9,5 @@ canvas {
     background-color: #b7e0c3;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    cursor: none;
 }
