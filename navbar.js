@@ -2,7 +2,6 @@ document.write(`
 <link href="https://fonts.cdnfonts.com/css/pp-neue-montreal" rel="stylesheet">
                                                 
 <link href="https://fonts.cdnfonts.com/css/super-dream" rel="stylesheet">
-<link href="https://fonts.cdnfonts.com/css/scrouble-outline" rel="stylesheet">
 
 <nav>
     <ul class="left">
