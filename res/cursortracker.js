@@ -86,4 +86,4 @@ setInterval(function() {
 timer = setInterval(function() {
     setCSize();
     clearInterval(timer);
-}, 100);
+}, 250);
