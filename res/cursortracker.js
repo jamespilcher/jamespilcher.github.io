@@ -20,10 +20,15 @@ function setCSize(){
     document.documentElement.clientHeight
     );
 }
-setCSize();
 c.style.position = "fixed";
 c.style.zIndex = "99";
 var ctx = c.getContext("2d");
+
+
+timer = setInterval(function() {
+    setCSize();
+    clearInterval(timer);
+}, 250);
 
 // when mouse moves left to right, draw a line
 class mousePosition {
@@ -82,8 +87,3 @@ setInterval(function() {
     }
 }
 , 80);
-
-timer = setInterval(function() {
-    setCSize();
-    clearInterval(timer);
-}, 250);
