@@ -10,7 +10,7 @@ body {
     font-size: 1rem;
     background-color: rgb(255, 245, 235);
     color: #000000;
-    font-family: Helvetica, sans-serif;
+    font-family: 'PP Neue Montreal', sans-serif;
     max-width: 600px;
     display: flex;
     flex-direction: column;
@@ -20,9 +20,39 @@ body {
 
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Super Dream', sans-serif;
+    letter-spacing: 1px;
+    color: #303b78;
+}
 .container {
     width: 100%;
     min-height: calc(100vh - 140px);
+}
+
+/* ------------------------------ home page messages ----------------------------- */
+
+.welcome {
+    text-align: center;
+    margin: 0;
+    padding-top: 25px;
+    padding-bottom: 0px;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: 'Scrouble Outline', sans-serif;
+    text-decoration: underline;
+    white-space: pre;
+    color: rgb(198, 0, 0);
+}
+
+.banner {
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: -10px;
+    font-family: 'Subeve', sans-serif;
+    color: rgb(0, 0, 0);
 }
 
 /* ------------------------------ NAV BAR ----------------------------- */
@@ -119,7 +149,8 @@ footer a {
     font-size: 1.25rem;
     font-weight: bold;
     text-decoration: none;
-    
+    font-family: 'Super Dream', sans-serif;
+    letter-spacing: 2px;
 }
 
 .blogpost li{
