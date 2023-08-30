@@ -5,15 +5,10 @@ document.write(`
 
 <nav>
     <ul class="left">
-        <a href="../home" class="logo" style="
-        font-family: 'Super Dream', sans-serif;
-        " 
+        <a href="../home" class="logo"
         >JPilcher<img src="../res/jim.png" class="logoimage"/></a>
     </ul>
-    <ul style="
-    font-family: 'Super Dream', sans-serif;
-    " 
-    >
+    <ul>
         <li><a href="../blog">blog</a></li>
         <li><a href="../projects">codeArt</a></li>
         <li><a href="../music">music</a></li>

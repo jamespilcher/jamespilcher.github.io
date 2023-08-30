@@ -38,11 +38,10 @@ h1, h2, h3, h4, h5, h6 {
     padding-top: 25px;
     padding-bottom: 0px;
     margin-bottom: 1rem;
-    font-size: 2rem;
+    font-size: 1.5rem;
     letter-spacing: 1px;
     font-weight: bold;
     font-family: 'Scrouble Outline', sans-serif;
-    text-decoration: underline;
     white-space: pre;
     color: rgb(198, 0, 0);
 }
@@ -63,7 +62,8 @@ nav {
     justify-content: space-between;
     align-items: center;
     z-index: 99;
-
+    font-family: 'Super Dream', sans-serif;
+    border-bottom: #000000 1px solid;
 }
 
 nav ul {
