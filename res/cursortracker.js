@@ -55,6 +55,8 @@ window.addEventListener('resize', function() {
     mousePositions = [];
 });
 
+
+
 document.addEventListener('mousemove', function(event) {
     if (mousePositions.length > 10) {
         mousePositions.shift();
