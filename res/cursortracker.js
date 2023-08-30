@@ -1,6 +1,8 @@
 // canvas over entire screen
 var c = document.getElementById("cursortracker");
 
+
+
 function setCSize(){
     c.width = Math.max(
         document.body.scrollWidth,
@@ -22,7 +24,9 @@ function setCSize(){
 }
 
 function getCursorPos(event){
-    return [event.pageX - - document.documentElement.scrollLeft, event.pageY - document.documentElement.scrollTop];
+    x = event.pageX - document.documentElement.scrollLeft;
+    y = event.pageY - document.documentElement.scrollTop;
+    return [x,y];
 }
 c.style.position = "fixed";
 c.style.zIndex = "99";
@@ -32,7 +36,7 @@ var ctx = c.getContext("2d");
 timer = setInterval(function() {
     setCSize();
     clearInterval(timer);
-}, 250);
+}, 5);
 
 // when mouse moves left to right, draw a line
 class mousePosition {
@@ -42,6 +46,44 @@ class mousePosition {
     }
 }
 mousePositions = [];
+
+class firework {
+    constructor(x, y, base_colour) {
+        this.x = x;
+        this.y = y;
+        this.base_colour = base_colour;
+    }
+    explode() {
+        for (i = 0; i < 20; i++) {
+            embers.push(new ember(this.x, this.y, this.base_colour));
+        }
+    }
+}
+class ember {
+    constructor(x, y, colour) {
+        this.x = x;
+        this.y = y;
+        this.colour = colour;
+        this.size = 12;
+        this.speed = 5;
+        this.xDirectionModifier = Math.random() * 2 - 1;  
+        this.yDirectionModifier = Math.random() * 2 - 1;
+        let self = this;      
+        let timer = setInterval(function() {
+            console.log("ember", self.x, self.y, self.size)
+            self.x += self.speed * self.xDirectionModifier;
+            self.y += self.speed * self.yDirectionModifier;
+            self.size -= 1;
+            if (self.size < 0) {
+                // remove from list
+                embers.splice(embers.indexOf(self), 1);
+                clearInterval(timer);
+            }
+        }, 40);
+    }
+}
+
+embers = [];
 
 // on mouse move, update mouse position
 // fix on resize
@@ -55,38 +97,30 @@ window.addEventListener('resize', function() {
     mousePositions = [];
 });
 
-
-
-document.addEventListener('mousemove', function(event) {
-    if (mousePositions.length > 10) {
+function updateCursor(event){
+    if (mousePositions.length > 6) {
         mousePositions.shift();
     }
-    x,y = getCursorPos(event);
-    // add scroll distance 
-    x = event.pageX - document.documentElement.scrollLeft;
-    y = event.pageY - document.documentElement.scrollTop;
+    var x;
+    var y;
+    [x,y] = getCursorPos(event);
     mousePositions.push(new mousePosition(x, y));
-    console.log(event.pageY, document.documentElement.scrollTop, c.height)
+}
 
-});
 
+document.addEventListener('mousemove', updateCursor);
+document.addEventListener('touchmove', updateCursor);
 mouseColours = ["rgba(90, 140, 90, 0.8)", "rgba(255, 140, 255, 0.8)", "rgba(255, 140, 90, 0.8)", "rgba(90, 140, 255, 0.8)"];
-currentColour = 0;
+currentColourIndex = 0;
 
 // on mouse down change colour
 document.addEventListener('mousedown', function(event) {
-    x = event.pageX - document.documentElement.scrollLeft;
-    y = event.pageY - document.documentElement.scrollTop;
+    var [x,y] = getCursorPos(event);
+    let fire = new firework(x, y, mouseColours[currentColourIndex]);
+    fire.explode();
+    currentColourIndex = (currentColourIndex + 1) % mouseColours.length;
 
-    currentColour = (currentColour + 1) % mouseColours.length;
-    firework( x, y);
 });
-
-function firework(x,y){
-    // firework
-    console.log("firework");
-}
-
 
 maxSize = 8;
 minSize = 5;
@@ -98,12 +132,18 @@ function getSize(index) {
 ctx.fillStyle = "rgba(90, 140, 90, 0.8)";
 setInterval(function() {
     ctx.clearRect(0, 0, c.width, c.height);
+    // Mouse cursor trail
     for (i = 0; i < mousePositions.length; i++) {
-        ctx.fillStyle = mouseColours[currentColour]
+        ctx.fillStyle = mouseColours[currentColourIndex]
         size = getSize(i);
         ctx.fillRect(mousePositions[i].x - 2, mousePositions[i].y + 7, size, size);
     }
-    // 
+
+    // Embers for fire works
+    for (i = 0; i < embers.length; i++) {
+        ctx.fillStyle = embers[i].colour;
+        ctx.fillRect(embers[i].x, embers[i].y, embers[i].size, embers[i].size);
+    }
 }
 , 20);
 
