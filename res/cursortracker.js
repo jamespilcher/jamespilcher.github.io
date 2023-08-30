@@ -20,6 +20,10 @@ function setCSize(){
     document.documentElement.clientHeight
     );
 }
+
+function getCursorPos(event){
+    return [event.pageX - - document.documentElement.scrollLeft, event.pageY - document.documentElement.scrollTop];
+}
 c.style.position = "fixed";
 c.style.zIndex = "99";
 var ctx = c.getContext("2d");
@@ -55,12 +59,32 @@ document.addEventListener('mousemove', function(event) {
     if (mousePositions.length > 10) {
         mousePositions.shift();
     }
-    x = event.pageX
-    y = event.pageY
+    x,y = getCursorPos(event);
+    // add scroll distance 
+    x = event.pageX - document.documentElement.scrollLeft;
+    y = event.pageY - document.documentElement.scrollTop;
     mousePositions.push(new mousePosition(x, y));
     console.log(event.pageY, document.documentElement.scrollTop, c.height)
 
 });
+
+mouseColours = ["rgba(90, 140, 90, 0.8)", "rgba(255, 140, 255, 0.8)", "rgba(255, 140, 90, 0.8)", "rgba(90, 140, 255, 0.8)"];
+currentColour = 0;
+
+// on mouse down change colour
+document.addEventListener('mousedown', function(event) {
+    x = event.pageX - document.documentElement.scrollLeft;
+    y = event.pageY - document.documentElement.scrollTop;
+
+    currentColour = (currentColour + 1) % mouseColours.length;
+    firework( x, y);
+});
+
+function firework(x,y){
+    // firework
+    console.log("firework");
+}
+
 
 maxSize = 8;
 minSize = 5;
@@ -69,12 +93,12 @@ minSize = 5;
 function getSize(index) {
     return minSize + (index * (maxSize - minSize) / mousePositions.length);
 }
-
+ctx.fillStyle = "rgba(90, 140, 90, 0.8)";
 setInterval(function() {
     ctx.clearRect(0, 0, c.width, c.height);
     for (i = 0; i < mousePositions.length; i++) {
+        ctx.fillStyle = mouseColours[currentColour]
         size = getSize(i);
-        ctx.fillStyle = "rgba(90, 140, 90, 0.8)";
         ctx.fillRect(mousePositions[i].x - 2, mousePositions[i].y + 7, size, size);
     }
     // 

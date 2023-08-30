@@ -17,13 +17,14 @@ body {
     justify-content: center;
     align-items: center;
     overflow-y: scroll;
+    letter-spacing: 1px;
 
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Super Dream', sans-serif;
     letter-spacing: 1px;
-    color: #303b78;
+    color: #503434;
 }
 .container {
     width: 100%;
@@ -63,6 +64,7 @@ nav {
     align-items: center;
     z-index: 99;
     font-family: 'Super Dream', sans-serif;
+    color:#ff0000;
     border-bottom: #000000 1px solid;
 }
 

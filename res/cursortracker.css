@@ -4,6 +4,6 @@ html {
 #cursortracker {
     cursor: none;
     z-index: -1;
-    position: sticky;
+    position: absolute;
     pointer-events: none;
 }
