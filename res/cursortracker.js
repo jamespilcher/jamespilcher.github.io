@@ -109,7 +109,7 @@ function updateCursor(event){
 
 
 document.addEventListener('mousemove', updateCursor);
-document.addEventListener('touchmove', updateCursor);
+
 mouseColours = ["rgba(90, 140, 90, 0.8)", "rgba(255, 140, 255, 0.8)", "rgba(255, 140, 90, 0.8)", "rgba(90, 140, 255, 0.8)"];
 currentColourIndex = 0;
 
@@ -119,7 +119,6 @@ document.addEventListener('mousedown', function(event) {
     let fire = new firework(x, y, mouseColours[currentColourIndex]);
     fire.explode();
     currentColourIndex = (currentColourIndex + 1) % mouseColours.length;
-
 });
 
 maxSize = 8;
