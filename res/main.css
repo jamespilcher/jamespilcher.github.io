@@ -35,8 +35,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .welcome {
     text-align: center;
-    padding-top: 25px;
-    padding-bottom: 0px;
+    padding-top: .3rem;
     margin-bottom: 1rem;
     font-size: 1.5rem;
     letter-spacing: 1px;
