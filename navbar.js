@@ -10,7 +10,7 @@ document.write(`
     </ul>
     <ul>
         <li><a href="../blog">blog</a></li>
-        <li><a href="../projects">codeArt</a></li>
+        <li><a href="../codeArt">codeArt</a></li>
         <li><a href="../music">music</a></li>
     </ul>
 </nav>
