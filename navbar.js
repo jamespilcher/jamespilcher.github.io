@@ -1,6 +1,12 @@
 let currentUrl = window.location.href;
 root = currentUrl.split("/").slice(0, 3).join("/");
 
+jpilcher = "JPilcher"
+// if window size < 600px, use JP
+if (window.innerWidth < 600) {
+    jpilcher = "JP"
+}
+
 document.write(`
 <link href="https://fonts.cdnfonts.com/css/pp-neue-montreal" rel="stylesheet">
                                                 
@@ -9,10 +15,10 @@ document.write(`
 <nav>
     <ul class="left">
         <a href="${root}/home" class="logo"
-        >JPilcher<img src="${root}/res/jim.png" class="logoimage"/></a>
+        >${jpilcher}<img src="${root}/res/jim.png" class="logoimage"/></a>
     </ul>
     <ul>
-        <li><a href="${root}/blog">blog</a></li>
+        <li><a href="${root}/blog">blog/other</a></li>
         <li><a href="${root}/codeArt">codeArt</a></li>
         <li><a href="${root}/music">music</a></li>
     </ul>
