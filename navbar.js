@@ -20,7 +20,7 @@ document.write(`
         >${jpilcher}<img src="${root}/res/jim.png" class="logoimage"/></a>
     </ul>
     <ul>
-        <li><a href="${root}/blog">${blog}/other</a></li>
+        <li><a href="${root}/blog">${blog}</a></li>
         <li><a href="${root}/codeArt">codeArt</a></li>
         <li><a href="${root}/music">music</a></li>
     </ul>

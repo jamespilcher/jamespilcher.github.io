@@ -2,6 +2,13 @@
 asciiChars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.', ' ']
 //asciiCharsReversed = asciiChars.reverse()
 
+fontSize = 4;
+
+const videoElement = document.getElementById('videoElement');
+const asciiOutput = document.getElementById('asciiOutput');
+asciiOutput.style.fontSize = fontSize + 'px';
+const  outputWidth = Math.round(document.body.clientWidth / fontSize); //font size is 5
+
 function stepFunction(x) {
   if (x < 0){
     return 0;
@@ -42,7 +49,7 @@ function generateAsciiArt(data) {
     output += asciiChar;
     charIndexCount += index;
   }
-  document.getElementById('asciiOutput').innerHTML = output;
+  asciiOutput.innerHTML = output;
   averageChar = charIndexCount / (data.length / pixelDataSize);
   
   return averageChar;
@@ -62,8 +69,6 @@ oscillator.connect(gainNode);
 gainNode.connect(audioContext.destination);
 oscillator.start();
 
-const videoElement = document.getElementById('videoElement');
-const  outputWidth = 192;
 //create a canvas
 // Access the webcam stream
 navigator.mediaDevices.getUserMedia({ video: true })
