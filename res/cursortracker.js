@@ -115,6 +115,7 @@ currentColourIndex = 0;
 
 // on mouse down change colour
 document.addEventListener('mousedown', function(event) {
+    setCSize();
     var [x,y] = getCursorPos(event);
     let fire = new firework(x, y, mouseColours[currentColourIndex]);
     fire.explode();
