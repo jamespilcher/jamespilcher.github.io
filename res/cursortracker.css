@@ -3,7 +3,9 @@ html {
 }
 #cursortracker {
     cursor: none;
-    z-index: -1;
-    position: absolute;
+    z-index: 99;
+    position: fixed;
     pointer-events: none;
+    top: 0;
+    left: 0;
 }

@@ -21,6 +21,10 @@ function setCSize(){
     document.body.clientHeight,
     document.documentElement.clientHeight
     );
+
+    c.width = window.innerWidth
+    c.height = window.innerHeight
+    console.log(c.width, c.height)
 }
 
 function getCursorPos(event){
@@ -28,17 +32,10 @@ function getCursorPos(event){
     y = event.pageY - document.documentElement.scrollTop;
     return [x,y];
 }
-c.style.position = "fixed";
-c.style.zIndex = "99";
 var ctx = c.getContext("2d");
 
+setCSize();
 
-timer = setInterval(function() {
-    setCSize();
-    clearInterval(timer);
-}, 5);
-
-// when mouse moves left to right, draw a line
 class mousePosition {
     constructor(x, y) {
         this.x = x;
@@ -85,18 +82,6 @@ class ember {
 
 embers = [];
 
-// on mouse move, update mouse position
-// fix on resize
-window.addEventListener('scroll', function() {
-    setCSize();
-    mousePositions = [];
-});
-
-window.addEventListener('resize', function() {
-    setCSize();
-    mousePositions = [];
-});
-
 function updateCursor(event){
     if (mousePositions.length > 6) {
         mousePositions.shift();
@@ -115,7 +100,7 @@ currentColourIndex = 0;
 
 // on mouse down change colour
 document.addEventListener('mousedown', function(event) {
-    setCSize();
+    setCSize(); // reset if need be, in case there is a bug..
     var [x,y] = getCursorPos(event);
     let fire = new firework(x, y, mouseColours[currentColourIndex]);
     fire.explode();
