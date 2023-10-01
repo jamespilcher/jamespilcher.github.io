@@ -5,17 +5,18 @@ currentBlock = "air"
 const tileHeight = 48  // 42 * 1  672  this is too big. the gap above the textures!
 const tileWidth = 48   //         736
 
-const gridWidth = 14
-const gridHeight = 14
-const buildLimit = 8
+const gridWidth = Math.round(document.body.clientWidth / tileWidth)
+console.log(gridWidth)
+const gridHeight = gridWidth
+const buildLimit = 10
 
 lightSpread = 3
 
 //tool bar settings
-toolWidth = 11
-toolHeight = 2
 blockSpacing = 4 //FOR TOOLBAR
-
+toolWidth = Math.round(document.body.clientWidth / (tileWidth + blockSpacing)) - 2 // -1 block width padding
+toolHeight = Math.ceil(Object.keys(blockData).length / toolWidth)
+console.log(toolWidth, toolHeight)
 
 
 const canvas = document.getElementById('world');
@@ -26,7 +27,7 @@ ctx.imageSmoothingEnabled=false
 
 
 canvas.width = tileWidth * (gridWidth)
-canvas.height = tileHeight * (gridHeight - 3)
+canvas.height = tileHeight * (gridHeight + buildLimit) / 2
 const centerGrid = (canvas.width- tileWidth) / 2
 
 
@@ -35,8 +36,8 @@ texture.src = "res/textures/blocks.png"
 
 texture.onload = _ => init()
 const init = () => {
-    genToolBar();
     drawWorld();
+    genToolBar();
 }
 
 const world = new Array(buildLimit).fill(0).map(() => new Array(gridHeight).fill(0).map(() => new Array(gridWidth).fill("air")));

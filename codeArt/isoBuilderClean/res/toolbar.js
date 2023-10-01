@@ -1,10 +1,9 @@
-const toolCanvas = document.getElementById('toolbar');
+const toolCanvas = document.createElement('canvas');
 const toolCtx = toolCanvas.getContext('2d');
 toolCtx.imageSmoothingEnabled = false
 toolCanvas.width = (tileWidth + blockSpacing) * toolWidth + blockSpacing
 toolCanvas.height = (tileHeight + blockSpacing) * toolHeight + blockSpacing
 const toolBar = new Array(toolHeight).fill(0).map(() => new Array(toolWidth).fill("air"));
-
 // ctx.save();
 // ctx.globalAlpha = alpha;
 // ctx.translate((y-x) * tileWidth/2+centerGrid,(x+y)*tileHeight/4+(buildLimit-layerNum)*tileHeight/2);  //THE +500 AND +50 NEED TO CHANGE
@@ -13,6 +12,9 @@ const toolBar = new Array(toolHeight).fill(0).map(() => new Array(toolWidth).fil
 // ctx.restore();
 
 const genToolBar = () => {   //this could use some work. sort by groupType maybe. idk...
+
+
+    document.getElementById("main").appendChild(toolCanvas) // append after world canvas
     texture.width = 7 * 48
     counter = 0
 
