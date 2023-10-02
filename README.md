@@ -34,3 +34,6 @@ If you are curious, the navbar/footer is dynamically created by linking a JS fil
 ## Where?
 
 [jamespilcher.github.io](https://jamespilcher.github.io)
+
+## Who?
+Authored by James Pilcher
