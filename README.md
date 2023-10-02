@@ -4,8 +4,7 @@
 - 🎶 Information About My Music 
 
 <br>
-
-![site pics](readme-res/sitescreenshots.png)
+<img style="border: 2px dotted blue;" src="readme-res/sitescreenshots.png" alt="site pics">
 
 I'd like to add more, like a picture gallery and shortfilms section, but I don't want to over-complicate the site. At the moment, these sections are blog entries.
 
