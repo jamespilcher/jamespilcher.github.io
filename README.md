@@ -1,7 +1,7 @@
 # [My Personal Site](https://jamespilcher.github.io)
 
 - 📝 A Blog 
-- 🎨 Interactive Art (using JavaScript as a medium)
+- 🎨 [Interactive Art (using JavaScript as a medium)](https://jamespilcher.github.io/codeArt)
 - 🎶 Information About My Music 
 
 
