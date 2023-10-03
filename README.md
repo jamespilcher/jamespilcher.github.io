@@ -13,9 +13,9 @@ I'd like to add more, like a picture gallery and shortfilms section, but I don't
 
 I typically use the phrase "just above mundane" to describe the site.
 
-The goal was to induce a sense of nostalgia and offer an engaging, widely accessible, site-wide experience that could captivate users in a unique way. It being a personal site, it's very "true to me" - simply put I find it cool and hope others do to.
+The goal was to induce a sense of nostalgia and offer an engaging, widely accessible, site-wide experience that could captivate users in a unique way. It being a personal site, it's very "true to me" - I find it cool and hope others do to.
 
-You can tell from the design that the site is reminicant of the early-internet days. I like sharing the enjoyment that can come from simple human-computer interaciton, something that I feel is often overlooked these days.
+It's reminicant of the early-internet days, focusing on fun, simple, human-computer interaciton.
 
 ## How?
 
