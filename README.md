@@ -21,8 +21,6 @@ You can tell from the design that the site is reminicant of the early-internet d
 
 Made from scratch in vanilla HTML/CSS/JS.
 
-If you are curious, the navbar/footer is dynamically created by linking a JS file to each page.
-
 ```
 - jamespilcher.github.io
     - Home
@@ -30,6 +28,8 @@ If you are curious, the navbar/footer is dynamically created by linking a JS fil
     - CodeArt
     - Music
 ```
+
+If you are curious, the navbar/footer is dynamically created by linking a JS file to each page. Not ideal but convenient...
 
 ## Where?
 
