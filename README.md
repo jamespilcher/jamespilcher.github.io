@@ -15,7 +15,7 @@ I typically use the phrase "just above mundane" to describe the site.
 
 The goal was to induce a sense of nostalgia and offer an engaging, widely accessible, site-wide experience that could captivate users in a unique way. It being a personal site, it's very "true to me" - I find it cool and hope others do to.
 
-It's reminicant of the early-internet days, focusing on fun, simple, human-computer interaciton.
+It's reminicant of the early-internet days: focusing on fun, simple, human-computer interaciton.
 
 ## How?
 
