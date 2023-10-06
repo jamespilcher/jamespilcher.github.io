@@ -1,5 +1,5 @@
 # [My Personal Site](https://jamespilcher.github.io)
-
+## What?
 - 📝 A Blog 
 - 🎨 [Interactive Art](https://jamespilcher.github.io/codeArt) (using JavaScript as a medium)
 - 🎶 Information About My Music 
