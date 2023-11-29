@@ -96,7 +96,7 @@ function updateCursor(event){
 document.addEventListener('mousemove', updateCursor);
 
 mouseColours = ["rgba(90, 140, 90, 0.8)", "rgba(255, 140, 255, 0.8)", "rgba(255, 140, 90, 0.8)", "rgba(90, 140, 255, 0.8)"];
-currentColourIndex = 0;
+currentColourIndex = Math.floor(Math.random() * mouseColours.length);
 
 // on mouse down change colour
 document.addEventListener('mousedown', function(event) {
