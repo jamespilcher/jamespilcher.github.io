@@ -7,7 +7,7 @@ fontSize = 4;
 const videoElement = document.getElementById('videoElement');
 const asciiOutput = document.getElementById('asciiOutput');
 asciiOutput.style.fontSize = fontSize + 'px';
-const  outputWidth = Math.round(document.body.clientWidth / fontSize); //font size is 5
+const  outputWidth = Math.round(document.body.clientWidth / fontSize);
 
 function stepFunction(x) {
   if (x < 0){

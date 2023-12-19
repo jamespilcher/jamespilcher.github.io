@@ -1,0 +1,9 @@
+#symbolSquare {
+    font-family: 'Courier New', monospace;
+    font-size: 5px;
+    white-space: pre;
+    text-align: center;
+    
+    /* no gap between chars, vertical or horizontal */
+
+  }
