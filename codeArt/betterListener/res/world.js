@@ -90,7 +90,7 @@ class SymbolSquare {
         for (let i = 0; i < sentence.length; i++) {
             if (currentX >= this.width) {
                 currentY++;
-                currentX = Math.floor(Math.random() * this.width - sentence.length / 2);
+                currentX = Math.floor(Math.random() * (this.width - sentence.length / 4));
             }
             if (currentY >= this.height) {
                 break;
