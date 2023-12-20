@@ -6,12 +6,14 @@
 const fontSize = 20;
 const symbolSquareElement = document.getElementById('symbolSquare');
 const startButton = document.getElementById('startButton');
-
+const userInput = document.getElementById('messageInput');
+const inputBox = document.getElementById('inputBox');
 
 function show() {
   // fade in bodge
   startButton.style.display = 'none';
   symbolSquareElement.hidden = false;
+  inputBox.hidden = false;
   main();
 }
 
@@ -21,11 +23,23 @@ function main() {
   const squareSize = Math.round(document.body.clientWidth / (fontSize * .8));
   const symbolSquare = new SymbolSquare(squareSize * .5, squareSize, symbolSquareElement);
 
-
+  const elizaBot = new ElizaBot();
+  
+  userInput.focus();
+  userInput.addEventListener('keydown', function(event) {
+    if (event.keyCode == 13) {
+      initiate(userInput.value);
+      userInput.value = "";
+    }
+  });
 
   // main.js
-  const elizaBot = new ElizaBot();
-
+  function initiate(userText) {
+    symbolSquare.populateWorldWithSentence(userText, "color: blue; font-weight: bold;");
+    const aiResponse = elizaBot.processInput(userText);
+    console.log("AI Response:", aiResponse);
+    speak(aiResponse);
+  }
   function startSpeechRecognition() {
     const recognition = new webkitSpeechRecognition() || new SpeechRecognition();
     recognition.continuous = true;
@@ -44,10 +58,7 @@ function main() {
       console.log("Confidence:", confidence);
 
       if (confidence > 0.5) {
-        symbolSquare.populateWorldWithSentence(transcript, "color: blue; font-weight: bold;");
-        const aiResponse = elizaBot.processInput(transcript);
-        console.log("AI Response:", aiResponse);
-        speak(aiResponse);
+        initiate(transcript);
       }
     };
 

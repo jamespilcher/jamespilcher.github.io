@@ -12,3 +12,13 @@
     /* no gap between chars, vertical or horizontal */
 
   }
+
+
+  
+.message {
+  max-width: 100%;
+  font-family:'Courier New', Courier, monospace;
+  padding: 10px;
+  margin: 10px;
+  text-align: center;
+}
