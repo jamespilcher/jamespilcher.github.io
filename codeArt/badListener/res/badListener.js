@@ -266,9 +266,8 @@ function generateSentence() {
 function userInputBox() {
   conversation.innerHTML += "<div class='message left' id='inputBox'><b>[YOU]</b><br>" + 
                             "<input type='text' id='messageInput' placeholder='_____________________'></div>";
-                  
+  
   userInput = document.getElementById('messageInput');
-  userInput.focus();
   userInput.addEventListener('keydown', function(event) {
     if (event.keyCode == 13) {
       appendUserReply(userInput.value.trim());

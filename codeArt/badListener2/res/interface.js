@@ -25,7 +25,6 @@ function main() {
 
   const elizaBot = new ElizaBot();
   
-  userInput.focus();
   userInput.addEventListener('keydown', function(event) {
     if (event.keyCode == 13) {
       initiate(userInput.value);
