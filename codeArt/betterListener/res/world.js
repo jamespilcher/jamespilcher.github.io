@@ -82,7 +82,7 @@ class SymbolSquare {
     populateWorldWithSentence(sentence, colour) {
         sentence = sentence.replace(/[^a-zA-Z ]/g, "").toLowerCase();
         // pick random stanting x, y. Ensure y is not too close to the bottom. make them ints
-        const x = Math.floor(Math.random() * this.width - sentence.length / 2);
+        const x = Math.floor(getRandomNumber(0, this.width - sentence.length / 2))
         const y = Math.floor(Math.random() * (this.height - 2));
         // for each letter in the sentence, add it to the world, at the right index. if hit the end of the line, go to the next line
         let currentX = x;
@@ -90,7 +90,7 @@ class SymbolSquare {
         for (let i = 0; i < sentence.length; i++) {
             if (currentX >= this.width) {
                 currentY++;
-                currentX = Math.floor(Math.random() * (this.width - sentence.length / 4));
+                currentX = Math.floor(getRandomNumber(0, this.width - sentence.length / 2))
             }
             if (currentY >= this.height) {
                 break;
