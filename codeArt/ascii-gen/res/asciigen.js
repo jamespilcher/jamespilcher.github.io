@@ -85,6 +85,7 @@ function main() {
     .then((stream) => {
       videoElement.srcObject = stream;
       videoElement.style.display = 'none';
+
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       canvas.display = 'none';
