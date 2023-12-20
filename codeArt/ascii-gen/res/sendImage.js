@@ -1,3 +1,11 @@
+
+function show() {
+  // fade in bodge
+  startButton.style.display = 'none';
+  asciiCam.hidden = false;
+  videoElement.play();
+}
+
 const fileInput = document.getElementById('image-upload');
 
 

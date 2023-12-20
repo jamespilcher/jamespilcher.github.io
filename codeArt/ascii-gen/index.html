@@ -26,10 +26,17 @@
         <div class="blogtitle">
             <i>asciiCam</i>
         </div>
-        <video id="videoElement" autoplay></video>
-        <div class="asciiContainer">
-            <pre id="asciiOutput"></pre>
+        
+        <div id="button-container">
+            <button id="startButton" onclick="show()">AsciiCamify</button>
+        </div>     
+        <div id="asciiCam" hidden = true>
+            <video id="videoElement"></video>
+            <div class="asciiContainer">
+                <pre id="asciiOutput"></pre>
+            </div>
         </div>
+
     </div>
     <script src="../../footer.js"></script>
     <script src="res/asciigen.js"></script>
