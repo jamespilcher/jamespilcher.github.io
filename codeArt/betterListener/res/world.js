@@ -12,15 +12,16 @@ class Symbol {
     constructor() {
         this.current_symbol = this.getRandomSymbol();
         this.next_symbol = this.getRandomSymbol();
-        this.current_colour = "black";
-        this.next_colour = "black";
+        this.current_css = "";
+        this.next_css = "";
+        this.next_symbol_update_time = getRandomNumber(0, 2000);
         this.start();
     }
     update() {
         this.current_symbol = this.next_symbol;
-        this.current_colour = this.next_colour;
+        this.current_css = this.next_css;
         this.next_symbol = this.getRandomSymbol();
-        this.next_colour = "black"; // go back to black!
+        this.next_css = ""; // go back to black!
         this.next_symbol_update_time = getRandomNumber(1000, 3000);
         this.start();
     }
@@ -58,7 +59,7 @@ class SymbolSquare {
             .map(row =>
                 row
                     .map(symbol =>
-                        `<span style="color: ${symbol.current_colour}">${symbol.current_symbol}</span>`
+                        `<span style="${symbol.current_css}">${symbol.current_symbol}</span>`
                     )
                     .join('')
             )
@@ -71,15 +72,15 @@ class SymbolSquare {
         }, 50)
     }
 
-    setSymbol(x, y, symbol, colour) {
+    setSymbol(x, y, symbol, css) {
         console.log("setting symbol", x, y, symbol);
         this.content[y][x].current_symbol = symbol;
         this.content[y][x].next_symbol = symbol;
-        this.content[y][x].current_colour = colour;
-        this.content[y][x].next_colour = colour;
+        this.content[y][x].current_css = css;
+        this.content[y][x].next_css = css;
     }
 
-    populateWorldWithSentence(sentence, colour) {
+    populateWorldWithSentence(sentence, css) {
         sentence = sentence.replace(/[^a-zA-Z ]/g, "").toLowerCase();
         // pick random stanting x, y. Ensure y is not too close to the bottom. make them ints
         const x = Math.floor(getRandomNumber(0, this.width - sentence.length / 2))
@@ -95,7 +96,7 @@ class SymbolSquare {
             if (currentY >= this.height) {
                 break;
             }
-            this.setSymbol(currentX, currentY, sentence[i], colour);
+            this.setSymbol(currentX, currentY, sentence[i], css);
             currentX++;
         }
         console.log(sentence);

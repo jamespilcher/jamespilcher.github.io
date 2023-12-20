@@ -1,10 +1,10 @@
 
 
-const fontSize = 15;
+const fontSize = 20;
 const symbolSquareElement = document.getElementById('symbolSquare');
 symbolSquareElement.style.fontSize = fontSize + 'px';
-const squareSize = Math.round(document.body.clientWidth / fontSize);
-const symbolSquare = new SymbolSquare(squareSize * 2/3, squareSize, symbolSquareElement);
+const squareSize = Math.round(document.body.clientWidth / (fontSize * .8));
+const symbolSquare = new SymbolSquare(squareSize * .5, squareSize, symbolSquareElement);
 
 
 
@@ -30,6 +30,7 @@ function startSpeechRecognition() {
     console.log("Confidence:", confidence);
 
     if (confidence > 0.5) {
+      symbolSquare.populateWorldWithSentence(transcript, "color: blue; font-weight: bold;");
       const aiResponse = elizaBot.processInput(transcript);
       console.log("AI Response:", aiResponse);
       speak(aiResponse);
@@ -55,28 +56,40 @@ const voiceSettings = {
     pitch: getRandomNumber(0.1, 1.1),
   };
 
-function speak(text) {
-    const synth = window.speechSynthesis;
+  function speak(text) {
+    const synth = window.speechSynthesis
     const utterance = new SpeechSynthesisUtterance(text);
-    const voices = synth.getVoices();
 
-    if (voices.length > 0) {
-        // If voiceIndex is not set, randomly choose one and store the settings
-        if (voiceSettings.voiceIndex === null) {
-        voiceSettings.voiceIndex = Math.floor(Math.random() * voices.length);
+    function initializeSpeech() {
+        const voices = synth.getVoices();
+        console.log("voices length: " + voices.length);
+
+        if (voices.length > 0) {
+            if (voiceSettings.voice === null) {
+                voiceSettings.voice = voices[Math.floor(Math.random() * voices.length)];
+            }
+
+            console.log("voice settings:1 " + voiceSettings.voice + " " + voiceSettings.volume + " " + voiceSettings.rate + " " + voiceSettings.pitch);
+
+            utterance.voice = voiceSettings.voice;
+            utterance.volume = voiceSettings.volume;
+            utterance.rate = voiceSettings.rate;
+            utterance.pitch = voiceSettings.pitch;
+
+            synth.speak(utterance);
+            setTimeout(() => { symbolSquare.populateWorldWithSentence(text, "color: red; font-weight: bold;") }, 500);                
         }
+    }
 
-        // Apply the stored voice settings to the utterance
-        utterance.voice = voices[voiceSettings.voiceIndex];
-        utterance.volume = voiceSettings.volume;
-        utterance.rate = voiceSettings.rate;
-        utterance.pitch = voiceSettings.pitch;
+    // Check if there are voices available immediately
+    initializeSpeech();
 
-        // Initiate speech synthesis
-        synth.speak(utterance);
-        symbolSquare.populateWorldWithSentence(text, "red");
+    // If not, wait for the voiceschanged event before initializing
+    if (synth.onvoiceschanged !== undefined) {
+        synth.onvoiceschanged = initializeSpeech;
     }
 }
+
 startSpeechRecognition();
 
 
