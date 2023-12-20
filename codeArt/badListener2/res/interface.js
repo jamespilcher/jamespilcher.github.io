@@ -67,13 +67,16 @@ function main() {
     voice: null,
     volume: 0.8,
     rate: getRandomNumber(0.95, 1.05),
-    pitch: getRandomNumber(0.1, 1.1),
+    pitch: getRandomNumber(0.3, 1.00),
   };
 
-  function speak(text) {
-    const synth = window.speechSynthesis
-    const utterance = new SpeechSynthesisUtterance(text);
+  const synth = window.speechSynthesis
 
+  function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (synth.speaking) {
+      synth.cancel();
+    }
     function initializeSpeech() {
       const voices = synth.getVoices();
       console.log("voices length: " + voices.length);

@@ -19,7 +19,7 @@ function ElizaBot() {
       { pattern: /^.* siblings .*$|.* brother .*$|.* sister .*$/i, responses: ["I don't give a shit about siblings."] },
       { pattern: /^thank you$|cheers$/i, responses: ["Youre welcome."] },
       { pattern: /^.* fact .*$/i, responses: ["You are a loser, that's a fact"] },
-      { pattern: /^tell me .*$/i, responses: ["I don't have to tell you anything"] },
+      { pattern: /^tell me .*$/i, responses: ["I don't have to tell you anything", "No"] },
 
       // Add more patterns and responses as needed
 
