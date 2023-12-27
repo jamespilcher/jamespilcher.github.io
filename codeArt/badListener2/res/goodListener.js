@@ -23,7 +23,7 @@ function ElizaBot() {
 
       // Add more patterns and responses as needed
 
-      { pattern: /(.*)/, responses: ["$1.", "What the fuck does that mean?", "I'm not listening", "You suck", "Whatever", "Okay", "Nice"] },
+      { pattern: /(.*)/, responses: ["$1.", "What the fuck does that mean?", "I'm not listening", "You suck", "Whatever", "Okay", "Nice", "Shut up"] },
     ];
   
     this.getRandomResponse = function(responses) {
