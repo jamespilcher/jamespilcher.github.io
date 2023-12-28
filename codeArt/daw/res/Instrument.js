@@ -2,8 +2,9 @@ class Instrument {
     // atributes
     constructor() {
         this.audioContext = new AudioContext();
-        this.noteSequence = [];
+        this.noteSequence = new Array(NUM_OF_NOTES).fill().map(() => []); // Initialize with empty arrays
         this.active = true;
+        this.midiGrid = new MidiGrid(this);
     }
 
     noteAsFrequency(note) {
@@ -35,11 +36,7 @@ class Instrument {
     playNote(note) {
     }
 
-    setNoteSequence(noteSequence) {
-        this.noteSequence = noteSequence;
-    }
-
     addNoteAtIndex(note, index) {
-        this.noteSequence[index] = note;
+        this.noteSequence[index].push(note);
     }
 }

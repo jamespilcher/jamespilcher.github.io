@@ -11,8 +11,8 @@ class Saw extends Instrument{
         oscillator.type = 'sawtooth';
         oscillator.frequency.setValueAtTime(this.noteAsFrequency(note.note), this.audioContext.currentTime);
         oscillator.connect(this.audioContext.destination);
-        oscillator.start(note.start * NOTE_DURATION);
-        oscillator.stop(this.audioContext.currentTime + (note.start + note.length) * NOTE_DURATION); // Adjust the duration
+        oscillator.start();
+        oscillator.stop(this.audioContext.currentTime + note.length * NOTE_DURATION); // Adjust the duration
         console.log("Playing note " + note.note + " for " + note.length * NOTE_DURATION + " seconds");
     }
 
