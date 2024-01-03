@@ -7,19 +7,16 @@ class MidiGrid {
         this.grid = new Array(NUM_OF_NOTES);
         this.grid = new Array(SCALE).fill().map(() => Array(NUM_OF_NOTES).fill([])); // 2D array with NUM_NOTES columns
     }
-    display() {
-        console.log("AHHAHAAHAHAHAHAHHA")
-        const table = document.createElement("table");
+    createGrid() {
+        const buttonGrid = document.getElementById('midiGrid');
 
-        for (let i = 0; i < this.grid.length; i++) {
-            const row = table.insertRow();
-            for (let j = 0; j < this.grid[i].length; j++) {
-                const cell = row.insertCell();
-                cell.textContent = this.grid[i][j].join(", ");
+        for (let i = 0; i < SCALE; i++) {
+            for (let j = 0; j < NUM_OF_NOTES; j++) {
+                const button = document.createElement("button");
+                button.textContent = "";
+                
+                this.grid[i][j] = button;
             }
         }
-
-        document.getElementById("table").appendChild(table);
-        console.log(this.grid);
     }
 }

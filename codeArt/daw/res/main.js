@@ -16,5 +16,5 @@ function main(){
     console.log(saw.noteSequence)
     conductor = new Conductor([saw]);
     conductor.playSong();
-    saw.midiGrid.display();
+    saw.midiGrid.createGrid();
 }
