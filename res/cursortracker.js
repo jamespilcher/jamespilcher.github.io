@@ -24,7 +24,6 @@ function setCSize(){
 
     c.width = window.innerWidth
     c.height = window.innerHeight
-    console.log(c.width, c.height)
 }
 
 function getCursorPos(event){
@@ -67,7 +66,6 @@ class ember {
         this.yDirectionModifier = Math.random() * 2 - 1;
         let self = this;      
         let timer = setInterval(function() {
-            console.log("ember", self.x, self.y, self.size)
             self.x += self.speed * self.xDirectionModifier;
             self.y += self.speed * self.yDirectionModifier;
             self.size -= 1;

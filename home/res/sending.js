@@ -20,13 +20,11 @@ function areRequiredFilled() {
 
 function sending(){
     if (!areRequiredFilled()) {
-        console.log("not filled")
         return;
         }
     var originalHeight = form.offsetHeight;
     var computedStyle = getComputedStyle(form);
     var originalBackgroundColor = computedStyle.backgroundColor;
-    console.log(originalBackgroundColor);
 // Hide the element
     form.style.display = 'none';
 
@@ -81,11 +79,9 @@ window.onload = function() {
     });
 
     function changeColor(event, element, index, elements) {
-        console.log(element.value)
         if (event.keyCode === 13) {
             // Prevent the default behavior of the Enter key (form submission)
             if (element.tagName.toLowerCase() === 'textarea' || index === elements.length - 1){
-                console.log("skip")
                 return;
             }
             event.preventDefault();
@@ -93,13 +89,11 @@ window.onload = function() {
             // Move to the next input field
             elements[index + 1].focus();
             }
-        console.log("changecolor")
         // Generate a random color for the character
         const randomColor = getRandomColor();
 
         // Display the styled characters in the div using innerHTML
         element.style.color = randomColor;
-        console.log("set color of " + element.style.color)
     }
     // Function to generate a random color
     function getRandomColor() {
