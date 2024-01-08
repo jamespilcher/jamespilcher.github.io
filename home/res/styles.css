@@ -43,11 +43,7 @@
     padding: 20px;
     padding-top:10px;
     padding-bottom: 0px;
-  }
-
-#contact {
-    margin-bottom: 0px;
-    margin-top: 0px;
     font-family:'Courier New';
-
-}
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
