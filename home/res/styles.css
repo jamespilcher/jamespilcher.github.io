@@ -1,0 +1,53 @@
+#email-form {
+    background-color: rgb(240, 230, 220);
+    margin-top: 0px;
+    margin-bottom: 20px;
+    padding: 20px;
+    padding-top: 20px;
+}
+
+#email-form input,
+#email-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    resize: vertical;
+
+}
+
+#contactFormSubmit {
+    background-color: rgb(220, 190, 170);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: .5rem;
+    cursor: pointer;
+    width: 100%;
+    font-family:'Courier New', Courier, monospace;
+    font-weight: bold;
+
+}
+
+#contactFormSubmit:hover {
+    background-color: rgb(200, 170, 150);
+}
+
+
+
+#tab {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: inline-block;
+    background-color: rgb(240, 230, 220);
+    padding: 20px;
+    padding-top:10px;
+    padding-bottom: 0px;
+  }
+
+#contact {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family:'Courier New';
+
+}

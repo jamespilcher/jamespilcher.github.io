@@ -11,6 +11,7 @@
                 
     <link rel="stylesheet" href="../res/main.css">
     <link rel="stylesheet" href="../res/cursortracker.css">
+    <link rel="stylesheet" href="res/styles.css">
     <link rel="icon" href="../res/jim.png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"></script>
@@ -31,16 +32,38 @@
         <div class="welcome"><p>BREAK AWAY FROM THE NORM</p></div>
 
         <h2>About me</h2>
-        <img src="../res/me.png" width="120" height="80"></img>
+        <img src="res/me.png" width="120" height="80"></img>
         <p>Hey! I'm James Pilcher. I like making things. Currently a software intern @ Rapyuta Robotics, Tokyo!</p>
         <p>Check out <a href="../codeArt">codeArt</a>.</p>
 
         <div class="banner">),0-.3*+9:=/n   ),0-.3*+9:=/n   ),0-.3*+9:=/n   ),0-.3*+9:=/n   </div>
 
+
         <h2>The site</h2>
         Made with vanilla HTML, CSS, and JavaScript. Hosted on GitHub pages.
-    </div>
 
+        <br><br><br>
+        <div id="tab">
+          <h2 id="contact">contact</h2>
+
+        </div>
+
+          <form id="email-form" accept-charset="utf-8" action="https://formsubmit.co/df12fc7a6d359a601ba0efe139e4e642" method="post">
+              <input type="text" name="name" id="full-name" placeholder="name" required="">
+              
+              <input type="email" name="email" id="email-address" placeholder="email@address.com" required="">
+              
+              <input type="text" name="_subject" id="subject" placeholder="subject" required="">
+              
+              <textarea rows="8" name="message" id="message" placeholder="please enter your message here" required="required"></textarea>
+              
+              <button id="contactFormSubmit" type="submit" onclick="sending()">send mail</button>
+          </form>
+
+
+
+    </div>
+    <script src="res/sending.js"></script>
     <script src="../footer.js"></script>
     <script src="../res/cursortracker.js"></script>
 </body>
