@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+<html lang="en">
+
+<head>
+    <title>Blog</title>
+    <link rel="stylesheet" href="../../res/main.css">
+    <link rel="stylesheet" href="../../res/cursortracker.css">
+    <link rel="icon" href="../../res/jim.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-REWLQQ5D58');
+  </script>
+</head>
+
+<body>
+    <canvas id="cursortracker"></canvas>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+        <h2>Blog</h2>
+        <p> In November 2023, I created <i>The Sunday Journal Club</i>. Each sunday, my friends and I write our own little pieces of written media.
+        </p>
+        <p> Below are some of my favourite entries (of mine) from <i>The Club</i>, plus a few extras from elsewhere.</p>
+        <div class="blogpost" id = "posts">
+            <ul id = "entries">
+<li><a href="entries/hello_world.html">07/07/2024 | Hello World</a></li>
+<li><a href="entries/test.html">07/06/2024 | This is a Test Blog</a></li>
+            </ul>
+        </div>
+    </div>
+    <script src="../../footer.js"></script>
+    <script src="../../res/cursortracker.js"></script>
+</body>
+<script> 
+    var posts = document.getElementById("posts").getElementsByTagName("a");
+</script>
+<script src="../../res/colour-changer.js"></script>
+
+</html>
