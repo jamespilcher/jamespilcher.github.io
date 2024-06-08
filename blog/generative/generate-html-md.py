@@ -1,40 +1,15 @@
-import re # pip install pathvalidate
-# working dir is blog/2.0/generative
-# loop through md files in ../md/
-# for each md file
-# copy base-entry.html to ../<sanitised first line of md file>.html
-# change the string in new file: 'base-entry.md' to the name of the md file
+""" Script to generate html files for blog entries from markdown files. Updates index.html with the entries. """
 
 
-
-
-# copy base-index.html to ../index.html
-# for file in entries/ folder
-# the second line of each file will be the date (in uk format)
-# the first line of each file will be the title
-# create a list that is sorted by date
-
-# for each file in the list
-# add a new entry to the list of entries
-#                 <li><a href="FILENAME.html">[DATE] | [TITLE]</a></li> 
-# child of ul with id 'entries'
-
-
-
+import re
 import os
 import shutil
 from datetime import datetime
 
-# wipe the entries folder contents but not the folder itself
-# get cwd
 [os.remove(os.path.join('../entries', f)) for f in os.listdir('../entries')]
-# delete the index.html file
 if os.path.exists('../index.html'):
     os.remove('../index.html')
 
-# 
-
-# Loop through md files in ../md/
 md_names = [f for f in os.listdir('../md/') if f.endswith('.md')]
 
 entry_data = []
@@ -49,7 +24,6 @@ for md_name in md_names:
         html_name =  re.sub(r'\W+', '_', md_name[:-3]) + '.html'
         new_html_file = f'../entries/{html_name}'
         shutil.copyfile('base-entry.html', new_html_file)
-        # Change the string in new file: 'base-entry.md' to the name of the md file
         with open(new_html_file, 'r+') as f:
             content = f.read()
             f.seek(0)
@@ -59,11 +33,9 @@ for md_name in md_names:
 
 entry_data.sort(key=lambda x: x['date'], reverse=True)
 
-# For each file in the list, add a new entry to the list of entries
-with open('base-index.html', 'r') as index_file, open('../index.html', 'w') as temp_file:
-    for line in index_file:
-        temp_file.write(line)
+with open('base-index.html', 'r') as base_index_file, open('../index.html', 'w') as index_file:
+    for line in base_index_file:
+        index_file.write(line)
         if line.strip() == '<ul id = "entries">':
             for entry in entry_data:
-                # <li><a href="FILENAME.html">[DATE] | [TITLE]</a></li> 
-                temp_file.write(f'<li><a href="entries/{entry["html_name"]}">{entry["date"].strftime("%d/%m/%Y")} | {entry["title"]}</a></li>\n')
+                index_file.write(f'<li><a href="entries/{entry["html_name"]}">{entry["date"].strftime("%d/%m/%Y")} | {entry["title"]}</a></li>\n')
