@@ -1,0 +1,12 @@
+#radiocontainer {
+    text-align: center;
+    outline: black 1px dotted;
+    width: 250px;
+}
+
+#radioimg {
+    width: 100%;
+}
+.bw-filter {
+    filter: grayscale(100%);
+}
