@@ -1,25 +1,26 @@
 
 const form = document.getElementById('email-form');
 
-function areRequiredFilled() {
+function areRequiredValid() {
     // Get all text/input fields in the form
     var formFields = document.querySelectorAll('#email-form input, #email-form textarea');
 
     // Initialize a boolean variable to check if all fields are filled
-    var allFieldsFilled = true;
+    // Initialize a boolean variable to check if all fields are valid
+    var allFieldsValid = true;
 
     // Check each field
     formFields.forEach(function(field) {
-      if (field.hasAttribute('required') && field.value.trim() === '') {
-        allFieldsFilled = false;
+      if (!field.checkValidity()) {
+        allFieldsValid = false;
       }
     });
-    return allFieldsFilled;
+    return allFieldsValid;
 }
 
 
 function sending(){
-    if (!areRequiredFilled()) {
+    if (!areRequiredValid()) {
         return;
         }
     var originalHeight = form.offsetHeight;
