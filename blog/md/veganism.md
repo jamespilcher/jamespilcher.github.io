@@ -116,5 +116,3 @@ violence and I don't want that).
 I just don't feel emotionally convicted enough to act. The thought that
 I've never heard a convincing case for meat-eating (that applies to me),
 is quite a big realisation though.
-
-I am curious if other people think about this kinda thing.
