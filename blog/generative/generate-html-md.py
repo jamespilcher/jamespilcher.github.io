@@ -20,15 +20,20 @@ for md_name in md_names:
             raise ValueError('Spaces are not allowed in md file names. replace it with an underscore!')
         title = f.readline().strip()[2:]
         date_str = f.readline().strip()[1:-1]
-        date = datetime.strptime(date_str, '%d/%m/%Y')
+        print(date_str)
+        date = datetime.strptime(date_str, '%d/%m/%y')
         html_name =  re.sub(r'\W+', '_', md_name[:-3]) + '.html'
         new_html_file = f'../entries/{html_name}'
         shutil.copyfile('base-entry.html', new_html_file)
         with open(new_html_file, 'r+') as f:
             content = f.read()
             f.seek(0)
-            f.write(content.replace('<title>base-head</title>', f'<title>{title}</title>\n'))
             f.write(content.replace('base-entry.md', md_name))
+        with open(new_html_file, 'r+') as f:
+            content = f.read()
+            f.seek(0)
+            f.write(content.replace('<title>base-head</title>', f'<title>{title}</title>\n'))
+            
         entry_data.append({'date': date, 'title': title, 'md_name': md_name, 'html_name': html_name})
 
 entry_data.sort(key=lambda x: x['date'], reverse=True)

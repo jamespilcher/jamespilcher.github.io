@@ -11,7 +11,7 @@ body {
     background-color: rgb(255, 245, 235);
     color: #000000;
     font-family: 'PP Neue Montreal', sans-serif;
-    max-width: 630px;
+    max-width: 730px;
     display: flex;
     flex-direction: column;
     justify-content: center;
