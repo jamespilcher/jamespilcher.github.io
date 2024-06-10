@@ -15,9 +15,10 @@ md_names = [f for f in os.listdir('../md/') if f.endswith('.md')]
 entry_data = []
 
 for md_name in md_names:
-    with open('../md/' + md_name, 'r') as f:
+    with open('../md/' + md_name, 'r',  encoding='utf-8') as f:
         if ' ' in md_name:
             raise ValueError('Spaces are not allowed in md file names. replace it with an underscore!')
+        print(md_name)
         title = f.readline().strip()[2:]
         date_str = f.readline().strip()[1:-1]
         print(date_str)

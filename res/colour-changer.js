@@ -31,7 +31,7 @@ function getColorAtIndex(x) {
     const step = 360 / num_posts;
     const hue = x * step;
     const saturation = 100;
-    const lightness = 40;
+    const lightness = 35;
     const rgb = hslToRgb(hue, saturation, lightness);
     return rgb;
 }

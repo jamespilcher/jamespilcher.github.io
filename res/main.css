@@ -10,8 +10,8 @@ body {
     font-size: 1rem;
     background-color: rgb(255, 245, 235);
     color: #000000;
-    font-family: 'PP Neue Montreal', sans-serif;
-    max-width: 730px;
+    font-family: 'Arial';
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -146,11 +146,9 @@ footer a {
     list-style-type: circle;
 }
 .blogpost a {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: bold;
     text-decoration: none;
-    font-family: 'Super Dream', sans-serif;
-    letter-spacing: 2px;
 }
 
 .blogpost li{
