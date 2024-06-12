@@ -147,7 +147,9 @@ async function playSongAtTime(song, startTime) {
 
     // When the current song ends, play the next song
     songs = songData.songs;
-    next_song = songs[Math.round(RNG(Date.now()) * songs.length)].filename; // Randomly select the next song
+    var now = Date.now();
+    var nearest30Secs = Math.round(now / 30000) * 30000; // Round to the nearest 30 seconds
+    next_song = songs[Math.round(RNG(nearest30Secs) * songs.length)].filename; // Randomly select the next song
     console.log(next_song);
     await playSongAtTime(next_song, 0); // Continue with the next song
     } catch (error) {
