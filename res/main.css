@@ -128,7 +128,7 @@ nav button {
     text-decoration-color: #ff0000; */
     cursor: pointer;
 }
-
+@media (min-width: 450px) {
 #radioPlayer:hover::after {
     content: attr(data-tooltip);
     position: absolute;
@@ -139,7 +139,7 @@ nav button {
     white-space: nowrap;
     font-size: 0.8rem;
 }
-
+}
 /* ---------------------------- FOOTER ------------------------------- */
 footer {
     bottom: 0;
