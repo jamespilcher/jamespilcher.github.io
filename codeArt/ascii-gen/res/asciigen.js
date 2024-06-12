@@ -104,6 +104,27 @@ function main() {
         asciiOutput.style.letterSpacing = originalLetterSpacing; // Restore the original letter-spacing
     });
   }
+  function createPrintButton() {
+    var asciiContainer = document.querySelector('.asciiContainer');
+    var printButton = document.createElement('button');
+    printButton.id = 'printButton';
+    printButton.textContent = 'Print as PDF';
+    asciiContainer.appendChild(document.createElement('br'));
+    asciiContainer.appendChild(printButton);
+    printButton.addEventListener('click', function() {
+      var iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      var asciiOutput = document.getElementById('asciiOutput');
+      var originalLetterSpacing = window.getComputedStyle(asciiOutput).letterSpacing; // Save the original letter-spacing
+      asciiOutput.style.letterSpacing = '0.06rem'; // Change to the desired spacing
+      var asciiOutput = document.getElementById('asciiOutput').cloneNode(true);
+      asciiOutput.style.letterSpacing = originalLetterSpacing; // Restore the original letter-spacing
+      iframe.contentDocument.body.appendChild(asciiOutput);
+      iframe.contentWindow.print();
+      document.body.removeChild(iframe);
+    });
+  }
 
   navigator.mediaDevices.getUserMedia({ video: true })
     .then((stream) => {
@@ -122,7 +143,7 @@ function main() {
       // divide by two to fix stretching
       canvas.height = Math.round(outputHeight / 2.2)
 
-      createSaveHTMLButton();
+      createPrintButton();
       setInterval(() => {
         // Draw the video frame onto the canvas every second
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
