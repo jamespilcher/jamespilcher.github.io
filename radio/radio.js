@@ -18,28 +18,6 @@ let gainNode;
 let currentSongIndex;
 let secondsThroughSong = 0;
 
-async function fetchSongData() {
-    try {
-        const response = await fetch(songsDataJson);
-        songData = await response.json();
-        // shuffle songData.songs array based on day using RNG
-        const now = new Date();
-        const day = now.getDate();
-        const shuffledSongs = songData.songs.sort((a, b) => RNG(day) - 0.5);
-        songData.songs = shuffledSongs;
-        // You can now use song_data in your code
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-
-
-async function setUpSongData(){
-    await fetchSongData();
-}
-setUpSongData();
-
 function seeder(str) {
     let h1 = 1779033703, h2 = 3144134277,
         h3 = 1013904242, h4 = 2773480762;
@@ -65,6 +43,31 @@ function RNG(seed) {
     var s = seed % m
     return (s = s * a % m) / m
 }
+
+async function fetchSongData() {
+    try {
+        const response = await fetch(songsDataJson);
+        songData = await response.json();
+        // shuffle songData.songs array based on day using RNG
+        const now = new Date();
+        const day = now.getDate();
+        console.log(songData.songs);
+        const shuffledSongs = songData.songs.sort((a, b) => RNG(day) - 0.5);
+        songData.songs = shuffledSongs;
+        console.log(songData.songs);
+        // You can now use song_data in your code
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
+
+async function setUpSongData(){
+    await fetchSongData();
+}
+setUpSongData();
+
 
 function playRadio(){
     if (!songData){
