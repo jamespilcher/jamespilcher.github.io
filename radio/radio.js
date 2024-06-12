@@ -15,14 +15,18 @@ var songs;
 let audioContext;
 let gainNode;
 
-let currentSongIndex = 0;
+let currentSongIndex;
 let secondsThroughSong = 0;
 
 async function fetchSongData() {
     try {
         const response = await fetch(songsDataJson);
         songData = await response.json();
-        console.log(songData);
+        // shuffle songData.songs array based on day using RNG
+        const now = new Date();
+        const day = now.getDate();
+        const shuffledSongs = songData.songs.sort((a, b) => RNG(day) - 0.5);
+        songData.songs = shuffledSongs;
         // You can now use song_data in your code
     } catch (error) {
         console.error('Error:', error);
@@ -147,10 +151,8 @@ async function playSongAtTime(song, startTime) {
 
     // When the current song ends, play the next song
     songs = songData.songs;
-    var now = Date.now();
-    var nearest30Secs = Math.round(now / 30000) * 30000; // Round to the nearest 30 seconds
-    next_song = songs[Math.round(RNG(nearest30Secs) * songs.length)].filename; // Randomly select the next song
-    console.log(next_song);
+    currentSongIndex = songs.findIndex(s => s.filename === song);
+    next_song = songs[(currentSongIndex + 1) % songs.length].filename;
     await playSongAtTime(next_song, 0); // Continue with the next song
     } catch (error) {
     console.error('Error fetching or playing file:', error);
