@@ -1,208 +1,194 @@
 {
-    "total_duration": 5661.5147228086635,
+    "total_duration": 5486.387258105544,
     "songs": [
         {
-            "filename": "1 . i saw you.wav",
+            "filename": "A Week and Seven Days.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 178.04451247165534
+            "duration": 195.21183399534314
         },
         {
-            "filename": "10Morning.wav",
+            "filename": "Afternoon Conversation.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 184.80263038548753
+            "duration": 229.73003306787723
         },
         {
-            "filename": "11And Then Lullabye Goodbye.wav",
+            "filename": "And Then Lullabye Goodbye.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 162.47115646258504
+            "duration": 162.81348543252392
         },
         {
-            "filename": "1A Second Hand (Day 1).wav",
+            "filename": "Bonfire.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 185.0016553287982
+            "duration": 203.82184827910072
         },
         {
-            "filename": "2. in the mist.wav",
+            "filename": "Chalkstreams.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 226.36507936507937
+            "duration": 157.84107852153326
         },
         {
-            "filename": "2AWeekandSevenDays.wav",
+            "filename": "Clarity SLASH Falling Asleep.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 194.81514739229024
+            "duration": 196.258610366486
         },
         {
-            "filename": "2Shower.wav",
+            "filename": "Closest Ballad.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 324.4414739229025
+            "duration": 194.7146809634688
         },
         {
-            "filename": "3Journey Outward.wav",
+            "filename": "Contemporary Unification.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 185.95519274376417
+            "duration": 167.65490441622478
         },
         {
-            "filename": "4Afternoon Conversation.wav",
+            "filename": "Dream No.2.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 229.26637188208616
+            "duration": 376.38667110180603
         },
         {
-            "filename": "5Let's Camp by the Lake.wav",
+            "filename": "farewell, and goodnight.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 262.207029478458
+            "duration": 84.90534760404643
         },
         {
-            "filename": "6Bonfire.wav",
+            "filename": "Frost on the Field.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 203.39142857142858
+            "duration": 182.75495724656113
         },
         {
-            "filename": "7Inside the Tent.wav",
+            "filename": "i saw you.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 166.19231292517006
+            "duration": 178.4106912947346
         },
         {
-            "filename": "8Clarity SLASH Falling Asleep.wav",
+            "filename": "Ily Joy.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 195.8403401360544
+            "duration": 197.95970023675815
         },
         {
-            "filename": "9Dream No.2.wav",
+            "filename": "Imagination of the Ugly Mice.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 375.6534013605442
+            "duration": 307.2717553368423
         },
         {
-            "filename": "A Chalkstreams.wav",
+            "filename": "in the mist.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 157.49877551020407
+            "duration": 226.8252568141351
         },
         {
-            "filename": "B Contemporary Unification.wav",
+            "filename": "Inside the Tent.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 167.29668934240362
+            "duration": 166.55578296515156
         },
         {
-            "filename": "C Frost on the Field.wav",
+            "filename": "Journey Outward.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 182.37399092970523
+            "duration": 186.34021953939774
         },
         {
-            "filename": "D The Dog-Eared March.wav",
+            "filename": "Let's Camp by the Lake.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 211.24290249433108
+            "duration": 262.7304752773593
         },
         {
-            "filename": "E Intro-Extro.wav",
+            "filename": "Morning (Day Two).mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 153.44299319727892
+            "duration": 185.18875300839414
         },
         {
-            "filename": "F Right Door.wav",
+            "filename": "Party's Over.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 221.63392290249433
+            "duration": 53.23970493278807
         },
         {
-            "filename": "G Party.wav",
+            "filename": "Pointless Duties.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 53.08244897959184
+            "duration": 260.79383254740054
         },
         {
-            "filename": "H Imagination of the Ugly Mice.wav",
+            "filename": "Right Door.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 306.6736054421769
+            "duration": 222.08840276283092
         },
         {
-            "filename": "I Pointless Duties.wav",
+            "filename": "Second Hand (Day 1).mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 260.2668707482993
+            "duration": 185.39813332811553
         },
         {
-            "filename": "J Closest Ballad.wav",
+            "filename": "Shower.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 194.30761904761906
+            "duration": 325.0935018686286
         },
         {
-            "filename": "K Ily Joy.wav",
+            "filename": "The Abyssal.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 197.55768707482994
+            "duration": 210.96620032480874
         },
         {
-            "filename": "L The Abyssal.wav",
+            "filename": "The Dog-Eared March.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 210.54365079365078
+            "duration": 211.67273367640442
         },
         {
-            "filename": "M  _____.wav",
+            "filename": "Useless Folk.mp3",
             "title": "Untitled",
             "album": "Unreleased",
             "artist": null,
-            "duration": 84.7012925170068
-        },
-        {
-            "filename": "silly demo.wav",
-            "title": "Untitled",
-            "album": "Unreleased",
-            "artist": null,
-            "duration": 105.90013605442176
-        },
-        {
-            "filename": "Waiting Room.mp3",
-            "title": "Waiting Room",
-            "album": "James Pilcher",
-            "artist": null,
-            "duration": 80.54440534834623
+            "duration": 153.75866319682237
         }
     ]
 }
