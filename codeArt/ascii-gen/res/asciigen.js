@@ -81,6 +81,30 @@ function main() {
 
   //create a canvas
   // Access the webcam stream
+
+  function createSaveHTMLButton(){
+      // Draw the image onto the canvas
+      var asciiContainer = document.querySelector('.asciiContainer');
+      var copyButton = document.createElement('button');
+      copyButton.id = 'copyButton';
+      copyButton.textContent = 'Save as HTML';
+      asciiContainer.appendChild(document.createElement('br'));
+      asciiContainer.appendChild(copyButton);
+      copyButton.addEventListener('click', function() {
+        var asciiOutput = document.getElementById('asciiOutput');
+        var originalLetterSpacing = window.getComputedStyle(asciiOutput).letterSpacing; // Save the original letter-spacing
+        asciiOutput.style.letterSpacing = '0.06rem'; // Change to the desired spacing
+        var html = asciiOutput.outerHTML;
+        var blob = new Blob([html], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'ascii-art.html';
+        link.click();
+        asciiOutput.style.letterSpacing = originalLetterSpacing; // Restore the original letter-spacing
+    });
+  }
+
   navigator.mediaDevices.getUserMedia({ video: true })
     .then((stream) => {
       videoElement.srcObject = stream;
@@ -98,8 +122,7 @@ function main() {
       // divide by two to fix stretching
       canvas.height = Math.round(outputHeight / 2.2)
 
-      // Draw the image onto the canvas
-
+      createSaveHTMLButton();
       setInterval(() => {
         // Draw the video frame onto the canvas every second
         ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
@@ -115,5 +138,9 @@ function main() {
       console.error('Error accessing webcam:', error);
       asciiOutput.innerHTML = 'Error accessing webcam';
     });
+
+    copyButton = document.getElementById('copyButton')
+
+    
 
 }
