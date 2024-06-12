@@ -98,6 +98,12 @@ nav div {
     justify-content: flex-start;
 }
 
+nav button {
+    z-index: -99;
+    color: blue;
+    outline: none;
+}
+
 .logo {
     font-size: 2rem;
     font-weight: bold;
@@ -111,9 +117,28 @@ nav div {
     padding-left: .5rem;
 }
 
+#radioPlayer {
+    font-size: 1.5rem;
+    line-height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background-color: transparent;
+    /* text-decoration: line-through;
+    text-decoration-color: #ff0000; */
+    cursor: pointer;
+}
 
-/* ----------------------------------------------------------- */
-
+#radioPlayer:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    transform: translate(-50%, 0.88rem); /* Move the tooltip down */
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
 
 /* ---------------------------- FOOTER ------------------------------- */
 footer {

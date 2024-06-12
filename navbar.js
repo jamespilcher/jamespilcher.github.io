@@ -1,4 +1,4 @@
-let currentUrl = window.location.href;
+var currentUrl = window.location.href;
 root = currentUrl.split("/").slice(0, 3).join("/");
 
 jpilcher = "JPilcher"
@@ -14,6 +14,7 @@ document.write(`
                                                 
 <link href="https://fonts.cdnfonts.com/css/super-dream" rel="stylesheet">
 
+
 <nav>
     <ul class="left">
         <a href="${root}/home" class="logo"
@@ -23,7 +24,8 @@ document.write(`
         <li><a href="${root}/blog">${blog}</a></li>
         <li><a href="${root}/codeArt">codeArt</a></li>
         <li><a href="${root}/music">music</a></li>
+        <li><button id="radioPlayer" onclick="playRadio()" data-tooltip="Unmute Me!"><div id="radioEmoji">📻🔇</div></button></li>    
     </ul>
 </nav>
-
+<script src="${root}/radio/radio.js"></script>
 `);
