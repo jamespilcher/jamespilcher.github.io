@@ -18,7 +18,10 @@ let gainNode;
 let currentSongIndex;
 let secondsThroughSong = 0;
 
+let currentSeed;
+
 function seeder(str) {
+    str = String(str);
     let h1 = 1779033703, h2 = 3144134277,
         h3 = 1013904242, h4 = 2773480762;
     for (let i = 0, k; i < str.length; i++) {
@@ -33,26 +36,33 @@ function seeder(str) {
     h3 = Math.imul(h1 ^ (h3 >>> 17), 951274213);
     h4 = Math.imul(h2 ^ (h4 >>> 19), 2716044179);
     h1 ^= (h2 ^ h3 ^ h4), h2 ^= h1, h3 ^= h1, h4 ^= h1;
-    return [h1>>>0];
+    return [h1>>>0, h2>>>0, h3>>>0, h4>>>0];
 }
 
-function RNG(seed) {
-    var seed = seeder(seed.toString())
-    var m = 2**35 - 31
-    var a = 185852
-    var s = seed % m
-    return (s = s * a % m) / m
-}
+function splitmix32(a) {
+    return function() {
+      a |= 0;
+      a = a + 0x9e3779b9 | 0;
+      let t = a ^ a >>> 16;
+      t = Math.imul(t, 0x21f0aaad);
+      t = t ^ t >>> 15;
+      t = Math.imul(t, 0x735a2d97);
+      return ((t = t ^ t >>> 15) >>> 0) / 4294967296;
+     }
+   }
 
 async function fetchSongData() {
     try {
         const response = await fetch(songsDataJson);
         songData = await response.json();
-        // shuffle songData.songs array based on day using RNG
+
+        // shuffle songs based on day
         const now = new Date();
-        const day = now.getDate();
-        console.log(songData.songs);
-        const shuffledSongs = songData.songs.sort((a, b) => RNG(day) - 0.5);
+        var seed = seeder(now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate());
+        var rand = splitmix32(seed[0]);
+        let randomNumbers = Array.from({length: songData.songs.length}, (_, i) => rand());
+        const shuffledSongs = songData.songs.sort((a, b) => randomNumbers[songData.songs.indexOf(a)] - randomNumbers[songData.songs.indexOf(b)]);
+
         songData.songs = shuffledSongs;
         console.log(songData.songs);
         // You can now use song_data in your code
@@ -161,7 +171,6 @@ async function playSongAtTime(song, startTime) {
     console.error('Error fetching or playing file:', error);
     }
 }
-console.log(RNG(Date.now()))
 async function mute_unmute(){
         if (muted){
             unmute();
