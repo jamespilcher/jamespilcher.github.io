@@ -89,14 +89,11 @@ function main() {
     }
     function initializeSpeech() {
       const voices = synth.getVoices();
-      console.log("voices length: " + voices.length);
 
       if (voices.length > 0) {
         if (voiceSettings.voice === null) {
           voiceSettings.voice = voices[Math.floor(Math.random() * voices.length)];
         }
-
-        console.log("voice settings:1 " + voiceSettings.voice + " " + voiceSettings.volume + " " + voiceSettings.rate + " " + voiceSettings.pitch);
 
         utterance.voice = voiceSettings.voice;
         utterance.volume = voiceSettings.volume;

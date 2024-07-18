@@ -73,7 +73,6 @@ class SymbolSquare {
     }
 
     setSymbol(x, y, symbol, css) {
-        console.log("setting symbol", x, y, symbol);
         this.content[y][x].current_symbol = symbol;
         this.content[y][x].next_symbol = symbol;
         this.content[y][x].current_css = css;
@@ -99,7 +98,6 @@ class SymbolSquare {
             this.setSymbol(currentX, currentY, sentence[i], css);
             currentX++;
         }
-        console.log(sentence);
     }
 }
 
