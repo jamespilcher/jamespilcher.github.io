@@ -76,7 +76,7 @@ function main() {
   const voiceSettings = {
     voice: null,
     volume: 0.8,
-    rate: getRandomNumber(0.95, 1.05),
+    rate: getRandomNumber(0.95, 1.02),
     pitch: getRandomNumber(0.3, 1.00),
   };
 
