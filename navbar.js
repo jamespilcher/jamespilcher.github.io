@@ -1,12 +1,10 @@
 var currentUrl = window.location.href;
 root = currentUrl.split("/").slice(0, 3).join("/");
 
-jpilcher = "JPilcher"
-blog = "blog"
+jpilcher = "JamesPilcher"
 // if window size < 600px, use JP
 if (window.innerWidth < 600) {
-    jpilcher = "JP"
-    blog = "blog"
+    jpilcher = "JPilcher"
 }
 
 document.write(`
@@ -21,7 +19,6 @@ document.write(`
         >${jpilcher}<img src="${root}/res/jim.png" class="logoimage"/></a>
     </ul>
     <ul>
-        <li><a href="${root}/blog">${blog}</a></li>
         <li><a href="${root}/codeArt">codeArt</a></li>
         <li><a href="${root}/music">music</a></li>
         <li><button id="radioPlayer" onclick="playRadio()" data-tooltip="Unmute Me!"><div id="radioEmoji">📻🔇</div></button></li>    
