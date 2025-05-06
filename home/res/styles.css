@@ -47,3 +47,33 @@
     font-weight: bold;
     font-size: 1.1rem;
   }
+
+.welcome {
+text-align: center;
+padding-top: .3rem;
+margin-bottom: -1rem;
+font-size: 1.5rem;
+letter-spacing: 1px;
+font-weight: bold;
+font-family: 'Scrouble Outline', sans-serif;
+color: rgb(200, 0, 0);
+}
+
+.welcomeQuote {
+    text-align: right;
+    margin-bottom: 1rem;
+    padding-right: 3rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    letter-spacing: 2px;
+    color: rgb(92, 92, 92);
+    }
+
+.banner {
+margin: 0 auto;
+text-align: center;
+font-size: 2rem;
+letter-spacing: -10px;
+font-family: 'Subeve', sans-serif;
+color: rgb(0, 0, 0);
+}
