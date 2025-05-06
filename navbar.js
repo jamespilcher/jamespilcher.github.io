@@ -1,10 +1,10 @@
 var currentUrl = window.location.href;
 root = currentUrl.split("/").slice(0, 3).join("/");
 
-jpilcher = "JamesPilcher"
+jpilcher = "JPilcher"
 // if window size < 600px, use JP
 if (window.innerWidth < 600) {
-    jpilcher = "JPilcher"
+    jpilcher = "JP"
 }
 
 document.write(`
