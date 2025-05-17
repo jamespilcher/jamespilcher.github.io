@@ -26,11 +26,12 @@ const letterDistribution = {
     Y: 1.97,
     Z: 0.07
 };
-
 export function divideLettersFairlyWithVowels() {
     const vowels = new Set(['A', 'E', 'I', 'O', 'U']);
     const letters = Object.keys(letterDistribution);
-    const shuffledLetters = letters.sort(() => Math.random() - 0.5); // Shuffle letters randomly
+
+    // Shuffle letters randomly
+    const shuffledLetters = letters.sort(() => Math.random() - 0.5);
 
     let player1Set = [];
     let player2Set = [];
@@ -44,17 +45,33 @@ export function divideLettersFairlyWithVowels() {
         const frequency = letterDistribution[letter];
         const isVowel = vowels.has(letter);
 
+        // Ensure the max difference of 2 characters between players
         if (
-            player1Total <= player2Total &&
-            (!isVowel || player1Vowels <= player2Vowels)
+            player1Set.length < player2Set.length + 2 && // Player 1 can take a letter
+            (player1Total <= player2Total || (isVowel && player1Vowels <= player2Vowels))
         ) {
             player1Set.push(letter);
             player1Total += frequency;
             if (isVowel) player1Vowels++;
-        } else {
+        } else if (player2Set.length < player1Set.length + 2) { // Player 2 can take a letter
             player2Set.push(letter);
             player2Total += frequency;
             if (isVowel) player2Vowels++;
+        }
+    }
+
+    // Ensure each player has at least 10 letters
+    while (player1Set.length < 10 || player2Set.length < 10) {
+        const remainingLetters = shuffledLetters.filter(
+            (letter) => !player1Set.includes(letter) && !player2Set.includes(letter)
+        );
+
+        for (const letter of remainingLetters) {
+            if (player1Set.length < 10) {
+                player1Set.push(letter);
+            } else if (player2Set.length < 10) {
+                player2Set.push(letter);
+            }
         }
     }
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+<html lang="en">
+
+<head>
+    <title>keyboardFight</title>
+    <link rel="stylesheet" href="../../res/main.css">
+    <link rel="stylesheet" href="res/styles.css">
+    <link rel="icon" href="../../../res/jim.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-REWLQQ5D58');
+  </script>
+</head>
+
+<body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+        <div class="blogtitle">
+            <i>keyboardFight</i>
+        </div>
+        
+        <div id="startContainer">
+          <div id="gameRules">
+              Welcome to keyboardFight! Here's how to play:
+              <ul>
+                  <li>Each player gets a set of letters from across the keyboard.</li>
+                  <li>Form words by typing letters. Submit with <b>Left Shift</b> (Player 1) or <b>Right Shift</b> (Player 2).</li>                  
+                  <li>Words must be valid and cannot be submitted twice.</li>
+                  <li>Earn points based on the length of your word.</li>
+                  <li>The game ends when the 60 second timer runs out---the player with the highest score wins!</li>
+              </ul>
+              Have fun :^)
+          </div>
+          <button id="startButton">Start Game</button>
+
+      </div>
+
+      <div id="gameContainer" style="display: none;">
+        <div id="timer">
+          <div id="timerBar"></div>
+      </div>
+          <div id="playerColumns">
+
+            <!-- Player 1 Section -->
+            <div id="player1Section" class="playerSection">
+                <p>Player 1</p>
+                <div class="letters" id="player1Letters"></div>
+                <div class="scoredWords" id="player1Words"></div>
+                <div class="currentWord" id="player1CurrentWord"></div>
+                <div class="wordcheck" id="player1wordcheck"></div>
+                <div class="score" id="player1Score">Score: 0</div>
+            </div>
+        
+            <!-- Player 2 Section -->
+            <div id="player2Section" class="playerSection">
+                <p>Player 2</p>
+                <div class="letters" id="player2Letters"></div>
+                <div class="scoredWords" id="player2Words"></div>
+                <div class="currentWord" id="player2CurrentWord"></div>
+                <div class="wordcheck" id="player2wordcheck"></div>
+                <div class="score" id="player2Score">Score: 0</div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="../../footer.js"></script>
+    <script src="res/letter_divider.js" type="module"></script>
+    <script src="res/valid_words.js" type="module"></script>
+    <script src="res/wordBattle.js" type="module"></script>
+
+</body>
+
+</html>
