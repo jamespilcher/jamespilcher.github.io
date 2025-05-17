@@ -12,6 +12,11 @@
     font-family:'Courier New', Courier, monospace;
     padding: 10px;
     margin: 10px;
+    font-size: 16px;
+}
+
+#messageInput {
+    font-size: 16px; /* Prevent zooming on iPhone */
 }
 
 .right {

@@ -2,3 +2,6 @@
     display: flex;
     justify-content: center; /* Horizontal centering */
 }
+#poemInput {
+    font-size: 16px; /* Prevent zooming on iPhone */
+}
