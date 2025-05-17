@@ -1,0 +1,4 @@
+#poemInputArea {
+    display: flex;
+    justify-content: center; /* Horizontal centering */
+}

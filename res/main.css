@@ -33,25 +33,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ------------------------------ home page messages ----------------------------- */
 
-.welcome {
-    text-align: center;
-    padding-top: .3rem;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-    letter-spacing: 1px;
-    font-weight: bold;
-    font-family: 'Scrouble Outline', sans-serif;
-    color: rgb(200, 0, 0);
-}
-
-.banner {
-    margin: 0 auto;
-    text-align: center;
-    font-size: 2rem;
-    letter-spacing: -10px;
-    font-family: 'Subeve', sans-serif;
-    color: rgb(0, 0, 0);
-}
 
 /* ------------------------------ NAV BAR ----------------------------- */
 
