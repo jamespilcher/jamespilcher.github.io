@@ -17,7 +17,7 @@ const COMPUTER_LINES = [
 ];
 const SPECIAL_CHARACTERS = ["—", "!", "..."];
 
-const MIN_NUM_WORDS = 30;
+const MIN_NUM_WORDS = 10;
 
 let usedLines = new Set();
 let words = [];
