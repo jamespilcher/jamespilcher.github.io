@@ -8,6 +8,12 @@ const maxCharge = 20; // Maximum charge in either direction
 const barLength = 30; // Length of the bar
 let gameInterval; // Declare gameInterval globally to manage start/restart
 
+
+function showKeyboard() {
+    const hiddenInput = document.getElementById("hiddenInput");
+    hiddenInput.focus(); // Focus on the hidden input to show the keyboard
+}
+
 // Function to render the bar
 function renderBar() {
     console.log(players.q.charge, players.p.charge);
@@ -116,5 +122,12 @@ function applyDecay() {
 }
 
 // Add buttons for start and restart
-document.getElementById("startButton").addEventListener("click", startGame);
-document.getElementById("restartButton").addEventListener("click", startGame);
+document.getElementById("startButton").addEventListener("click", () => {
+    startGame();
+    showKeyboard(); // Trigger the keyboard
+});
+
+document.getElementById("restartButton").addEventListener("click", () => {
+    startGame();
+    showKeyboard(); // Trigger the keyboard
+});
