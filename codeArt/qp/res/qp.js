@@ -42,7 +42,7 @@ function endGame() {
 
     setTimeout(() => {
         document.getElementById("restartButton").style.display = "block";
-    }, 700);}
+    }, 1000);}
 
 function startGame() {
     // Reset player states
