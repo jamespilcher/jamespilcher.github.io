@@ -3,9 +3,11 @@ const players = {
     p: { charge: 0, isPressing: false }  // Player P's charge and press state
 };
 
+console.log("Game initialized");
+
 const decayRate = 0.3; // Decay rate per tick
 const maxCharge = 20; // Maximum charge in either direction
-const barLength = 30; // Length of the bar
+const barLength = 25; // Length of the bar
 let gameInterval; // Declare gameInterval globally to manage start/restart
 
 
@@ -123,6 +125,7 @@ function applyDecay() {
 
 // Add buttons for start and restart
 document.getElementById("startButton").addEventListener("click", () => {
+    console.log("Start button clicked");
     startGame();
     showKeyboard(); // Trigger the keyboard
 });
