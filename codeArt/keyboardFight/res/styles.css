@@ -20,7 +20,12 @@
     margin-top: 2rem;
 }
 
-
+.verticalBar {
+    width: 2px;
+    padding: 2px;
+    background-color: transparent; /* Remove solid background */
+    border-left: 2px dotted #2d2d2d;
+}
 
 
 #gameRules {
@@ -48,10 +53,11 @@
 
 .letters{
     width: 100%;
-    height: 2rem;
+    height: 3.2rem;
     text-align: center;
     font-weight: bold;
     font-size: 1.5em;
+    color: #3f3f3f;
 }
 .scoredWords {
     width: 80%;

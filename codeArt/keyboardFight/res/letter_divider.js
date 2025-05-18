@@ -40,20 +40,38 @@ export function divideLettersFairlyWithVowels() {
     let player1Vowels = 0;
     let player2Vowels = 0;
 
-    // Distribute letters fairly based on their frequencies and vowel count
-    for (const letter of shuffledLetters) {
+    // Separate vowels and consonants
+    const vowelsList = shuffledLetters.filter((letter) => vowels.has(letter));
+    const consonantsList = shuffledLetters.filter((letter) => !vowels.has(letter));
+
+    // Ensure each player gets at least 2 vowels
+    while (player1Vowels < 2 && vowelsList.length > 0) {
+        const vowel = vowelsList.pop();
+        player1Set.push(vowel);
+        player1Total += letterDistribution[vowel];
+        player1Vowels++;
+    }
+    while (player2Vowels < 2 && vowelsList.length > 0) {
+        const vowel = vowelsList.pop();
+        player2Set.push(vowel);
+        player2Total += letterDistribution[vowel];
+        player2Vowels++;
+    }
+
+    // Distribute remaining letters fairly
+    const remainingLetters = [...vowelsList, ...consonantsList];
+    for (const letter of remainingLetters) {
         const frequency = letterDistribution[letter];
         const isVowel = vowels.has(letter);
 
-        // Ensure the max difference of 2 characters between players
         if (
-            player1Set.length < player2Set.length + 2 && // Player 1 can take a letter
+            player1Set.length < player2Set.length + 2 &&
             (player1Total <= player2Total || (isVowel && player1Vowels <= player2Vowels))
         ) {
             player1Set.push(letter);
             player1Total += frequency;
             if (isVowel) player1Vowels++;
-        } else if (player2Set.length < player1Set.length + 2) { // Player 2 can take a letter
+        } else if (player2Set.length < player1Set.length + 2) {
             player2Set.push(letter);
             player2Total += frequency;
             if (isVowel) player2Vowels++;
@@ -74,6 +92,16 @@ export function divideLettersFairlyWithVowels() {
             }
         }
     }
+
+    player1Set = player1Set.sort( () => Math.random() - 0.5);
+    player2Set = player2Set.sort( () => Math.random() - 0.5);
+    console.log("Player 1 Letters: ", player1Set);
+    console.log("Player 2 Letters: ", player2Set);
+    console.log("Player 1 Total: ", player1Total);
+    console.log("Player 2 Total: ", player2Total);
+    console.log("Player 1 Vowels: ", player1Vowels);
+    console.log("Player 2 Vowels: ", player2Vowels);
+    
 
     return {
         player1: player1Set,
