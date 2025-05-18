@@ -112,17 +112,18 @@ function main() {
     asciiContainer.appendChild(document.createElement('br'));
     asciiContainer.appendChild(printButton);
     printButton.addEventListener('click', function() {
-      var iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      var asciiOutput = document.getElementById('asciiOutput');
-      var originalLetterSpacing = window.getComputedStyle(asciiOutput).letterSpacing; // Save the original letter-spacing
-      asciiOutput.style.letterSpacing = '0.06rem'; // Change to the desired spacing
-      var asciiOutput = document.getElementById('asciiOutput').cloneNode(true);
-      asciiOutput.style.letterSpacing = originalLetterSpacing; // Restore the original letter-spacing
-      iframe.contentDocument.body.appendChild(asciiOutput);
-      iframe.contentWindow.print();
-      document.body.removeChild(iframe);
+      print();
+      // var iframe = document.createElement('iframe');
+      // iframe.style.display = 'none';
+      // document.body.appendChild(iframe);
+      // var asciiOutput = document.getElementById('asciiOutput');
+      // var originalLetterSpacing = window.getComputedStyle(asciiOutput).letterSpacing; // Save the original letter-spacing
+      // asciiOutput.style.letterSpacing = '0.06rem'; // Change to the desired spacing
+      // var asciiOutput = document.getElementById('asciiOutput').cloneNode(true);
+      // asciiOutput.style.letterSpacing = originalLetterSpacing; // Restore the original letter-spacing
+      // iframe.contentDocument.body.appendChild(asciiOutput);
+      // iframe.contentWindow.print();
+      // document.body.removeChild(iframe);
     });
   }
 

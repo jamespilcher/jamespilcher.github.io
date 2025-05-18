@@ -1,0 +1,15 @@
+#gameContainer {
+    text-align: center;
+    font-size: 20px;
+}
+
+#winnerText {
+    font-size: 12px;
+    text-align: center;
+    color: #166f02;
+}
+
+#buttonContainer {
+    display: flex;
+    justify-content: center;
+}
