@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+<html lang="en">
+
+<head>
+    <title>impostaUtil</title>
+    <link rel="stylesheet" href="res/style.css">
+    <link rel="stylesheet" href="../../res/main.css">
+    <link rel="icon" href="../../../res/jim.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-REWLQQ5D58');
+  </script>
+</head>
+
+<body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+        <div class="blogtitle">
+            <i>impostaUtil</i>
+        </div>
+        <br>
+        <div id="imposta">
+
+          <p>Imposta is a game where everyone but the imposta knows <i>the word</i>. Everyone takes it in turns saying a separate word related to the given word, and the imposta has to blend in. </p>
+
+          <p>Voting can occur at any time. Innocents win by voting out the imposta but if they get it wrong, they lose. If the imposta can successfully guess the word aloud, then the imposta wins.</p>
+
+          <p>Innocents should be careful not to reveal the word by being too obvious. Impostas should use context clues to figure out the word.</p>
+
+          <p>This tool will tell each player what the word is, apart from the imposta who will be told 'YOU ARE THE IMPOSTA'. There are approx 500 words in the word list.</p>
+
+          <p><b>How many players are there?</b></p>
+
+          <input type="number" id="playerCount" min="3" max="20" value="3">
+
+          <button id="startGame">Start</button>
+
+        </div>
+
+    </div>
+    <script src="res/imposta.js" type="module"></script>
+    <script src="../../footer.js"></script>
+</body>
+
+</html>
