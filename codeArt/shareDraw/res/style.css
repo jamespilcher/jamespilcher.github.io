@@ -1,0 +1,41 @@
+# Eraser button active state
+#eraser-btn.active {
+  background: #e74c3c;
+  color: #fff;
+  border: 1px solid #c0392b;
+}
+
+#thickness-slider {
+  vertical-align: middle;
+}
+/* 64x64 grid styles for shareDraw */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(64, 1fr);
+  grid-template-rows: repeat(64, 1fr);
+  aspect-ratio: 1 / 1;
+  gap: 1px;
+  background: #222;
+  width: 100%;
+  max-width: 90vw;
+  max-height: 90vw;
+  margin: 20px auto;
+}
+.grid-cell {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.grid-cell.active {
+  background: #000;
+}
+#share-url {
+  width: 90vw;
+  max-width: 600px;
+  margin: 10px auto;
+  display: block;
+  font-size: 1em;
+}

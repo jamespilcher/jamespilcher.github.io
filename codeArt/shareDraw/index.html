@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+<html lang="en">
+
+<head>
+    <title>shareDraw</title>
+    <link rel="stylesheet" href="res/style.css">
+    <link rel="stylesheet" href="../../res/main.css">
+    <link rel="icon" href="../../../res/jim.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-REWLQQ5D58');
+  </script>
+</head>
+
+<body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+      <div class="blogtitle">
+        <i>shareDraw</i>
+      </div>
+      <br>
+      <div id="grid-root">
+        <div style="margin-bottom:10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+          <label for="colour-picker">Draw colour: </label>
+          <input type="color" id="colour-picker" value="#000000" style="vertical-align:middle;">
+          <label for="bg-colour-picker" style="margin-left:10px;">Background:</label>
+          <input type="color" id="bg-colour-picker" value="#ffffff" style="vertical-align:middle;">
+            <input type="range" id="thickness-slider" min="1" max="8" value="1" style="width:80px;">
+          <span id="thickness-value">1</span> px
+          <button id="eraser-btn" type="button">Eraser (off)</button>
+          <button id="clear-btn" type="button">Clear All</button>
+        </div>
+        <div id="grid" class="grid-container"></div>
+        <input id="share-url" readonly value="" onclick="this.select()" />
+        <div style="display: flex; justify-content: center; margin-top: 8px;">
+          <button id="share-btn" type="button">Share</button>
+        </div>
+      </div>
+    </div>
+    <script src="res/shareDraw.js"></script>
+    <script src="../../footer.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,255 @@
+// 64x64 drawable grid with URL hash/compression (step 1: grid + draw logic)
+const GRID_SIZE = 64;
+
+const gridElem = document.getElementById('grid');
+const shareUrlElem = document.getElementById('share-url');
+const colourPicker = document.getElementById('colour-picker');
+const eraserBtn = document.getElementById('eraser-btn');
+const thicknessSlider = document.getElementById('thickness-slider');
+const thicknessValue = document.getElementById('thickness-value');
+const clearBtn = document.getElementById('clear-btn');
+const bgColourPicker = document.getElementById('bg-colour-picker');
+const shareBtn = document.getElementById('share-btn');
+let grid = Array(GRID_SIZE * GRID_SIZE).fill(0); // 0: white, 1: coloured
+let drawColour = '#000000';
+let eraserMode = false;
+let lineThickness = parseInt(thicknessSlider.value, 10);
+let mouseDown = false;
+let bgColour = bgColourPicker.value;
+
+colourPicker.addEventListener('input', e => {
+	drawColour = e.target.value;
+	renderGrid();
+	updateShareUrl();
+});
+
+bgColourPicker.addEventListener('input', e => {
+    bgColour = e.target.value;
+    renderGrid();
+    updateShareUrl();
+});
+
+eraserBtn.addEventListener('click', () => {
+	eraserMode = !eraserMode;
+	eraserBtn.classList.toggle('active', eraserMode);
+	eraserBtn.textContent = eraserMode ? 'Eraser (on)' : 'Eraser (off)';
+});
+
+thicknessSlider.addEventListener('input', e => {
+	lineThickness = parseInt(e.target.value, 10);
+	thicknessValue.textContent = lineThickness;
+});
+thicknessValue.textContent = thicknessSlider.value;
+
+clearBtn.addEventListener('click', () => {
+	grid = Array(GRID_SIZE * GRID_SIZE).fill(0);
+	renderGrid();
+	updateShareUrl();
+});
+
+bgColourPicker.addEventListener('input', e => {
+	bgColour = e.target.value;
+	updateShareUrl();
+});
+
+// --- Efficient grid rendering ---
+// On load/clear, call renderGrid() to build the DOM. On draw, update only changed cells.
+
+function renderGrid() {
+  gridElem.innerHTML = '';
+  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'grid-cell';
+    cell.dataset.idx = i;
+    cell.style.background = grid[i] ? drawColour : bgColour;
+    cell.addEventListener('mouseenter', handleCellDrag);
+    cell.addEventListener('mousedown', handleCellClick);
+    cell.addEventListener('touchmove', handleCellTouch, { passive: false });
+    gridElem.appendChild(cell);
+  }
+}
+
+function updateCell(idx) {
+  const cell = gridElem.children[idx];
+  if (cell) {
+    cell.style.background = grid[idx] ? drawColour : bgColour;
+  }
+}
+
+// Update mouse/touch handlers to only update changed cells
+function handleCellClick(e) {
+  const idx = +e.target.dataset.idx;
+  drawValue = eraserMode ? 0 : 1;
+  mouseDown = true; // Set mouseDown on click for drag
+  drawAt(idx, drawValue, lineThickness, true);
+}
+
+function handleCellDrag(e) {
+  if (!mouseDown || (e.buttons !== undefined && (e.buttons & 1) === 0)) return;
+  const idx = +e.target.dataset.idx;
+  drawAt(idx, drawValue, lineThickness, true);
+}
+
+function handleCellTouch(e) {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const target = document.elementFromPoint(touch.clientX, touch.clientY);
+  if (!target || !target.classList.contains('grid-cell')) return;
+  const idx = +target.dataset.idx;
+  drawValue = eraserMode ? 0 : 1;
+  drawAt(idx, drawValue, lineThickness, true);
+  updateShareUrl();
+}
+
+// Draw a circle and update only changed cells if updateDom=true
+function drawAt(idx, value, thickness, updateDom) {
+  const x0 = idx % GRID_SIZE;
+  const y0 = Math.floor(idx / GRID_SIZE);
+  const r = thickness / 2;
+  for (let dy = -Math.ceil(r); dy <= Math.ceil(r); dy++) {
+    for (let dx = -Math.ceil(r); dx <= Math.ceil(r); dx++) {
+      const x = x0 + dx;
+      const y = y0 + dy;
+      if (x >= 0 && x < GRID_SIZE && y >= 0 && y < GRID_SIZE) {
+        if (Math.sqrt(dx*dx + dy*dy) <= r) {
+          const i = y * GRID_SIZE + x;
+          if (grid[i] !== value) {
+            grid[i] = value;
+            if (updateDom) updateCell(i);
+          }
+        }
+      }
+    }
+  }
+  if (updateDom) updateShareUrl();
+}
+
+// --- URL-safe base64 helpers ---
+function toUrlSafeBase64(b64) {
+  return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+function fromUrlSafeBase64(str) {
+  let b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  while (b64.length % 4) b64 += '=';
+  return b64;
+}
+
+// Binary encode grid (1 bit per cell), then URL-safe base64
+function gridToBase64() {
+  const bytes = new Uint8Array(512); // 4096 bits = 512 bytes
+  for (let i = 0; i < grid.length; i++) {
+    const byteIdx = (i / 8) | 0;
+    const bitIdx = i % 8;
+    if (grid[i]) bytes[byteIdx] |= (1 << bitIdx);
+  }
+  let bin = '';
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return toUrlSafeBase64(btoa(bin));
+}
+
+function base64ToGrid(b64) {
+  try {
+    const bin = atob(fromUrlSafeBase64(b64));
+    if (bin.length !== 512) return false;
+    const arr = Array(GRID_SIZE * GRID_SIZE).fill(0);
+    for (let i = 0; i < arr.length; i++) {
+      const byteIdx = (i / 8) | 0;
+      const bitIdx = i % 8;
+      arr[i] = (bin.charCodeAt(byteIdx) >> bitIdx) & 1;
+    }
+    return arr;
+  } catch (e) { return false; }
+}
+
+// --- updateShareUrl: store colours as 6 hex digits (no #) ---
+function updateShareUrl() {
+  const colour = colourPicker.value.replace(/^#/, '');
+  const bg = bgColourPicker.value.replace(/^#/, '');
+  const hash = colour + bg + gridToBase64();
+  const url = location.origin + location.pathname + '#' + hash;
+  shareUrlElem.value = url;
+  if (location.hash !== '#' + hash) {
+    history.replaceState(null, '', '#' + hash);
+  }
+}
+
+// --- loadFromHash: parse colours as 6 hex digits and add # for input values ---
+function loadFromHash() {
+  const hash = location.hash.replace(/^#/, '');
+  if (!hash) return;
+  if (hash.length > 12) {
+    const colour = '#' + hash.slice(0, 6);
+    const bg = '#' + hash.slice(6, 12);
+    if (/^#[0-9a-fA-F]{6}$/.test(colour) && /^#[0-9a-fA-F]{6}$/.test(bg)) {
+      colourPicker.value = colour;
+      drawColour = colour;
+      bgColourPicker.value = bg;
+      bgColour = bg;
+      const arr = base64ToGrid(hash.slice(12));
+      if (arr) { grid = arr; return; }
+    }
+  }
+  // Fallback: old format
+  if (hash.length > 6) {
+    const colour = '#' + hash.slice(0, 6);
+    if (/^#[0-9a-fA-F]{6}$/.test(colour)) {
+      colourPicker.value = colour;
+      drawColour = colour;
+      const arr = base64ToGrid(hash.slice(6));
+      if (arr) { grid = arr; return; }
+    }
+  }
+  const arr = base64ToGrid(hash);
+  if (arr) { grid = arr; return; }
+}
+
+function handleHashChange() {
+	loadFromHash();
+	renderGrid();
+}
+
+
+// Update renderGrid and updateCell to use bgColour
+const originalRenderGrid = renderGrid;
+renderGrid = function() {
+  gridElem.innerHTML = '';
+  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'grid-cell';
+    cell.dataset.idx = i;
+    cell.style.background = grid[i] ? drawColour : bgColour;
+    cell.addEventListener('mouseenter', handleCellDrag);
+    cell.addEventListener('mousedown', handleCellClick);
+    cell.addEventListener('touchmove', handleCellTouch, { passive: false });
+    gridElem.appendChild(cell);
+  }
+};
+
+window.addEventListener('hashchange', handleHashChange);
+
+window.addEventListener('mouseup', () => { mouseDown = false; });
+
+shareBtn.addEventListener('click', async () => {
+    console.log(shareUrlElem.value);
+  let url = shareUrlElem.value;
+  if (navigator.share) {
+    try {
+      await navigator.share({ url, title: 'I shareDrew something for you <3' });
+    } catch (e) {
+      // User cancelled or error
+    }
+  } else if (navigator.clipboard) {
+    await navigator.clipboard.writeText(url);
+    shareBtn.textContent = 'Copied!';
+    setTimeout(() => { shareBtn.textContent = 'Share'; }, 1200);
+  } else {
+    shareUrlElem.select();
+    document.execCommand('copy');
+    shareBtn.textContent = 'Copied!';
+    setTimeout(() => { shareBtn.textContent = 'Share'; }, 1200);
+  }
+});
+
+loadFromHash();
+renderGrid();
+updateShareUrl();
