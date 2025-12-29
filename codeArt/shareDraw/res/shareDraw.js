@@ -234,7 +234,7 @@ shareBtn.addEventListener('click', async () => {
   let url = shareUrlElem.value;
   if (navigator.share) {
     try {
-      await navigator.share({ url, title: 'I shareDrew something for you <3' });
+      await navigator.share({ url, title: 'I shareDrew something for you <3', text: 'I shareDrew something for you <3' });
     } catch (e) {
       // User cancelled or error
     }
