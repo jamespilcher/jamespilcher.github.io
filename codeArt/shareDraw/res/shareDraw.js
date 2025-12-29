@@ -222,6 +222,7 @@ renderGrid = function() {
     cell.style.background = grid[i] ? drawColour : bgColour;
     cell.addEventListener('mouseenter', handleCellDrag);
     cell.addEventListener('mousedown', handleCellClick);
+    cell.addEventListener('touchstart', handleCellClick, { passive: false });
     cell.addEventListener('touchmove', handleCellTouch, { passive: false });
     gridElem.appendChild(cell);
   }
