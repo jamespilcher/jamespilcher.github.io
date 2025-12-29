@@ -78,6 +78,7 @@ function updateCell(idx) {
 
 // Update mouse/touch handlers to only update changed cells
 function handleCellClick(e) {
+  if (e.cancelable) e.preventDefault(); // Prevent scrolling only if possible
   const idx = +e.target.dataset.idx;
   drawValue = eraserMode ? 0 : 1;
   mouseDown = true; // Set mouseDown on click for drag
@@ -85,13 +86,14 @@ function handleCellClick(e) {
 }
 
 function handleCellDrag(e) {
+  if (e.cancelable) e.preventDefault(); // Prevent scrolling only if possible
   if (!mouseDown || (e.buttons !== undefined && (e.buttons & 1) === 0)) return;
   const idx = +e.target.dataset.idx;
   drawAt(idx, drawValue, lineThickness, true);
 }
 
 function handleCellTouch(e) {
-  e.preventDefault();
+  if (e.cancelable) e.preventDefault(); // Prevent scrolling only if possible
   const touch = e.touches[0];
   const target = document.elementFromPoint(touch.clientX, touch.clientY);
   if (!target || !target.classList.contains('grid-cell')) return;
@@ -223,6 +225,25 @@ renderGrid = function() {
     cell.addEventListener('touchmove', handleCellTouch, { passive: false });
     gridElem.appendChild(cell);
   }
+};
+
+// Prevent all zooming and scrolling on the grid (single or multi-touch)
+function addTouchPrevention() {
+  for (let i = 0; i < gridElem.children.length; i++) {
+    gridElem.children[i].addEventListener('touchstart', function(e) {
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+    gridElem.children[i].addEventListener('touchmove', function(e) {
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+  }
+}
+
+// Call after renderGrid
+const originalRenderGrid2 = renderGrid;
+renderGrid = function() {
+  originalRenderGrid2.apply(this, arguments);
+  addTouchPrevention();
 };
 
 window.addEventListener('hashchange', handleHashChange);
