@@ -123,7 +123,28 @@ function handleCellTouch(e) {
   if (!target || !target.classList.contains('grid-cell')) return;
   const idx = +target.dataset.idx;
   drawValue = eraserMode ? 0 : 1;
-  drawAt(idx, drawValue, lineThickness);
+  if (lastDrawIdx !== null && lastDrawIdx !== idx) {
+    // Interpolate between lastDrawIdx and idx (Bresenham)
+    const x0 = lastDrawIdx % GRID_SIZE;
+    const y0 = Math.floor(lastDrawIdx / GRID_SIZE);
+    const x1 = idx % GRID_SIZE;
+    const y1 = Math.floor(idx / GRID_SIZE);
+    let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    let err = dx + dy, e2;
+    let x = x0, y = y0;
+    while (true) {
+      const i = y * GRID_SIZE + x;
+      drawAt(i, drawValue, lineThickness);
+      if (x === x1 && y === y1) break;
+      e2 = 2 * err;
+      if (e2 >= dy) { err += dy; x += sx; }
+      if (e2 <= dx) { err += dx; y += sy; }
+    }
+  } else {
+    drawAt(idx, drawValue, lineThickness);
+  }
+  lastDrawIdx = idx;
 }
 
 // Draw a circle and update only changed cells if updateDom=true
@@ -273,6 +294,7 @@ renderGrid = function() {
 window.addEventListener('hashchange', handleHashChange);
 
 window.addEventListener('mouseup', () => { mouseDown = false; lastDrawIdx = null; });
+window.addEventListener('touchend', () => { lastDrawIdx = null; });
 
 shareBtn.addEventListener('click', async () => {
     console.log(shareUrlElem.value);
