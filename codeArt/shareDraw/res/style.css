@@ -27,7 +27,7 @@
   aspect-ratio: 1 / 1;
   background: #fff;
   cursor: pointer;
-  transition: background 0.1s;
+  transition: background 0.2s;
 }
 .grid-cell.active {
   background: #000;
