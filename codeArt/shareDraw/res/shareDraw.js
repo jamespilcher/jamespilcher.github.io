@@ -66,8 +66,11 @@ function renderGrid() {
     cell.style.background = grid[i] ? drawColour : bgColour;
     cell.addEventListener('mouseenter', handleCellDrag);
     cell.addEventListener('mousedown', handleCellClick);
+    cell.addEventListener('touchstart', handleCellClick, { passive: false });
+    cell.addEventListener('touchmove', handleCellTouch, { passive: false });
     gridElem.appendChild(cell);
   }
+  addTouchPrevention();
 }
 
 function updateCell(idx) {
@@ -116,7 +119,28 @@ function handleCellDrag(e) {
   lastDrawIdx = idx;
 }
 
-function handleCellTouch(e) {
+// Throttle helper
+function throttle(fn, limit) {
+  let inThrottle = false;
+  let lastArgs = null;
+  return function throttled(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => {
+        inThrottle = false;
+        if (lastArgs) {
+          fn.apply(this, lastArgs);
+          lastArgs = null;
+        }
+      }, limit);
+    } else {
+      lastArgs = args;
+    }
+  };
+}
+
+function _handleCellTouch(e) {
   if (e.cancelable) e.preventDefault(); // Prevent scrolling only if possible
   const touch = e.touches[0];
   const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -146,6 +170,8 @@ function handleCellTouch(e) {
   }
   lastDrawIdx = idx;
 }
+
+const handleCellTouch = throttle(_handleCellTouch, 30); // ~30fps
 
 // Debounce helper
 function debounce(fn, delay) {
@@ -266,22 +292,7 @@ function handleHashChange() {
 }
 
 
-// Update renderGrid and updateCell to use bgColour
-const originalRenderGrid = renderGrid;
-renderGrid = function() {
-  gridElem.innerHTML = '';
-  for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'grid-cell';
-    cell.dataset.idx = i;
-    cell.style.background = grid[i] ? drawColour : bgColour;
-    cell.addEventListener('mouseenter', handleCellDrag);
-    cell.addEventListener('mousedown', handleCellClick);
-    cell.addEventListener('touchstart', handleCellClick, { passive: false });
-    cell.addEventListener('touchmove', handleCellTouch, { passive: false });
-    gridElem.appendChild(cell);
-  }
-};
+
 
 // Prevent all zooming and scrolling on the grid (single or multi-touch)
 function addTouchPrevention() {
@@ -295,12 +306,7 @@ function addTouchPrevention() {
   }
 }
 
-// Call after renderGrid
-const originalRenderGrid2 = renderGrid;
-renderGrid = function() {
-  originalRenderGrid2.apply(this, arguments);
-  addTouchPrevention();
-};
+
 
 window.addEventListener('hashchange', handleHashChange);
 
