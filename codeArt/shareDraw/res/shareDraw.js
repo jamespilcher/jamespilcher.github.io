@@ -66,7 +66,6 @@ function renderGrid() {
     cell.style.background = grid[i] ? drawColour : bgColour;
     cell.addEventListener('mouseenter', handleCellDrag);
     cell.addEventListener('mousedown', handleCellClick);
-    cell.addEventListener('touchmove', handleCellTouch, { passive: false });
     gridElem.appendChild(cell);
   }
 }
