@@ -22,13 +22,13 @@ let bgColour = bgColourPicker.value;
 colourPicker.addEventListener('input', e => {
 	drawColour = e.target.value;
 	renderGrid();
-	updateShareUrl();
+	debouncedUpdateShareUrl();
 });
 
 bgColourPicker.addEventListener('input', e => {
     bgColour = e.target.value;
     renderGrid();
-    updateShareUrl();
+    debouncedUpdateShareUrl();
 });
 
 eraserBtn.addEventListener('click', () => {
@@ -46,12 +46,12 @@ thicknessValue.textContent = thicknessSlider.value;
 clearBtn.addEventListener('click', () => {
 	grid = Array(GRID_SIZE * GRID_SIZE).fill(0);
 	renderGrid();
-	updateShareUrl();
+	debouncedUpdateShareUrl();
 });
 
 bgColourPicker.addEventListener('input', e => {
 	bgColour = e.target.value;
-	updateShareUrl();
+	debouncedUpdateShareUrl();
 });
 
 // --- Efficient grid rendering ---
