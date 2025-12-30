@@ -54,10 +54,11 @@ bgColourPicker.addEventListener('input', e => {
 	debouncedUpdateShareUrl();
 });
 
-// --- Efficient grid rendering ---
-// On load/clear, call renderGrid() to build the DOM. On draw, update only changed cells.
 
-function renderGrid() {
+// Throttle helper (already defined above, reuse if present)
+// function throttle(fn, limit) { ... }
+
+function _renderGrid() {
   gridElem.innerHTML = '';
   for (let i = 0; i < GRID_SIZE * GRID_SIZE; i++) {
     const cell = document.createElement('div');
@@ -72,6 +73,8 @@ function renderGrid() {
   }
   addTouchPrevention();
 }
+
+const renderGrid = throttle(_renderGrid, 30); // ~30fps
 
 function updateCell(idx) {
   const cell = gridElem.children[idx];
