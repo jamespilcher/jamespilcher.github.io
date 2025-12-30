@@ -260,9 +260,34 @@ function updateShareUrl() {
 }
 
 // --- loadFromHash: parse colours as 6 hex digits and add # for input values ---
+function getRandomColour() {
+  // Return a random rgb hex string
+  const r = Math.floor(Math.random() * 256);
+  const g = Math.floor(Math.random() * 256);
+  const b = Math.floor(Math.random() * 256);
+  return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+}
+
+function getComplimentaryColour(hex) {
+  // hex: #rrggbb
+  const r = 255 - parseInt(hex.slice(1, 3), 16);
+  const g = 255 - parseInt(hex.slice(3, 5), 16);
+  const b = 255 - parseInt(hex.slice(5, 7), 16);
+  return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+}
+
 function loadFromHash() {
   const hash = location.hash.replace(/^#/, '');
-  if (!hash) return;
+  if (!hash) {
+    // New drawing: set random complimentary colours
+    const bg = getRandomColour();
+    const colour = getComplimentaryColour(bg);
+    colourPicker.value = colour;
+    drawColour = colour;
+    bgColourPicker.value = bg;
+    bgColour = bg;
+    return;
+  }
   if (hash.length > 12) {
     const colour = '#' + hash.slice(0, 6);
     const bg = '#' + hash.slice(6, 12);
