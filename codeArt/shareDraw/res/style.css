@@ -1,4 +1,6 @@
-# Eraser button active state
+#eraser-btn {
+    min-width: 90px;
+}
 #eraser-btn.active {
   background: #e74c3c;
   color: #fff;
@@ -27,7 +29,7 @@
   aspect-ratio: 1 / 1;
   background: #fff;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: 0.2s;
 }
 .grid-cell.active {
   background: #000;
