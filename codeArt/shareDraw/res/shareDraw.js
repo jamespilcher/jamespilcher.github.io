@@ -15,6 +15,7 @@ let drawColour = '#000000';
 let eraserMode = false;
 let lineThickness = parseInt(thicknessSlider.value, 10);
 let mouseDown = false;
+let lastDrawIdx = null;
 let bgColour = bgColourPicker.value;
 
 colourPicker.addEventListener('input', e => {
@@ -82,14 +83,37 @@ function handleCellClick(e) {
   const idx = +e.target.dataset.idx;
   drawValue = eraserMode ? 0 : 1;
   mouseDown = true; // Set mouseDown on click for drag
-  drawAt(idx, drawValue, lineThickness, true);
+  lastDrawIdx = idx;
+  drawAt(idx, drawValue, lineThickness);
 }
 
 function handleCellDrag(e) {
   if (e.cancelable) e.preventDefault(); // Prevent scrolling only if possible
   if (!mouseDown || (e.buttons !== undefined && (e.buttons & 1) === 0)) return;
   const idx = +e.target.dataset.idx;
-  drawAt(idx, drawValue, lineThickness, true);
+  if (lastDrawIdx !== null && lastDrawIdx !== idx) {
+    // Interpolate between lastDrawIdx and idx
+    const x0 = lastDrawIdx % GRID_SIZE;
+    const y0 = Math.floor(lastDrawIdx / GRID_SIZE);
+    const x1 = idx % GRID_SIZE;
+    const y1 = Math.floor(idx / GRID_SIZE);
+    // Bresenham's line algorithm
+    let dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    let dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    let err = dx + dy, e2;
+    let x = x0, y = y0;
+    while (true) {
+      const i = y * GRID_SIZE + x;
+      drawAt(i, drawValue, lineThickness);
+      if (x === x1 && y === y1) break;
+      e2 = 2 * err;
+      if (e2 >= dy) { err += dy; x += sx; }
+      if (e2 <= dx) { err += dx; y += sy; }
+    }
+  } else {
+    drawAt(idx, drawValue, lineThickness);
+  }
+  lastDrawIdx = idx;
 }
 
 function handleCellTouch(e) {
@@ -99,12 +123,11 @@ function handleCellTouch(e) {
   if (!target || !target.classList.contains('grid-cell')) return;
   const idx = +target.dataset.idx;
   drawValue = eraserMode ? 0 : 1;
-  drawAt(idx, drawValue, lineThickness, true);
-  updateShareUrl();
+  drawAt(idx, drawValue, lineThickness);
 }
 
 // Draw a circle and update only changed cells if updateDom=true
-function drawAt(idx, value, thickness, updateDom) {
+function drawAt(idx, value, thickness) {
   const x0 = idx % GRID_SIZE;
   const y0 = Math.floor(idx / GRID_SIZE);
   const r = thickness / 2;
@@ -117,13 +140,13 @@ function drawAt(idx, value, thickness, updateDom) {
           const i = y * GRID_SIZE + x;
           if (grid[i] !== value) {
             grid[i] = value;
-            if (updateDom) updateCell(i);
+            updateCell(i);
           }
         }
       }
     }
   }
-  if (updateDom) updateShareUrl();
+  updateShareUrl();
 }
 
 // --- URL-safe base64 helpers ---
@@ -249,7 +272,7 @@ renderGrid = function() {
 
 window.addEventListener('hashchange', handleHashChange);
 
-window.addEventListener('mouseup', () => { mouseDown = false; });
+window.addEventListener('mouseup', () => { mouseDown = false; lastDrawIdx = null; });
 
 shareBtn.addEventListener('click', async () => {
     console.log(shareUrlElem.value);
