@@ -148,6 +148,17 @@ function handleCellTouch(e) {
   lastDrawIdx = idx;
 }
 
+// Debounce helper
+function debounce(fn, delay) {
+  let timeout;
+  return function(...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+const debouncedUpdateShareUrl = debounce(updateShareUrl, 250);
+
 // Draw a circle and update only changed cells if updateDom=true
 function drawAt(idx, value, thickness) {
   const x0 = idx % GRID_SIZE;
@@ -168,7 +179,7 @@ function drawAt(idx, value, thickness) {
       }
     }
   }
-  updateShareUrl();
+  debouncedUpdateShareUrl();
 }
 
 // --- URL-safe base64 helpers ---
