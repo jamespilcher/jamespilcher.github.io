@@ -42,7 +42,7 @@ window.addEventListener('DOMContentLoaded', function() {
   }
   shareTextElem.addEventListener('input', autoGrowTextarea);
 
-  // Only allow 2 spaces (3 segments), no leading spaces, ignore double spaces, max 200 chars, remove auto full stop after double space
+  // Only allow 2 spaces (3 segments), no leading spaces, ignore double spaces, max 200 chars, remove auto full stop after double space, force lower case
   function enforceTwoSpaces(e) {
     let val = shareTextElem.value;
     // Remove leading spaces
@@ -54,6 +54,8 @@ window.addEventListener('DOMContentLoaded', function() {
     // Remove auto full stop after double space (macOS feature)
     // If a full stop is present after a space, and the previous char is a space, remove the full stop
     val = val.replace(/( )\./g, '$1');
+    // Force lower case
+    val = val.toLowerCase();
     let spaceCount = (val.match(/ /g) || []).length;
     if (spaceCount > 2) {
       let parts = val.split(' ');
