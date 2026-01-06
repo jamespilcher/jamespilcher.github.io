@@ -94,7 +94,7 @@ window.addEventListener('DOMContentLoaded', function() {
     let url = shareTextUrlElem.value;
     if (navigator.share) {
       try {
-        await navigator.share({ url, title: 'Shareable text!' });
+        await navigator.share({ url, title: 'I love sharing3Words with you <3' });
       } catch (e) {}
     } else if (navigator.clipboard) {
       await navigator.clipboard.writeText(url);
