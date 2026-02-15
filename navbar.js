@@ -19,8 +19,8 @@ document.write(`
         >${jpilcher}<img src="${root}/res/jim.png" class="logoimage"/></a>
     </ul>
     <ul>
-        <li><a href="https://roundapples.substack.com/t/poetry" target="_blank">poetry</a></li>
         <li><a href="${root}/codeArt">codeArt</a></li>
+        <li><a href="https://roundapples.substack.com/t/poetry" target="_blank">poetry</a></li>
         <li><button id="radioPlayer" onclick="playRadio()" data-tooltip="Unmute Me!"><div id="radioEmoji">📻🔇</div></button></li>    
     </ul>
 </nav>
