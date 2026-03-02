@@ -5,7 +5,8 @@
 <html lang="en">
 
 <head>
-    <title>template</title>
+    <title>share3Words</title>
+    <link rel="stylesheet" href="res/shareText.css">
     <link rel="stylesheet" href="res/style.css">
     <link rel="stylesheet" href="../../res/main.css">
     <link rel="icon" href="../../../res/jim.png">
@@ -24,11 +25,18 @@
     <script src="../../navbar.js"></script>
     <div class="container">
         <div class="blogtitle">
-            <i>here</i>
+            <i>share3Words</i>
         </div>
         <br>
-        content goes here!
+        <div id="share-text-container" style="margin:1em 0;">
+          <textarea id="share-text" rows="1" cols="8"></textarea>
+          <br>
+          <input id="share-text-url" type="text" readonly style="width:100%;margin-top:0.5em;">
+          <button id="share-text-btn">Share</button>
+        </div>
     </div>
+    <script src="res/lz77.js"></script>
+    <script src="res/shareText.js"></script>
     <script src="../../footer.js"></script>
 </body>
 

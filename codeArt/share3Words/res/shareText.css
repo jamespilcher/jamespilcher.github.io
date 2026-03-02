@@ -1,0 +1,40 @@
+/* shareText.css - styles for shareable text box */
+#share-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#share-text {
+  width: 85%;
+  font-size: 1.2em;
+  padding-top: 1.3em;
+  padding-bottom: 1.3em;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  border: 1px dotted #555555;
+  border-radius: 3px;
+
+    outline: none;
+  /* box-shadow: none;
+  border: 0; */
+  resize: none;
+  box-sizing: border-box;
+  background: #fafaff00;
+  color: #222;
+  text-align: center;
+}
+#share-text-url {
+  width: 90%;
+  font-size: 0.8em;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+
+label[for="share-text"] {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 0.2em;
+  display: block;
+}
