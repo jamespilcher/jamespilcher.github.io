@@ -13,7 +13,7 @@ let rightThresholdMatrix = 'normal';
 let comparisonSlider = null;
 let leftModeLabel = null;
 let rightModeLabel = null;
-let selectedSide = 'left'; // Track which side is being configured
+let selectedSide = 'right'; // Track which side is being configured
 let leftSelectedButton = null; // Track which button is selected for left side
 let rightSelectedButton = null; // Track which button is selected for right side
 
@@ -28,17 +28,13 @@ window.onload = function() {
     setTimeout(() => {
         const normalButton = document.querySelector('.pattern-controls button[onclick*="normalMatrix"]');
         if (normalButton) {
-            // Set left side to normal
-            selectedSide = 'left';
-            selectPattern(normalButton, normalMatrix);
-            
-            // Set right side to normal
+            // Set both sides to normal
+            selectPattern(normalButton, normalMatrix, 'left');
+            selectPattern(normalButton, normalMatrix, 'right');
+
+            // Set right side as default selection
             selectedSide = 'right';
-            selectPattern(normalButton, normalMatrix);
-            
-            // Reset back to left side as default
-            selectedSide = 'left';
-            setSide('left');
+            setSide('right'); 
         }
     }, 0);
 };
@@ -52,20 +48,20 @@ function createDitherPresets() {
     controls.className = 'pattern-controls';
     controls.innerHTML = `
         <div style="margin-bottom: 15px;">
-            <button onclick="setSide('left')" id="leftSideBtn" style="background-color: lightblue;">Configure Left Side</button>
-            <button onclick="setSide('right')" id="rightSideBtn">Configure Right Side</button>
+            <button onclick="setSide('left')" id="leftSideBtn">Configure Left Side</button>
+            <button onclick="setSide('right')" id="rightSideBtn" style="background-color: lightcoral;">Configure Right Side</button>
         </div>
-        <button onclick="selectPattern(this, normalMatrix)">Normal</button>
-        <button onclick="selectPattern(this, threshold25Matrix)">25% Threshold</button>
-        <button onclick="selectPattern(this, threshold50Matrix)">50% Threshold</button>
-        <button onclick="selectPattern(this, threshold75Matrix)">75% Threshold</button>
-        <button onclick="selectPattern(this, bayer2x2Matrix)">Bayer 2×2</button>
-        <button onclick="selectPattern(this, bayer4x4Matrix)">Bayer 4×4</button>
-        <button onclick="selectPattern(this, bayer8x8Matrix)">Bayer 8×8</button>
-        <button onclick="selectPattern(this, clockwiseMatrix)">Clockwise</button>
-        <button onclick="selectPattern(this, dispersedDotMatrix)">Dispersed Dot</button>
-        <button onclick="selectPattern(this, blueNoiseMatrix)">Blue Noise</button>
-        <button onclick="selectPattern(this, randomMatrix)">Random Noise</button>
+        <button onclick="selectPattern(this, normalMatrix, selectedSide)">Normal</button>
+        <button onclick="selectPattern(this, threshold25Matrix, selectedSide)">25% Threshold</button>
+        <button onclick="selectPattern(this, threshold50Matrix, selectedSide)">50% Threshold</button>
+        <button onclick="selectPattern(this, threshold75Matrix, selectedSide)">75% Threshold</button>
+        <button onclick="selectPattern(this, bayer2x2Matrix, selectedSide)">Bayer 2×2</button>
+        <button onclick="selectPattern(this, bayer4x4Matrix, selectedSide)">Bayer 4×4</button>
+        <button onclick="selectPattern(this, bayer8x8Matrix, selectedSide)">Bayer 8×8</button>
+        <button onclick="selectPattern(this, clockwiseMatrix, selectedSide)">Clockwise</button>
+        <button onclick="selectPattern(this, dispersedDotMatrix, selectedSide)">Dispersed Dot</button>
+        <button onclick="selectPattern(this, blueNoiseMatrix, selectedSide)">Blue Noise</button>
+        <button onclick="selectPattern(this, randomMatrix, selectedSide)">Random Noise</button>
     `;
     presetsDiv.appendChild(controls);
 }
@@ -95,51 +91,36 @@ function setSide(side) {
         leftBtn.style.backgroundColor = '';
         rightBtn.style.backgroundColor = 'lightcoral';
     }
-    
-    // Reset all pattern button selections
-    const allPatternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
-    allPatternButtons.forEach(btn => btn.style.backgroundColor = '');
-    
-    // Show both left and right selected pattern buttons with their colors
-    if (leftSelectedButton) {
-        // Check if this button is also selected for right side
-        if (rightSelectedButton && leftSelectedButton === rightSelectedButton) {
-            // Mix the colors if same pattern is selected on both sides
-            leftSelectedButton.style.backgroundColor = 'mediumpurple';
-        } else {
-            leftSelectedButton.style.backgroundColor = 'lightblue';
-        }
-    }
-    
-    if (rightSelectedButton && rightSelectedButton !== leftSelectedButton) {
-        rightSelectedButton.style.backgroundColor = 'lightcoral';
-    }
+
 }
 
-function selectPattern(button, patternFunction) {
-    // Remove background from all pattern buttons
+function selectPattern(button, patternFunction, side) {
+    // Clear all pattern button backgrounds and set correct colors
     const patternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
     patternButtons.forEach(btn => btn.style.backgroundColor = '');
-    
-    // Remember which button is selected for the current side
-    if (selectedSide === 'left') {
+
+    if (side === 'left') {
         leftSelectedButton = button;
     } else {
         rightSelectedButton = button;
     }
+
+    console.log(`Selected pattern for ${side} side: ${button.textContent}`);
     
+    
+
     // Set background colors for selected buttons
-    if (leftSelectedButton) {
-        if (rightSelectedButton && leftSelectedButton === rightSelectedButton) {
-            // Mix colors if same pattern is selected on both sides
-            leftSelectedButton.style.backgroundColor = 'mediumpurple';
-        } else {
+    if (leftSelectedButton && rightSelectedButton && leftSelectedButton === rightSelectedButton) {
+        // Same pattern selected on both sides - use purple
+        leftSelectedButton.style.backgroundColor = 'mediumpurple';
+    } else {
+        // Different patterns - use side-specific colors
+        if (leftSelectedButton) {
             leftSelectedButton.style.backgroundColor = 'lightblue';
         }
-    }
-    
-    if (rightSelectedButton && rightSelectedButton !== leftSelectedButton) {
-        rightSelectedButton.style.backgroundColor = 'lightcoral';
+        if (rightSelectedButton) {
+            rightSelectedButton.style.backgroundColor = 'lightcoral';
+        }
     }
     
     // Get pattern name for labels
@@ -151,7 +132,7 @@ function selectPattern(button, patternFunction) {
     const newPattern = thresholdMatrix;
     thresholdMatrix = originalThresholdMatrix; // Restore
     
-    if (selectedSide === 'left') {
+    if (side === 'left') {
         leftThresholdMatrix = newPattern;
         leftModeLabel.textContent = patternName;
     } else {
@@ -161,10 +142,12 @@ function selectPattern(button, patternFunction) {
     
     // Show/hide recalculate noise button based on pattern type
     const noiseControls = document.getElementById('noiseControls');
-    if (patternName.includes('Blue Noise') || patternName.includes('Random Noise')) {
-        noiseControls.style.display = 'block';
-    } else {
-        noiseControls.style.display = 'none';
+    if (noiseControls) {
+        if (patternName.includes('Blue Noise') || patternName.includes('Random Noise')) {
+            noiseControls.style.display = 'block';
+        } else {
+            noiseControls.style.display = 'none';
+        }
     }
 }
 
