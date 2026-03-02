@@ -1,0 +1,38 @@
+.controls {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.controls label {
+    margin-right: 10px;
+}
+
+.controls input {
+    margin: 0 10px;
+    width: 60px;
+    text-align: center;
+}
+
+.controls button {
+    margin: 0 5px;
+}
+
+.dither-output {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.pattern-controls {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.pattern-controls button {
+    margin: 0 5px;
+}
+
+.dither-presets {
+    margin: 20px auto;
+    text-align: center;
+}
+
