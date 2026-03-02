@@ -33,9 +33,14 @@
         
         <div id="ditherPresets" class="dither-presets"></div>
         <div id="ditherOutput" class="dither-output"></div>
-        <div id="noiseControls" style="text-align: center; margin-top: 10px; display: none;">
-            <button onclick="recalculateNoise()" style="padding: 8px 16px;">Recalculate Noise!</button>
+        <div id="comparisonControls" class="comparison-controls">
+            <input type="range" id="comparisonSlider" min="0" max="100" value="50" step="0.1">
+            <div class="comparison-labels">
+                <span id="leftMode">Normal</span>
+                <span id="rightMode">Normal</span>
+            </div>
         </div>
+
     </div>
     <script src="../../footer.js"></script>
     <script src="res/dither.js"></script>

@@ -7,17 +7,38 @@ let ctx = null;
 let outputCanvas = null;
 let outputCtx = null;
 
+// Comparison mode variables
+let leftThresholdMatrix = 'normal';
+let rightThresholdMatrix = 'normal';
+let comparisonSlider = null;
+let leftModeLabel = null;
+let rightModeLabel = null;
+let selectedSide = 'left'; // Track which side is being configured
+let leftSelectedButton = null; // Track which button is selected for left side
+let rightSelectedButton = null; // Track which button is selected for right side
+
 // Initialize and start immediately
 window.onload = function() {
-    createDitherPresets(); // Create pattern buttons once
+    createDitherPresets();
     setupCanvas();
+    setupComparisonControls();
     startDithering(); // Auto-start
     
-    // Set default selections only on initial load
+    // Set default selection for both sides on initial load
     setTimeout(() => {
-        const firstPatternButton = document.querySelector('.pattern-controls button');
-        if (firstPatternButton) {
-            selectPattern(firstPatternButton, normalMatrix);
+        const normalButton = document.querySelector('.pattern-controls button[onclick*="normalMatrix"]');
+        if (normalButton) {
+            // Set left side to normal
+            selectedSide = 'left';
+            selectPattern(normalButton, normalMatrix);
+            
+            // Set right side to normal
+            selectedSide = 'right';
+            selectPattern(normalButton, normalMatrix);
+            
+            // Reset back to left side as default
+            selectedSide = 'left';
+            setSide('left');
         }
     }, 0);
 };
@@ -30,6 +51,10 @@ function createDitherPresets() {
     const controls = document.createElement('div');
     controls.className = 'pattern-controls';
     controls.innerHTML = `
+        <div style="margin-bottom: 15px;">
+            <button onclick="setSide('left')" id="leftSideBtn" style="background-color: lightblue;">Configure Left Side</button>
+            <button onclick="setSide('right')" id="rightSideBtn">Configure Right Side</button>
+        </div>
         <button onclick="selectPattern(this, normalMatrix)">Normal</button>
         <button onclick="selectPattern(this, threshold25Matrix)">25% Threshold</button>
         <button onclick="selectPattern(this, threshold50Matrix)">50% Threshold</button>
@@ -37,64 +62,126 @@ function createDitherPresets() {
         <button onclick="selectPattern(this, bayer2x2Matrix)">Bayer 2×2</button>
         <button onclick="selectPattern(this, bayer4x4Matrix)">Bayer 4×4</button>
         <button onclick="selectPattern(this, bayer8x8Matrix)">Bayer 8×8</button>
-        <button onclick="selectPattern(this, blueNoiseMatrix)">Blue Noise</button>
         <button onclick="selectPattern(this, clockwiseMatrix)">Clockwise</button>
         <button onclick="selectPattern(this, dispersedDotMatrix)">Dispersed Dot</button>
-        <button onclick="selectPattern(this, verticalLineMatrix)">Vertical Lines</button>
-        <button onclick="selectPattern(this, horizontalLineMatrix)">Horizontal Lines</button>
+        <button onclick="selectPattern(this, blueNoiseMatrix)">Blue Noise</button>
         <button onclick="selectPattern(this, randomMatrix)">Random Noise</button>
     `;
     presetsDiv.appendChild(controls);
 }
 
+function setupComparisonControls() {
+    comparisonSlider = document.getElementById('comparisonSlider');
+    leftModeLabel = document.getElementById('leftMode');
+    rightModeLabel = document.getElementById('rightMode');
+    
+    // Add slider event listener
+    comparisonSlider.addEventListener('input', function() {
+        // No need to do anything here - the slider value is read during rendering
+    });
+}
+
+function setSide(side) {
+    selectedSide = side;
+    
+    // Update button styling
+    const leftBtn = document.getElementById('leftSideBtn');
+    const rightBtn = document.getElementById('rightSideBtn');
+    
+    if (side === 'left') {
+        leftBtn.style.backgroundColor = 'lightblue';
+        rightBtn.style.backgroundColor = '';
+    } else {
+        leftBtn.style.backgroundColor = '';
+        rightBtn.style.backgroundColor = 'lightcoral';
+    }
+    
+    // Reset all pattern button selections
+    const allPatternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
+    allPatternButtons.forEach(btn => btn.style.backgroundColor = '');
+    
+    // Show both left and right selected pattern buttons with their colors
+    if (leftSelectedButton) {
+        // Check if this button is also selected for right side
+        if (rightSelectedButton && leftSelectedButton === rightSelectedButton) {
+            // Mix the colors if same pattern is selected on both sides
+            leftSelectedButton.style.backgroundColor = 'mediumpurple';
+        } else {
+            leftSelectedButton.style.backgroundColor = 'lightblue';
+        }
+    }
+    
+    if (rightSelectedButton && rightSelectedButton !== leftSelectedButton) {
+        rightSelectedButton.style.backgroundColor = 'lightcoral';
+    }
+}
+
 function selectPattern(button, patternFunction) {
-    // Remove green background from all buttons
-    const allButtons = document.querySelectorAll('.pattern-controls button');
-    allButtons.forEach(btn => btn.style.backgroundColor = '');
+    // Remove background from all pattern buttons
+    const patternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
+    patternButtons.forEach(btn => btn.style.backgroundColor = '');
     
-    // Set green background for selected button
-    button.style.backgroundColor = 'green';
+    // Remember which button is selected for the current side
+    if (selectedSide === 'left') {
+        leftSelectedButton = button;
+    } else {
+        rightSelectedButton = button;
+    }
     
-    // Execute the pattern function
+    // Set background colors for selected buttons
+    if (leftSelectedButton) {
+        if (rightSelectedButton && leftSelectedButton === rightSelectedButton) {
+            // Mix colors if same pattern is selected on both sides
+            leftSelectedButton.style.backgroundColor = 'mediumpurple';
+        } else {
+            leftSelectedButton.style.backgroundColor = 'lightblue';
+        }
+    }
+    
+    if (rightSelectedButton && rightSelectedButton !== leftSelectedButton) {
+        rightSelectedButton.style.backgroundColor = 'lightcoral';
+    }
+    
+    // Get pattern name for labels
+    const patternName = button.textContent;
+    
+    // Execute the pattern function and assign to appropriate side
+    const originalThresholdMatrix = thresholdMatrix;
     patternFunction();
+    const newPattern = thresholdMatrix;
+    thresholdMatrix = originalThresholdMatrix; // Restore
+    
+    if (selectedSide === 'left') {
+        leftThresholdMatrix = newPattern;
+        leftModeLabel.textContent = patternName;
+    } else {
+        rightThresholdMatrix = newPattern;
+        rightModeLabel.textContent = patternName;
+    }
     
     // Show/hide recalculate noise button based on pattern type
     const noiseControls = document.getElementById('noiseControls');
-    const buttonText = button.textContent;
-    if (buttonText.includes('Blue Noise') || buttonText.includes('Random Noise')) {
+    if (patternName.includes('Blue Noise') || patternName.includes('Random Noise')) {
         noiseControls.style.display = 'block';
     } else {
         noiseControls.style.display = 'none';
     }
 }
 
-function recalculateNoise() {
-    // Find currently selected pattern
-    const selectedButton = document.querySelector('.pattern-controls button[style*="green"]');
-    if (selectedButton) {
-        const buttonText = selectedButton.textContent;
-        if (buttonText.includes('Blue Noise')) {
-            thresholdMatrix = 'blueNoise'; // Reset to flag for regeneration
-        } else if (buttonText.includes('Random Noise')) {
-            thresholdMatrix = 'random'; // Reset to flag for regeneration
-        }
-    }
-}
-
 function normalMatrix() {
-    thresholdMatrix = 'normal'; // Special flag for no dithering
+    thresholdMatrix = 'normal';
 }
 
 function threshold25Matrix() {
-    thresholdMatrix = 64; // Single value for uniform threshold
+    thresholdMatrix = 64;
 }
 
 function threshold50Matrix() {
-    thresholdMatrix = 128; // Single value for uniform threshold
+    thresholdMatrix = 128;
 }
 
 function threshold75Matrix() {
-    thresholdMatrix = 192; // Single value for uniform threshold
+    thresholdMatrix = 192;
 }
 
 function bayer2x2Matrix() {
@@ -139,22 +226,6 @@ function dispersedDotMatrix() {
         [128, 64, 192],
         [32, 255, 96],
         [224, 160, 0]
-    ];
-}
-
-function verticalLineMatrix() {
-    thresholdMatrix = [
-        [0, 255, 0],
-        [0, 255, 0],
-        [0, 255, 0]
-    ];
-}
-
-function horizontalLineMatrix() {
-    thresholdMatrix = [
-        [0, 0, 0],
-        [255, 255, 255],
-        [0, 0, 0]
     ];
 }
 
@@ -264,38 +335,35 @@ function applyDithering(imageData) {
     const height = imageData.height;
     const result = [];
     
-    // Handle normal (no dithering) mode
-    if (thresholdMatrix === 'normal') {
-        for (let y = 0; y < height; y++) {
-            result[y] = [];
-            for (let x = 0; x < width; x++) {
-                const pixelIndex = (y * width + x) * 4;
-                
-                // Convert to grayscale and keep original values (0-255)
-                const r = data[pixelIndex];
-                const g = data[pixelIndex + 1];
-                const b = data[pixelIndex + 2];
-                result[y][x] = Math.round((r + g + b) / 3);
-            }
-        }
-        return result;
+    // Get the comparison split point (0-100 slider becomes 0-1)
+    const splitRatio = comparisonSlider.value / 100;
+    const splitX = Math.floor(width * splitRatio);
+    
+    // Handle generation of noise patterns if needed
+    if (leftThresholdMatrix === 'blueNoise') {
+        showCanvasLoadingMessage('Generating Left Blue Noise...');
+        setTimeout(() => {
+            leftThresholdMatrix = generateBlueNoise(width, height);
+        }, 50);
+        return [];
+    } else if (leftThresholdMatrix === 'random') {
+        showCanvasLoadingMessage('Generating Left Random Noise...');
+        setTimeout(() => {
+            leftThresholdMatrix = generateRandomNoise(width, height);
+        }, 50);
+        return [];
     }
     
-    // Generate full-image noise patterns on first use
-    if (thresholdMatrix === 'blueNoise') {
-        showCanvasLoadingMessage('Generating Blue Noise...');
-        console.log('Generating blue noise for', width, 'x', height, 'image...');
-        // Use setTimeout to allow the loading message to render
+    if (rightThresholdMatrix === 'blueNoise') {
+        showCanvasLoadingMessage('Generating Right Blue Noise...');
         setTimeout(() => {
-            thresholdMatrix = generateBlueNoise(width, height);
+            rightThresholdMatrix = generateBlueNoise(width, height);
         }, 50);
-        // Return early this frame, will continue next frame with generated matrix
         return [];
-    } else if (thresholdMatrix === 'random') {
-        showCanvasLoadingMessage('Generating Random Noise...');
-        console.log('Generating random noise for', width, 'x', height, 'image...');
+    } else if (rightThresholdMatrix === 'random') {
+        showCanvasLoadingMessage('Generating Right Random Noise...');
         setTimeout(() => {
-            thresholdMatrix = generateRandomNoise(width, height);
+            rightThresholdMatrix = generateRandomNoise(width, height);
         }, 50);
         return [];
     }
@@ -311,16 +379,25 @@ function applyDithering(imageData) {
             const b = data[pixelIndex + 2];
             const grayscale = Math.round((r + g + b) / 3);
             
+            // Determine which side of the comparison we're on
+            const currentMatrix = x < splitX ? leftThresholdMatrix : rightThresholdMatrix;
+            
+            // Handle normal (no dithering) mode
+            if (currentMatrix === 'normal') {
+                result[y][x] = grayscale;
+                continue;
+            }
+            
             // Get threshold based on pattern type
             let threshold;
-            if (typeof thresholdMatrix === 'number') {
+            if (typeof currentMatrix === 'number') {
                 // Uniform threshold (25%, 50%, 75%)
-                threshold = thresholdMatrix;
-            } else if (Array.isArray(thresholdMatrix)) {
+                threshold = currentMatrix;
+            } else if (Array.isArray(currentMatrix)) {
                 // Matrix pattern (including full-image noise)
-                const matrixHeight = thresholdMatrix.length;
-                const matrixWidth = thresholdMatrix[0].length;
-                threshold = thresholdMatrix[y % matrixHeight][x % matrixWidth];
+                const matrixHeight = currentMatrix.length;
+                const matrixWidth = currentMatrix[0].length;
+                threshold = currentMatrix[y % matrixHeight][x % matrixWidth];
             } else {
                 threshold = 128; // Default
             }
@@ -413,16 +490,18 @@ function displayDitheredFrame(ditheredData, width, height) {
     const imageData = outputCtx.createImageData(width, height);
     const data = imageData.data;
     
-    // Check if this is normal mode (grayscale values) or dithered mode (0/1 values)
-    const isNormalMode = thresholdMatrix === 'normal';
+    // Get the comparison split point
+    const splitRatio = comparisonSlider.value / 100;
+    const splitX = Math.floor(width * splitRatio);
     
     // Fill ImageData with pixels
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
             const index = (y * width + x) * 4;
+            const currentMatrix = x < splitX ? leftThresholdMatrix : rightThresholdMatrix;
             let value;
             
-            if (isNormalMode) {
+            if (currentMatrix === 'normal') {
                 // Normal mode: use grayscale value directly (0-255)
                 value = ditheredData[y][x];
             } else {
@@ -439,6 +518,14 @@ function displayDitheredFrame(ditheredData, width, height) {
     
     // Draw to canvas in one operation
     outputCtx.putImageData(imageData, 0, 0);
+    
+    // Draw a subtle vertical line at the split point
+    outputCtx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+    outputCtx.lineWidth = 2;
+    outputCtx.beginPath();
+    outputCtx.moveTo(splitX, 0);
+    outputCtx.lineTo(splitX, height);
+    outputCtx.stroke();
 }
 
 function showCanvasLoadingMessage(message) {
