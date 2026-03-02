@@ -22,6 +22,17 @@ window.onload = function() {
     createDitherPresets();
     setupCanvas();
     setupComparisonControls();
+    
+    // Show loading message initially
+    const outputDiv = document.getElementById('ditherOutput');
+    outputDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 10px;">Loading...</div>';
+    
+    // Hide slider initially
+    const comparisonControls = document.getElementById('comparisonControls');
+    if (comparisonControls) {
+        comparisonControls.style.display = 'none';
+    }
+    
     startDithering(); // Auto-start
     
     // Set default selection for both sides on initial load
@@ -238,6 +249,10 @@ function setupOutputCanvas(width, height) {
         outputCanvas.remove();
     }
     
+    // Clear loading message and any existing content
+    const outputDiv = document.getElementById('ditherOutput');
+    outputDiv.innerHTML = '';
+    
     // Create display canvas for dither output
     outputCanvas = document.createElement('canvas');
     outputCtx = outputCanvas.getContext('2d');
@@ -250,7 +265,6 @@ function setupOutputCanvas(width, height) {
     outputCanvas.style.imageRendering = 'pixelated'; // Keep sharp pixels when scaling
     
     // Add to output div
-    const outputDiv = document.getElementById('ditherOutput');
     outputDiv.appendChild(outputCanvas);
 }
 
@@ -271,6 +285,12 @@ async function startDithering() {
             
             // Create output canvas for display
             setupOutputCanvas(outputWidth, outputHeight);
+            
+            // Show slider now that video is loaded
+            const comparisonControls = document.getElementById('comparisonControls');
+            if (comparisonControls) {
+                comparisonControls.style.display = 'block';
+            }
             
             videoElement.play();
             startProcessing();
