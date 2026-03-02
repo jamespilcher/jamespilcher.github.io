@@ -1,0 +1,115 @@
+<!doctype html>
+
+<meta
+  name="viewport"
+  content="width=device-width, height=device-height, initial-scale=1"
+/>
+
+<html lang="en">
+  <head>
+    <title>thereminWebcam</title>
+    <link rel="stylesheet" href="res/styles.css" />
+    <link rel="stylesheet" href="../../res/main.css" />
+    <link rel="icon" href="../../../res/jim.png" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-REWLQQ5D58");
+    </script>
+  </head>
+
+  <body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+      <div class="blogtitle">
+        <i>thereminWebcam</i>
+      </div>
+      <br />
+
+      <div id="theremimInterface" class="theremin-interface">
+        <div class="controls-panel">
+          <div class="webcam-brightness-container">
+            <div class="webcam-preview">
+              <video id="videoElement" autoplay muted></video>
+            </div>
+
+            <div class="brightness-display">
+              <div id="brightnessBlock" class="brightness-block"></div>
+              <div class="brightness-label">
+                <span id="brightnessValue">0%</span>
+                Average Brightness
+              </div>
+            </div>
+          </div>
+
+          <div class="slider-controls">
+            <div class="volume-control">
+              <label for="volumeSlider">Volume:</label>
+              <input
+                type="range"
+                id="volumeSlider"
+                min="0"
+                max="100"
+                value="50"
+              />
+              <span id="volumeValue">50%</span>
+            </div>
+
+            <div class="volume-control">
+              <label for="reverbSlider">Reverb:</label>
+              <input
+                type="range"
+                id="reverbSlider"
+                min="0"
+                max="100"
+                value="20"
+              />
+              <span id="reverbValue">50%</span>
+            </div>
+          </div>
+
+          <div class="selector-controls">
+            <div class="scale-control">
+              <label for="scaleSelector">Scale:</label>
+              <select id="scaleSelector">
+                <option value="c-pentatonic">C Major Pentatonic</option>
+                <option value="c-major">C Major</option>
+                <option value="c-minor-pentatonic">C Minor Pentatonic</option>
+                <option value="c-blues">C Blues</option>
+                <option value="whole-tone">Whole Tone</option>
+              </select>
+            </div>
+            <div class="scale-control">
+              <label for="oscillatorSelector">Wave Type:</label>
+              <select id="oscillatorSelector">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="sawtooth">Sawtooth</option>
+                <option value="triangle">Triangle</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="brightnessChart"></canvas>
+          <p>
+            <span id="currentNote">A4</span> (<span id="currentFreq">440</span>
+            Hz)
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="res/theremin.js"></script>
+    <script src="../../footer.js"></script>
+  </body>
+</html>
