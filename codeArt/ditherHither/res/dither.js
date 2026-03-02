@@ -1,201 +1,30 @@
-let thresholdMatrix = [];
-let isStreaming = false;
-let animationId = null;
-let videoElement = null;
-let canvas = null;
-let ctx = null;
-let outputCanvas = null;
-let outputCtx = null;
-
-// Comparison mode variables
-let leftThresholdMatrix = 'normal';
-let rightThresholdMatrix = 'normal';
-let comparisonSlider = null;
-let leftModeLabel = null;
-let rightModeLabel = null;
-let selectedSide = 'right'; // Track which side is being configured
-let leftSelectedButton = null; // Track which button is selected for left side
-let rightSelectedButton = null; // Track which button is selected for right side
-
-// Initialize and start immediately
-window.onload = function() {
-    createDitherPresets();
-    setupCanvas();
-    setupComparisonControls();
-    
-    // Show loading message initially
-    const outputDiv = document.getElementById('ditherOutput');
-    outputDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 10px;">Loading...</div>';
-    
-    // Hide slider initially
-    const comparisonControls = document.getElementById('comparisonControls');
-    if (comparisonControls) {
-        comparisonControls.style.display = 'none';
-    }
-    
-    startDithering(); // Auto-start
-    
-    // Set default selection for both sides on initial load
-    setTimeout(() => {
-        const normalButton = document.querySelector('.pattern-controls button[onclick*="normalMatrix"]');
-        if (normalButton) {
-            // Set both sides to normal
-            selectPattern(normalButton, normalMatrix, 'left');
-            selectPattern(normalButton, normalMatrix, 'right');
-
-            // Set right side as default selection
-            selectedSide = 'right';
-            setSide('right'); 
-        }
-    }, 0);
+// Constants
+const COLORS = {
+    LEFT: 'lightblue',
+    RIGHT: 'lightcoral',
+    BOTH: 'mediumpurple'
 };
 
+const CONFIG = {
+    OUTPUT_WIDTH: 500,
+    FRAME_RATE: 33,
+    NOISE_SAMPLE_SIZE: 10000
+};
 
-function createDitherPresets() {
-    const presetsDiv = document.getElementById('ditherPresets');
-    presetsDiv.innerHTML = '';
-    
-    const controls = document.createElement('div');
-    controls.className = 'pattern-controls';
-    controls.innerHTML = `
-        <div style="margin-bottom: 15px;">
-            <button onclick="setSide('left')" id="leftSideBtn">Configure Left Side</button>
-            <button onclick="setSide('right')" id="rightSideBtn" style="background-color: lightcoral;">Configure Right Side</button>
-        </div>
-        <button onclick="selectPattern(this, normalMatrix, selectedSide)">Normal</button>
-        <button onclick="selectPattern(this, threshold25Matrix, selectedSide)">25% Threshold</button>
-        <button onclick="selectPattern(this, threshold50Matrix, selectedSide)">50% Threshold</button>
-        <button onclick="selectPattern(this, threshold75Matrix, selectedSide)">75% Threshold</button>
-        <button onclick="selectPattern(this, bayer2x2Matrix, selectedSide)">Bayer 2×2</button>
-        <button onclick="selectPattern(this, bayer4x4Matrix, selectedSide)">Bayer 4×4</button>
-        <button onclick="selectPattern(this, bayer8x8Matrix, selectedSide)">Bayer 8×8</button>
-        <button onclick="selectPattern(this, clockwiseMatrix, selectedSide)">Clockwise</button>
-        <button onclick="selectPattern(this, dispersedDotMatrix, selectedSide)">Dispersed Dot</button>
-        <button onclick="selectPattern(this, blueNoiseMatrix, selectedSide)">Blue Noise</button>
-        <button onclick="selectPattern(this, randomMatrix, selectedSide)">Random Noise</button>
-    `;
-    presetsDiv.appendChild(controls);
-}
-
-function setupComparisonControls() {
-    comparisonSlider = document.getElementById('comparisonSlider');
-    leftModeLabel = document.getElementById('leftMode');
-    rightModeLabel = document.getElementById('rightMode');
-    
-    // Add slider event listener
-    comparisonSlider.addEventListener('input', function() {
-        // No need to do anything here - the slider value is read during rendering
-    });
-}
-
-function setSide(side) {
-    selectedSide = side;
-    
-    // Update button styling
-    const leftBtn = document.getElementById('leftSideBtn');
-    const rightBtn = document.getElementById('rightSideBtn');
-    
-    if (side === 'left') {
-        leftBtn.style.backgroundColor = 'lightblue';
-        rightBtn.style.backgroundColor = '';
-    } else {
-        leftBtn.style.backgroundColor = '';
-        rightBtn.style.backgroundColor = 'lightcoral';
-    }
-
-}
-
-function selectPattern(button, patternFunction, side) {
-    // Clear all pattern button backgrounds and set correct colors
-    const patternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
-    patternButtons.forEach(btn => btn.style.backgroundColor = '');
-
-    if (side === 'left') {
-        leftSelectedButton = button;
-    } else {
-        rightSelectedButton = button;
-    }
-
-    console.log(`Selected pattern for ${side} side: ${button.textContent}`);
-    
-    
-
-    // Set background colors for selected buttons
-    if (leftSelectedButton && rightSelectedButton && leftSelectedButton === rightSelectedButton) {
-        // Same pattern selected on both sides - use purple
-        leftSelectedButton.style.backgroundColor = 'mediumpurple';
-    } else {
-        // Different patterns - use side-specific colors
-        if (leftSelectedButton) {
-            leftSelectedButton.style.backgroundColor = 'lightblue';
-        }
-        if (rightSelectedButton) {
-            rightSelectedButton.style.backgroundColor = 'lightcoral';
-        }
-    }
-    
-    // Get pattern name for labels
-    const patternName = button.textContent;
-    
-    // Execute the pattern function and assign to appropriate side
-    const originalThresholdMatrix = thresholdMatrix;
-    patternFunction();
-    const newPattern = thresholdMatrix;
-    thresholdMatrix = originalThresholdMatrix; // Restore
-    
-    if (side === 'left') {
-        leftThresholdMatrix = newPattern;
-        leftModeLabel.textContent = patternName;
-    } else {
-        rightThresholdMatrix = newPattern;
-        rightModeLabel.textContent = patternName;
-    }
-    
-    // Show/hide recalculate noise button based on pattern type
-    const noiseControls = document.getElementById('noiseControls');
-    if (noiseControls) {
-        if (patternName.includes('Blue Noise') || patternName.includes('Random Noise')) {
-            noiseControls.style.display = 'block';
-        } else {
-            noiseControls.style.display = 'none';
-        }
-    }
-}
-
-function normalMatrix() {
-    thresholdMatrix = 'normal';
-}
-
-function threshold25Matrix() {
-    thresholdMatrix = 64;
-}
-
-function threshold50Matrix() {
-    thresholdMatrix = 128;
-}
-
-function threshold75Matrix() {
-    thresholdMatrix = 192;
-}
-
-function bayer2x2Matrix() {
-    thresholdMatrix = [
-        [0, 128],
-        [192, 64]
-    ];
-}
-
-function bayer4x4Matrix() {
-    thresholdMatrix = [
+// Pattern Registry
+const PATTERNS = {
+    normal: () => 'normal',
+    threshold25: () => 64,
+    threshold50: () => 128,
+    threshold75: () => 192,
+    bayer2x2: () => [[0, 128], [192, 64]],
+    bayer4x4: () => [
         [0, 128, 32, 160],
         [192, 64, 224, 96],
         [48, 176, 16, 144],
         [240, 112, 208, 80]
-    ];
-}
-
-function bayer8x8Matrix() {
-    thresholdMatrix = [
+    ],
+    bayer8x8: () => [
         [0, 128, 32, 160, 8, 136, 40, 168],
         [192, 64, 224, 96, 200, 72, 232, 104],
         [48, 176, 16, 144, 56, 184, 24, 152],
@@ -204,343 +33,462 @@ function bayer8x8Matrix() {
         [204, 76, 236, 108, 196, 68, 228, 100],
         [60, 188, 28, 156, 52, 180, 20, 148],
         [252, 124, 220, 92, 244, 116, 212, 84]
-    ];
-}
-
-function clockwiseMatrix() {
-    thresholdMatrix = [
+    ],
+    clockwise: () => [
         [64, 32, 96],
         [128, 0, 160],
         [192, 224, 255]
-    ];
-}
-
-function dispersedDotMatrix() {
-    thresholdMatrix = [
+    ],
+    dispersedDot: () => [
         [128, 64, 192],
         [32, 255, 96],
         [224, 160, 0]
-    ];
-}
+    ],
+    blueNoise: () => 'blueNoise',
+    randomNoise: () => 'random'
+};
 
-function blueNoiseMatrix() {
-    // Flag for full-image blue noise generation
-    thresholdMatrix = 'blueNoise';
-}
+const PATTERN_CONFIGS = [
+    { name: 'Normal', key: 'normal' },
+    { name: '25% Threshold', key: 'threshold25' },
+    { name: '50% Threshold', key: 'threshold50' },
+    { name: '75% Threshold', key: 'threshold75' },
+    { name: 'Bayer 2×2', key: 'bayer2x2' },
+    { name: 'Bayer 4×4', key: 'bayer4x4' },
+    { name: 'Bayer 8×8', key: 'bayer8x8' },
+    { name: 'Clockwise', key: 'clockwise' },
+    { name: 'Dispersed Dot', key: 'dispersedDot' },
+    { name: 'Blue Noise', key: 'blueNoise' },
+    { name: 'Random Noise', key: 'randomNoise' }
+];
 
-function randomMatrix() {
-    // Flag for full-image random generation
-    thresholdMatrix = 'random';
-}
+// Application State and Modules
+const DitherApp = {
+    state: {
+        canvas: { element: null, ctx: null, output: null, outputCtx: null },
+        ui: { 
+            selectedSide: 'right', 
+            leftButton: null, 
+            rightButton: null,
+            comparisonSlider: null,
+            leftModeLabel: null,
+            rightModeLabel: null
+        },
+        patterns: { left: 'normal', right: 'normal' },
+        streaming: { active: false, animationId: null, videoElement: null },
+        thresholdMatrix: []
+    },
 
+    // UI Management
+    ui: {
+        init() {
+            this.createDitherPresets();
+            this.setupCanvas();
+            this.setupComparisonControls();
+            this.showLoadingMessage();
+            this.hideSlider();
+        },
 
+        showLoadingMessage() {
+            const outputDiv = document.getElementById('ditherOutput');
+            outputDiv.innerHTML = '<div style="text-align: center; color: #666; padding: 10px;">Loading...</div>';
+        },
 
-function setupCanvas() {
-    // Create hidden canvas for image processing
-    canvas = document.createElement('canvas');
-    ctx = canvas.getContext('2d');
-    canvas.style.display = 'none';
-    document.body.appendChild(canvas);
-}
+        hideSlider() {
+            const comparisonControls = document.getElementById('comparisonControls');
+            if (comparisonControls) {
+                comparisonControls.style.display = 'none';
+            }
+        },
 
-function setupOutputCanvas(width, height) {
-    // Remove existing output canvas if any
-    if (outputCanvas) {
-        outputCanvas.remove();
-    }
-    
-    // Clear loading message and any existing content
-    const outputDiv = document.getElementById('ditherOutput');
-    outputDiv.innerHTML = '';
-    
-    // Create display canvas for dither output
-    outputCanvas = document.createElement('canvas');
-    outputCtx = outputCanvas.getContext('2d');
-    outputCanvas.width = width;
-    outputCanvas.height = height;
-    outputCanvas.style.border = '2px solid #333';
-    outputCanvas.style.maxWidth = '100%';
-    outputCanvas.style.width = '100%';
-    outputCanvas.style.height = 'auto';
-    outputCanvas.style.imageRendering = 'pixelated'; // Keep sharp pixels when scaling
-    
-    // Add to output div
-    outputDiv.appendChild(outputCanvas);
-}
-
-async function startDithering() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        videoElement = document.getElementById('videoElement');
-        videoElement.srcObject = stream;
-        
-        videoElement.onloadedmetadata = () => {
-            // Set canvas dimensions based on desired output resolution
-            const outputWidth = 500; // Fixed resolution
-            const aspectRatio = videoElement.videoHeight / videoElement.videoWidth;
-            const outputHeight = Math.round(outputWidth * aspectRatio);
-            
-            canvas.width = outputWidth;
-            canvas.height = outputHeight;
-            
-            // Create output canvas for display
-            setupOutputCanvas(outputWidth, outputHeight);
-            
-            // Show slider now that video is loaded
+        showSlider() {
             const comparisonControls = document.getElementById('comparisonControls');
             if (comparisonControls) {
                 comparisonControls.style.display = 'block';
             }
-            
-            videoElement.play();
-            startProcessing();
-        };
-        
-    } catch (error) {
-        console.error('Error accessing webcam:', error);
-        const outputDiv = document.getElementById('ditherOutput');
-        outputDiv.innerHTML = '<div style="text-align: center; color: red;">Error accessing webcam. Please ensure you have granted camera permissions.</div>';
-    }
-}
+        },
 
+        createDitherPresets() {
+            const presetsDiv = document.getElementById('ditherPresets');
+            presetsDiv.innerHTML = '';
+            
+            const controls = document.createElement('div');
+            controls.className = 'pattern-controls';
+            
+            // Create side selection buttons
+            const sideButtons = `
+                <div style="margin-bottom: 15px;">
+                    <button onclick="DitherApp.ui.setSide('left')" id="leftSideBtn">Configure Left Side</button>
+                    <button onclick="DitherApp.ui.setSide('right')" id="rightSideBtn" style="background-color: ${COLORS.RIGHT};">Configure Right Side</button>
+                </div>`;
+            
+            // Create pattern buttons
+            const patternButtons = PATTERN_CONFIGS.map(pattern => 
+                `<button onclick="DitherApp.ui.selectPattern(this, '${pattern.key}', DitherApp.state.ui.selectedSide)">${pattern.name}</button>`
+            ).join('\n        ');
+            
+            controls.innerHTML = sideButtons + patternButtons;
+            presetsDiv.appendChild(controls);
+        },
 
-function startProcessing() {
-    isStreaming = true;
-    processFrame();
-}
+        setupComparisonControls() {
+            DitherApp.state.ui.comparisonSlider = document.getElementById('comparisonSlider');
+            DitherApp.state.ui.leftModeLabel = document.getElementById('leftMode');
+            DitherApp.state.ui.rightModeLabel = document.getElementById('rightMode');
+            
+            DitherApp.state.ui.comparisonSlider.addEventListener('input', function() {
+                // Slider value is read during rendering
+            });
+        },
 
-function processFrame() {
-    if (!isStreaming) return;
-    
-    // Draw video frame to canvas
-    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-    
-    // Get image data
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    
-    // Apply dithering
-    const ditheredData = applyDithering(imageData);
-    
-    // Only display if we have valid dithered data (not empty during loading)
-    if (ditheredData.length > 0) {
-        displayDitheredFrame(ditheredData, canvas.width, canvas.height);
-    }
-    
-    // Continue processing at ~30fps for better performance
-    setTimeout(() => {
-        animationId = requestAnimationFrame(processFrame);
-    }, 33);
-}
-    
-function applyDithering(imageData) {
-    const data = imageData.data;
-    const width = imageData.width;
-    const height = imageData.height;
-    const result = [];
-    
-    // Get the comparison split point (0-100 slider becomes 0-1)
-    const splitRatio = comparisonSlider.value / 100;
-    const splitX = Math.floor(width * splitRatio);
-    
-    // Handle generation of noise patterns if needed
-    if (leftThresholdMatrix === 'blueNoise') {
-        showCanvasLoadingMessage('Generating Left Blue Noise...');
-        setTimeout(() => {
-            leftThresholdMatrix = generateBlueNoise(width, height);
-        }, 50);
-        return [];
-    } else if (leftThresholdMatrix === 'random') {
-        showCanvasLoadingMessage('Generating Left Random Noise...');
-        setTimeout(() => {
-            leftThresholdMatrix = generateRandomNoise(width, height);
-        }, 50);
-        return [];
-    }
-    
-    if (rightThresholdMatrix === 'blueNoise') {
-        showCanvasLoadingMessage('Generating Right Blue Noise...');
-        setTimeout(() => {
-            rightThresholdMatrix = generateBlueNoise(width, height);
-        }, 50);
-        return [];
-    } else if (rightThresholdMatrix === 'random') {
-        showCanvasLoadingMessage('Generating Right Random Noise...');
-        setTimeout(() => {
-            rightThresholdMatrix = generateRandomNoise(width, height);
-        }, 50);
-        return [];
-    }
-    
-    for (let y = 0; y < height; y++) {
-        result[y] = [];
-        for (let x = 0; x < width; x++) {
-            const pixelIndex = (y * width + x) * 4;
+        setSide(side) {
+            DitherApp.state.ui.selectedSide = side;
             
-            // Convert to grayscale
-            const r = data[pixelIndex];
-            const g = data[pixelIndex + 1];
-            const b = data[pixelIndex + 2];
-            const grayscale = Math.round((r + g + b) / 3);
+            const leftBtn = document.getElementById('leftSideBtn');
+            const rightBtn = document.getElementById('rightSideBtn');
             
-            // Determine which side of the comparison we're on
-            const currentMatrix = x < splitX ? leftThresholdMatrix : rightThresholdMatrix;
-            
-            // Handle normal (no dithering) mode
-            if (currentMatrix === 'normal') {
-                result[y][x] = grayscale;
-                continue;
-            }
-            
-            // Get threshold based on pattern type
-            let threshold;
-            if (typeof currentMatrix === 'number') {
-                // Uniform threshold (25%, 50%, 75%)
-                threshold = currentMatrix;
-            } else if (Array.isArray(currentMatrix)) {
-                // Matrix pattern (including full-image noise)
-                const matrixHeight = currentMatrix.length;
-                const matrixWidth = currentMatrix[0].length;
-                threshold = currentMatrix[y % matrixHeight][x % matrixWidth];
+            if (side === 'left') {
+                leftBtn.style.backgroundColor = COLORS.LEFT;
+                rightBtn.style.backgroundColor = '';
             } else {
-                threshold = 128; // Default
+                leftBtn.style.backgroundColor = '';
+                rightBtn.style.backgroundColor = COLORS.RIGHT;
             }
-            
-            // Apply threshold
-            result[y][x] = grayscale > threshold ? 1 : 0;
-        }
-    }
-    
-    return result;
-}
+        },
 
-function generateBlueNoise(width, height) {
-    const matrix = [];
-    
-    // Initialize with zeros
-    for (let i = 0; i < height; i++) {
-        matrix[i] = [];
-        for (let j = 0; j < width; j++) {
-            matrix[i][j] = 0;
-        }
-    }
-    
-    // Generate blue noise-like distribution using Mitchell's algorithm
-    const totalPoints = width * height;
-    const points = [];
-    
-    // Use a sampling approach for large images to avoid performance issues
-    const sampleSize = Math.min(totalPoints, 10000); // Limit for performance
-    
-    for (let n = 0; n < sampleSize; n++) {
-        let bestCandidate = null;
-        let bestDistance = 0;
-        
-        // Try multiple candidates
-        for (let c = 0; c < 10; c++) {
-            const candidate = {
-                x: Math.random() * width,
-                y: Math.random() * height
-            };
-            
-            // Find minimum distance to existing points
-            let minDistance = Infinity;
-            for (const point of points) {
-                const dx = candidate.x - point.x;
-                const dy = candidate.y - point.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                minDistance = Math.min(minDistance, distance);
-            }
-            
-            if (minDistance > bestDistance) {
-                bestDistance = minDistance;
-                bestCandidate = candidate;
-            }
-        }
-        
-        if (bestCandidate) {
-            points.push(bestCandidate);
-            const gridX = Math.min(Math.floor(bestCandidate.x), width - 1);
-            const gridY = Math.min(Math.floor(bestCandidate.y), height - 1);
-            matrix[gridY][gridX] = Math.floor((n / sampleSize) * 255);
-        }
-    }
-    
-    // Fill remaining pixels with interpolated values
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            if (matrix[y][x] === 0 && Math.random() > 0.5) {
-                matrix[y][x] = Math.floor(Math.random() * 128) + 64; // Mid-range values
-            }
-        }
-    }
-    
-    return matrix;
-}
-
-function generateRandomNoise(width, height) {
-    const matrix = [];
-    for (let i = 0; i < height; i++) {
-        matrix[i] = [];
-        for (let j = 0; j < width; j++) {
-            matrix[i][j] = Math.floor(Math.random() * 256);
-        }
-    }
-    return matrix;
-}
-
-function displayDitheredFrame(ditheredData, width, height) {
-    // Create ImageData for fast canvas rendering
-    const imageData = outputCtx.createImageData(width, height);
-    const data = imageData.data;
-    
-    // Get the comparison split point
-    const splitRatio = comparisonSlider.value / 100;
-    const splitX = Math.floor(width * splitRatio);
-    
-    // Fill ImageData with pixels
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            const index = (y * width + x) * 4;
-            const currentMatrix = x < splitX ? leftThresholdMatrix : rightThresholdMatrix;
-            let value;
-            
-            if (currentMatrix === 'normal') {
-                // Normal mode: use grayscale value directly (0-255)
-                value = ditheredData[y][x];
+        selectPattern(button, patternKey, side) {
+            // Update button references
+            if (side === 'left') {
+                DitherApp.state.ui.leftButton = button;
             } else {
-                // Dithered mode: convert 0/1 to 0/255
-                value = ditheredData[y][x] * 255;
+                DitherApp.state.ui.rightButton = button;
+            }
+
+            // Execute pattern and update state
+            const patternResult = PATTERNS[patternKey]();
+            if (side === 'left') {
+                DitherApp.state.patterns.left = patternResult;
+                DitherApp.state.ui.leftModeLabel.textContent = button.textContent;
+            } else {
+                DitherApp.state.patterns.right = patternResult;
+                DitherApp.state.ui.rightModeLabel.textContent = button.textContent;
+            }
+
+            this.updateButtonColors();
+            this.handleNoiseControls(button.textContent);
+        },
+
+        updateButtonColors() {
+            const patternButtons = document.querySelectorAll('.pattern-controls button:not([id*="SideBtn"])');
+            patternButtons.forEach(btn => btn.style.backgroundColor = '');
+
+            const leftBtn = DitherApp.state.ui.leftButton;
+            const rightBtn = DitherApp.state.ui.rightButton;
+
+            if (leftBtn && rightBtn && leftBtn === rightBtn) {
+                leftBtn.style.backgroundColor = COLORS.BOTH;
+            } else {
+                if (leftBtn) leftBtn.style.backgroundColor = COLORS.LEFT;
+                if (rightBtn) rightBtn.style.backgroundColor = COLORS.RIGHT;
+            }
+        },
+
+        handleNoiseControls(patternName) {
+            const noiseControls = document.getElementById('noiseControls');
+            if (noiseControls) {
+                const isNoise = patternName.includes('Blue Noise') || patternName.includes('Random Noise');
+                noiseControls.style.display = isNoise ? 'block' : 'none';
+            }
+        },
+
+        setupCanvas() {
+            DitherApp.state.canvas.element = document.createElement('canvas');
+            DitherApp.state.canvas.ctx = DitherApp.state.canvas.element.getContext('2d');
+            DitherApp.state.canvas.element.style.display = 'none';
+            document.body.appendChild(DitherApp.state.canvas.element);
+        },
+
+        setupOutputCanvas(width, height) {
+            if (DitherApp.state.canvas.output) {
+                DitherApp.state.canvas.output.remove();
             }
             
-            data[index] = value;     // R
-            data[index + 1] = value; // G
-            data[index + 2] = value; // B
-            data[index + 3] = 255;   // A
+            const outputDiv = document.getElementById('ditherOutput');
+            outputDiv.innerHTML = '';
+            
+            DitherApp.state.canvas.output = document.createElement('canvas');
+            DitherApp.state.canvas.outputCtx = DitherApp.state.canvas.output.getContext('2d');
+            DitherApp.state.canvas.output.width = width;
+            DitherApp.state.canvas.output.height = height;
+            DitherApp.state.canvas.output.style.border = '2px solid #333';
+            DitherApp.state.canvas.output.style.maxWidth = '100%';
+            DitherApp.state.canvas.output.style.width = '100%';
+            DitherApp.state.canvas.output.style.height = 'auto';
+            DitherApp.state.canvas.output.style.imageRendering = 'pixelated';
+            
+            outputDiv.appendChild(DitherApp.state.canvas.output);
+        },
+
+        initializeDefaultPattern() {
+            setTimeout(() => {
+                const normalButton = document.querySelector('.pattern-controls button[onclick*="normal"]');
+                if (normalButton) {
+                    this.selectPattern(normalButton, 'normal', 'left');
+                    this.selectPattern(normalButton, 'normal', 'right');
+                    DitherApp.state.ui.selectedSide = 'right';
+                    this.setSide('right');
+                }
+            }, 0);
+        }
+    },
+
+    // Video and Processing
+    video: {
+        async start() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                DitherApp.state.streaming.videoElement = document.getElementById('videoElement');
+                DitherApp.state.streaming.videoElement.srcObject = stream;
+                
+                DitherApp.state.streaming.videoElement.onloadedmetadata = () => {
+                    const aspectRatio = DitherApp.state.streaming.videoElement.videoHeight / DitherApp.state.streaming.videoElement.videoWidth;
+                    const outputHeight = Math.round(CONFIG.OUTPUT_WIDTH * aspectRatio);
+                    
+                    DitherApp.state.canvas.element.width = CONFIG.OUTPUT_WIDTH;
+                    DitherApp.state.canvas.element.height = outputHeight;
+                    
+                    DitherApp.ui.setupOutputCanvas(CONFIG.OUTPUT_WIDTH, outputHeight);
+                    DitherApp.ui.showSlider();
+                    
+                    DitherApp.state.streaming.videoElement.play();
+                    this.startProcessing();
+                };
+                
+            } catch (error) {
+                console.error('Error accessing webcam:', error);
+                const outputDiv = document.getElementById('ditherOutput');
+                outputDiv.innerHTML = '<div style="text-align: center; color: red;">Error accessing webcam. Please ensure you have granted camera permissions.</div>';
+            }
+        },
+
+        startProcessing() {
+            DitherApp.state.streaming.active = true;
+            this.processFrame();
+        },
+
+        processFrame() {
+            if (!DitherApp.state.streaming.active) return;
+            
+            const canvas = DitherApp.state.canvas;
+            canvas.ctx.drawImage(DitherApp.state.streaming.videoElement, 0, 0, canvas.element.width, canvas.element.height);
+            
+            const imageData = canvas.ctx.getImageData(0, 0, canvas.element.width, canvas.element.height);
+            const ditheredData = DitherApp.processing.applyDithering(imageData);
+            
+            if (ditheredData.length > 0) {
+                DitherApp.processing.displayDitheredFrame(ditheredData, canvas.element.width, canvas.element.height);
+            }
+            
+            setTimeout(() => {
+                DitherApp.state.streaming.animationId = requestAnimationFrame(() => this.processFrame());
+            }, CONFIG.FRAME_RATE);
+        }
+    },
+    // Processing
+    processing: {
+        applyDithering(imageData) {
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            const result = [];
+            
+            const splitRatio = DitherApp.state.ui.comparisonSlider.value / 100;
+            const splitX = Math.floor(width * splitRatio);
+            
+            // Handle noise generation
+            if (DitherApp.state.patterns.left === 'blueNoise') {
+                this.showLoadingMessage('Generating Left Blue Noise...');
+                setTimeout(() => {
+                    DitherApp.state.patterns.left = this.generateBlueNoise(width, height);
+                }, 50);
+                return [];
+            } else if (DitherApp.state.patterns.left === 'random') {
+                this.showLoadingMessage('Generating Left Random Noise...');
+                setTimeout(() => {
+                    DitherApp.state.patterns.left = this.generateRandomNoise(width, height);
+                }, 50);
+                return [];
+            }
+            
+            if (DitherApp.state.patterns.right === 'blueNoise') {
+                this.showLoadingMessage('Generating Right Blue Noise...');
+                setTimeout(() => {
+                    DitherApp.state.patterns.right = this.generateBlueNoise(width, height);
+                }, 50);
+                return [];
+            } else if (DitherApp.state.patterns.right === 'random') {
+                this.showLoadingMessage('Generating Right Random Noise...');
+                setTimeout(() => {
+                    DitherApp.state.patterns.right = this.generateRandomNoise(width, height);
+                }, 50);
+                return [];
+            }
+            
+            for (let y = 0; y < height; y++) {
+                result[y] = [];
+                for (let x = 0; x < width; x++) {
+                    const pixelIndex = (y * width + x) * 4;
+                    
+                    const r = data[pixelIndex];
+                    const g = data[pixelIndex + 1];
+                    const b = data[pixelIndex + 2];
+                    const grayscale = Math.round((r + g + b) / 3);
+                    
+                    const currentMatrix = x < splitX ? DitherApp.state.patterns.left : DitherApp.state.patterns.right;
+                    
+                    if (currentMatrix === 'normal') {
+                        result[y][x] = grayscale;
+                        continue;
+                    }
+                    
+                    let threshold;
+                    if (typeof currentMatrix === 'number') {
+                        threshold = currentMatrix;
+                    } else if (Array.isArray(currentMatrix)) {
+                        const matrixHeight = currentMatrix.length;
+                        const matrixWidth = currentMatrix[0].length;
+                        threshold = currentMatrix[y % matrixHeight][x % matrixWidth];
+                    } else {
+                        threshold = 128;
+                    }
+                    
+                    result[y][x] = grayscale > threshold ? 1 : 0;
+                }
+            }
+            
+            return result;
+        },
+
+        displayDitheredFrame(ditheredData, width, height) {
+            const outputCtx = DitherApp.state.canvas.outputCtx;
+            const imageData = outputCtx.createImageData(width, height);
+            const data = imageData.data;
+            
+            const splitRatio = DitherApp.state.ui.comparisonSlider.value / 100;
+            const splitX = Math.floor(width * splitRatio);
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const index = (y * width + x) * 4;
+                    const currentMatrix = x < splitX ? DitherApp.state.patterns.left : DitherApp.state.patterns.right;
+                    
+                    let value;
+                    if (currentMatrix === 'normal') {
+                        value = ditheredData[y][x];
+                    } else {
+                        value = ditheredData[y][x] * 255;
+                    }
+                    
+                    data[index] = value;
+                    data[index + 1] = value;
+                    data[index + 2] = value;
+                    data[index + 3] = 255;
+                }
+            }
+            
+            outputCtx.putImageData(imageData, 0, 0);
+            
+            // Draw split line
+            outputCtx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+            outputCtx.lineWidth = 2;
+            outputCtx.beginPath();
+            outputCtx.moveTo(splitX, 0);
+            outputCtx.lineTo(splitX, height);
+            outputCtx.stroke();
+        },
+
+        showLoadingMessage(message) {
+            const outputCtx = DitherApp.state.canvas.outputCtx;
+            outputCtx.fillStyle = 'red';
+            outputCtx.font = 'bold 24px Arial';
+            outputCtx.textAlign = 'center';
+            outputCtx.textBaseline = 'middle';
+            outputCtx.fillText(message, DitherApp.state.canvas.output.width / 2, DitherApp.state.canvas.output.height / 2);
+        },
+
+        generateBlueNoise(width, height) {
+            const matrix = [];
+            
+            for (let i = 0; i < height; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < width; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+            
+            const totalPoints = width * height;
+            const points = [];
+            const sampleSize = Math.min(totalPoints, CONFIG.NOISE_SAMPLE_SIZE);
+            
+            for (let n = 0; n < sampleSize; n++) {
+                let bestCandidate = null;
+                let bestDistance = 0;
+                
+                for (let c = 0; c < 10; c++) {
+                    const candidate = {
+                        x: Math.random() * width,
+                        y: Math.random() * height
+                    };
+                    
+                    let minDistance = Infinity;
+                    for (const point of points) {
+                        const dx = candidate.x - point.x;
+                        const dy = candidate.y - point.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        minDistance = Math.min(minDistance, distance);
+                    }
+                    
+                    if (minDistance > bestDistance) {
+                        bestDistance = minDistance;
+                        bestCandidate = candidate;
+                    }
+                }
+                
+                if (bestCandidate) {
+                    points.push(bestCandidate);
+                    const gridX = Math.min(Math.floor(bestCandidate.x), width - 1);
+                    const gridY = Math.min(Math.floor(bestCandidate.y), height - 1);
+                    matrix[gridY][gridX] = Math.floor((n / sampleSize) * 255);
+                }
+            }
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (matrix[y][x] === 0 && Math.random() > 0.5) {
+                        matrix[y][x] = Math.floor(Math.random() * 128) + 64;
+                    }
+                }
+            }
+            
+            return matrix;
+        },
+
+        generateRandomNoise(width, height) {
+            const matrix = [];
+            for (let i = 0; i < height; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < width; j++) {
+                    matrix[i][j] = Math.floor(Math.random() * 256);
+                }
+            }
+            return matrix;
         }
     }
-    
-    // Draw to canvas in one operation
-    outputCtx.putImageData(imageData, 0, 0);
-    
-    // Draw a subtle vertical line at the split point
-    outputCtx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-    outputCtx.lineWidth = 2;
-    outputCtx.beginPath();
-    outputCtx.moveTo(splitX, 0);
-    outputCtx.lineTo(splitX, height);
-    outputCtx.stroke();
-}
+};
 
-function showCanvasLoadingMessage(message) {
-    // Clear canvas and draw loading message
-
-    
-    // Set up text style
-    outputCtx.fillStyle = 'red';
-    outputCtx.font = 'bold 24px Arial';
-    outputCtx.textAlign = 'center';
-    outputCtx.textBaseline = 'middle';
-    
-    // Draw loading message in center
-    outputCtx.fillText(message, outputCanvas.width / 2, outputCanvas.height / 2);
-}
+// Initialize application
+window.onload = function() {
+    DitherApp.ui.init();
+    DitherApp.video.start();
+    DitherApp.ui.initializeDefaultPattern();
+};
