@@ -107,13 +107,14 @@ class WebcamTheremin {
         // Brightness tracking
         this.brightnessHistory = [];
         this.maxHistoryLength = 100;
-        this.currentBrightness = 0;
-
+        this.currentBrightness = 0;        
+        // Threshold image processing (separate from brightness measurement)
+        this.thresholdCanvas = null;
+        this.thresholdCtx = null;
+        this.brightnessThreshold = 50; // 50% threshold
         // Chart setup
         this.chart = null;
         this.chartCtx = null;
-        this.chartWidth = 800;
-        this.chartHeight = 200;
 
         // Note timing
         this.currentNoteStartTime = 0;
@@ -133,6 +134,7 @@ class WebcamTheremin {
     init() {
         this.setupEventListeners();
         this.setupChart();
+        this.setupThresholdDisplay();
         this.setupWindowFocusListeners();
         // Auto-start the theremin
         this.autoStartTheremin();
@@ -191,8 +193,29 @@ class WebcamTheremin {
     setupChart() {
         this.chart = document.getElementById('brightnessChart');
         this.chartCtx = this.chart.getContext('2d');
+        
+        // Set canvas internal dimensions to match CSS dimensions
+        const rect = this.chart.getBoundingClientRect();
+        this.chart.width = rect.width;
+        this.chart.height = rect.height;
+        
         this.chartCtx.fillStyle = 'white';
-        this.chartCtx.fillRect(0, 0, this.chartWidth, this.chartHeight);
+        this.chartCtx.fillRect(0, 0, this.chart.width, this.chart.height);
+    }
+
+    setupThresholdDisplay() {
+        // Create a canvas for the threshold display inside the brightness block
+        this.thresholdCanvas = document.createElement('canvas');
+        this.thresholdCtx = this.thresholdCanvas.getContext('2d');
+        
+        // Style the canvas to fill the brightness block
+        this.thresholdCanvas.style.width = '100%';
+        this.thresholdCanvas.style.height = '100%';
+        this.thresholdCanvas.style.objectFit = 'cover';
+        
+        // Insert the canvas into the brightness block
+        const brightnessBlock = document.getElementById('brightnessBlock');
+        brightnessBlock.appendChild(this.thresholdCanvas);
     }
 
     async startTheremin() {
@@ -201,8 +224,7 @@ class WebcamTheremin {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
             // Get webcam access
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 200, height: 150 }
+            const stream = await navigator.mediaDevices.getUserMedia({ video : true, audio: false
             });
             
             // Setup video element
@@ -287,12 +309,74 @@ class WebcamTheremin {
     startTracking() {
         // Create hidden canvas for brightness analysis
         this.canvas = document.createElement('canvas');
-        this.canvas.width = this.video.videoWidth || 200;
-        this.canvas.height = this.video.videoHeight || 150;
+        
+        // Use video's actual dimensions, or calculate reasonable defaults based on video element size
+        if (this.video.videoWidth && this.video.videoHeight) {
+            this.canvas.width = this.video.videoWidth;
+            this.canvas.height = this.video.videoHeight;
+        } else {
+            // Fallback: use video element's display dimensions
+            const videoRect = this.video.getBoundingClientRect();
+            this.canvas.width = videoRect.width || 200;
+            this.canvas.height = videoRect.height || 150;
+        }
+        
         this.ctx = this.canvas.getContext('2d');
         
         this.isTracking = true;
         this.trackBrightness();
+    }
+
+    processThresholdImage() {
+        if (!this.video || !this.thresholdCanvas) return;
+        
+        // Set canvas size to match display size
+        const brightnessBlock = document.getElementById('brightnessBlock');
+        const blockRect = brightnessBlock.getBoundingClientRect();
+        this.thresholdCanvas.width = blockRect.width;
+        this.thresholdCanvas.height = blockRect.height;
+        
+        // Create a temporary canvas for video processing
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = this.video.videoWidth || 200;
+        tempCanvas.height = this.video.videoHeight || 150;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Draw video frame to temp canvas
+        tempCtx.drawImage(this.video, 0, 0, tempCanvas.width, tempCanvas.height);
+        const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+        const data = imageData.data;
+        
+        // Process pixels - keep only those below brightness threshold
+        for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            
+            // Calculate brightness (0-100)
+            const brightness = (r * 0.299 + g * 0.587 + b * 0.114) / 255 * 100;
+            
+            if (brightness >= this.brightnessThreshold) {
+                // Make pixels above threshold transparent/white
+                data[i] = 255;     // R
+                data[i + 1] = 255; // G
+                data[i + 2] = 255; // B
+                data[i + 3] = 0;   // A (transparent)
+            } else {
+                // Keep dark pixels, make them black
+                data[i] = 0;       // R
+                data[i + 1] = 0;   // G
+                data[i + 2] = 0;   // B
+                data[i + 3] = 255; // A (opaque)
+            }
+        }
+        
+        // Put processed image back to temp canvas
+        tempCtx.putImageData(imageData, 0, 0);
+        
+        // Clear and stretch the processed image to fill the brightness block
+        this.thresholdCtx.clearRect(0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
+        this.thresholdCtx.drawImage(tempCanvas, 0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
     }
 
     trackBrightness() {
@@ -337,6 +421,9 @@ class WebcamTheremin {
         
         // Update chart
         this.updateChart();
+        
+        // Update threshold display
+        this.processThresholdImage();
         
         // Continue tracking
         requestAnimationFrame(() => this.trackBrightness());
@@ -401,9 +488,13 @@ class WebcamTheremin {
     updateChart() {
         if (this.brightnessHistory.length === 0) return;
 
+        // Get current chart dimensions
+        const chartWidth = this.chart.width;
+        const chartHeight = this.chart.height;
+
         // Clear chart
         this.chartCtx.fillStyle = 'white';
-        this.chartCtx.fillRect(0, 0, this.chartWidth, this.chartHeight);
+        this.chartCtx.fillRect(0, 0, chartWidth, chartHeight);
         
         // Draw grid lines
         this.chartCtx.strokeStyle = '#e0e0e0';
@@ -411,10 +502,10 @@ class WebcamTheremin {
         
         // Horizontal grid lines (25%, 50%, 75%)
         for (let i = 1; i <= 3; i++) {
-            const y = (i / 4) * this.chartHeight;
+            const y = (i / 4) * chartHeight;
             this.chartCtx.beginPath();
             this.chartCtx.moveTo(0, y);
-            this.chartCtx.lineTo(this.chartWidth, y);
+            this.chartCtx.lineTo(chartWidth, y);
             this.chartCtx.stroke();
         }
         
@@ -424,8 +515,8 @@ class WebcamTheremin {
             this.chartCtx.beginPath();
             
             for (let i = 0; i < this.brightnessHistory.length; i++) {
-                const x = (i / (this.maxHistoryLength - 1)) * this.chartWidth;
-                const y = this.chartHeight - (this.brightnessHistory[i] / 100) * this.chartHeight;
+                const x = (i / (this.maxHistoryLength - 1)) * chartWidth;
+                const y = chartHeight - (this.brightnessHistory[i] / 100) * chartHeight;
                 
                 // Change color based on current note fade state
                 if (i === this.brightnessHistory.length - 1) {
@@ -465,8 +556,8 @@ class WebcamTheremin {
         // Draw current point
         if (this.brightnessHistory.length > 0) {
             const lastIndex = this.brightnessHistory.length - 1;
-            const x = (lastIndex / (this.maxHistoryLength - 1)) * this.chartWidth;
-            const y = this.chartHeight - (this.brightnessHistory[lastIndex] / 100) * this.chartHeight;
+            const x = (lastIndex / (this.maxHistoryLength - 1)) * chartWidth;
+            const y = chartHeight - (this.brightnessHistory[lastIndex] / 100) * chartHeight;
             
             // Color the current point based on fade state
             const currentTime = Date.now();
