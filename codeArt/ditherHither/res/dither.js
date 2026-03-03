@@ -280,15 +280,20 @@ const DitherApp = {
             if (!DitherApp.state.streaming.active) return;
             
             const canvas = DitherApp.state.canvas;
+            // Flip image horizontally
+            canvas.ctx.save();
+            canvas.ctx.translate(canvas.element.width, 0);
+            canvas.ctx.scale(-1, 1);
             canvas.ctx.drawImage(DitherApp.state.streaming.videoElement, 0, 0, canvas.element.width, canvas.element.height);
-            
+            canvas.ctx.restore();
+
             const imageData = canvas.ctx.getImageData(0, 0, canvas.element.width, canvas.element.height);
             const ditheredData = DitherApp.processing.applyDithering(imageData);
-            
+
             if (ditheredData.length > 0) {
                 DitherApp.processing.displayDitheredFrame(ditheredData, canvas.element.width, canvas.element.height);
             }
-            
+
             setTimeout(() => {
                 DitherApp.state.streaming.animationId = requestAnimationFrame(() => this.processFrame());
             }, CONFIG.FRAME_RATE);
