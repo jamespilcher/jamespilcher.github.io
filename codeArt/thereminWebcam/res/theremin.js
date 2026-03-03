@@ -324,13 +324,13 @@ class WebcamTheremin {
             this.canvas.height = videoRect.height || 150;
         }
 
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
 
         // Create reusable temp canvas for threshold processing
         this.tempCanvas = document.createElement('canvas');
         this.tempCanvas.width = this.canvas.width;
         this.tempCanvas.height = this.canvas.height;
-        this.tempCtx = this.tempCanvas.getContext('2d');
+        this.tempCtx = this.tempCanvas.getContext('2d', { willReadFrequently: true });
 
         this.isTracking = true;
         // Use setInterval for mobile compatibility
