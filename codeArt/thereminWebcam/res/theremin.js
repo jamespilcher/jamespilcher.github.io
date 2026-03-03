@@ -309,7 +309,7 @@ class WebcamTheremin {
     startTracking() {
         // Create hidden canvas for brightness analysis
         this.canvas = document.createElement('canvas');
-        
+
         // Use video's actual dimensions, or calculate reasonable defaults based on video element size
         if (this.video.videoWidth && this.video.videoHeight) {
             this.canvas.width = this.video.videoWidth;
@@ -320,11 +320,16 @@ class WebcamTheremin {
             this.canvas.width = videoRect.width || 200;
             this.canvas.height = videoRect.height || 150;
         }
-        
+
         this.ctx = this.canvas.getContext('2d');
-        
+
         this.isTracking = true;
-        this.trackBrightness();
+        // Use setInterval for mobile compatibility
+        this._trackingInterval = setInterval(() => {
+            if (this.isTracking) {
+                this.trackBrightness();
+            }
+        }, 50); // 20 FPS
     }
 
     processThresholdImage() {
@@ -384,11 +389,11 @@ class WebcamTheremin {
 
         // Draw video frame to canvas
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
-        
+
         // Get image data
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         const data = imageData.data;
-        
+
         // Calculate average brightness
         let totalBrightness = 0;
         for (let i = 0; i < data.length; i += 4) {
@@ -396,37 +401,35 @@ class WebcamTheremin {
             const brightness = (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
             totalBrightness += brightness;
         }
-        
+
         const avgBrightness = totalBrightness / (data.length / 4);
         const rawBrightnessPercent = (avgBrightness / 255) * 100;
-        
+
         // Clamp and scale brightness: 5%-75% becomes 0%-100%
         const clampedRaw = Math.max(5, Math.min(75, rawBrightnessPercent));
         const brightnessPercent = ((clampedRaw - 5) / (75 - 5)) * 100;
-        
+
         // Update current brightness
         this.currentBrightness = brightnessPercent;
-        
+
         // Update history
         this.brightnessHistory.push(brightnessPercent);
         if (this.brightnessHistory.length > this.maxHistoryLength) {
             this.brightnessHistory.shift();
         }
-        
+
         // Update UI
         this.updateUI(brightnessPercent);
-        
+
         // Map brightness to frequency and update audio
         this.updateFrequency(brightnessPercent);
-        
+
         // Update chart
         this.updateChart();
-        
+
         // Update threshold display
         this.processThresholdImage();
-        
-        // Continue tracking
-        requestAnimationFrame(() => this.trackBrightness());
+        // No requestAnimationFrame; handled by setInterval
     }
 
     updateUI(brightnessPercent) {
@@ -616,17 +619,18 @@ class WebcamTheremin {
 
     stop() {
         this.isTracking = false;
-        
+        if (this._trackingInterval) {
+            clearInterval(this._trackingInterval);
+            this._trackingInterval = null;
+        }
         if (this.oscillator) {
             this.oscillator.stop();
             this.oscillator = null;
         }
-        
         if (this.video && this.video.srcObject) {
             const tracks = this.video.srcObject.getTracks();
             tracks.forEach(track => track.stop());
         }
-        
         if (this.audioContext) {
             this.audioContext.close();
         }
