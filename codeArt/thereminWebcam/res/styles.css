@@ -11,13 +11,9 @@
     align-items: flex-start;
 }
 
-.webcam-preview {
-    position: absolute;
-    width: 1px;
-    opacity: 0;
-    pointer-events: none;
+#videoElement {
+    display: none;
 }
-    
 
 .brightness-display {
     width: 30%;

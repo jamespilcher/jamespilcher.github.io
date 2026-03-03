@@ -236,6 +236,9 @@ class WebcamTheremin {
                 this.video.addEventListener('loadedmetadata', resolve);
             });
 
+            // Start video playback
+            this.video.play();
+
             // Setup audio nodes
             this.setupAudioNodes();
             
