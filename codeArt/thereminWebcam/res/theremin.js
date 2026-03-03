@@ -112,6 +112,8 @@ class WebcamTheremin {
         this.thresholdCanvas = null;
         this.thresholdCtx = null;
         this.brightnessThreshold = 50; // 50% threshold
+        this.tempCanvas = null;
+        this.tempCtx = null;
         // Chart setup
         this.chart = null;
         this.chartCtx = null;
@@ -231,19 +233,17 @@ class WebcamTheremin {
             this.video = document.getElementById('videoElement');
             this.video.srcObject = stream;
             
-            // Wait for video to load
-            await new Promise(resolve => {
-                this.video.addEventListener('loadedmetadata', resolve);
-            });
-
-            // Start video playback
-            this.video.play();
-
-            // Setup audio nodes
-            this.setupAudioNodes();
-            
-            // Start tracking
-            this.startTracking();
+            // Handle video metadata load
+            this.video.onloadedmetadata = () => {
+                // Start video playback
+                this.video.play();
+                
+                // Setup audio nodes
+                this.setupAudioNodes();
+                
+                // Start tracking
+                this.startTracking();
+            };
             
         } catch (error) {
             console.error('Error starting theremin:', error);
@@ -326,6 +326,12 @@ class WebcamTheremin {
 
         this.ctx = this.canvas.getContext('2d');
 
+        // Create reusable temp canvas for threshold processing
+        this.tempCanvas = document.createElement('canvas');
+        this.tempCanvas.width = this.canvas.width;
+        this.tempCanvas.height = this.canvas.height;
+        this.tempCtx = this.tempCanvas.getContext('2d');
+
         this.isTracking = true;
         // Use setInterval for mobile compatibility
         this._trackingInterval = setInterval(() => {
@@ -335,24 +341,15 @@ class WebcamTheremin {
         }, 50); // 20 FPS
     }
 
-    processThresholdImage() {
-        if (!this.video || !this.thresholdCanvas) return;
+    processThresholdImage(sourceImageData) {
+        if (!this.tempCanvas || !this.thresholdCanvas) return;
         
-        // Set canvas size to match display size
-        const brightnessBlock = document.getElementById('brightnessBlock');
-        const blockRect = brightnessBlock.getBoundingClientRect();
-        this.thresholdCanvas.width = blockRect.width;
-        this.thresholdCanvas.height = blockRect.height;
-        
-        // Create a temporary canvas for video processing
-        const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = this.video.videoWidth || 200;
-        tempCanvas.height = this.video.videoHeight || 150;
-        const tempCtx = tempCanvas.getContext('2d');
-        
-        // Draw video frame to temp canvas
-        tempCtx.drawImage(this.video, 0, 0, tempCanvas.width, tempCanvas.height);
-        const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+        // Clone the image data for processing
+        const imageData = new ImageData(
+            new Uint8ClampedArray(sourceImageData.data),
+            sourceImageData.width,
+            sourceImageData.height
+        );
         const data = imageData.data;
         
         // Process pixels - keep only those below brightness threshold
@@ -379,12 +376,19 @@ class WebcamTheremin {
             }
         }
         
-        // Put processed image back to temp canvas
-        tempCtx.putImageData(imageData, 0, 0);
+        // Put processed image to temp canvas
+        this.tempCtx.putImageData(imageData, 0, 0);
         
-        // Clear and stretch the processed image to fill the brightness block
-        this.thresholdCtx.clearRect(0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
-        this.thresholdCtx.drawImage(tempCanvas, 0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
+        // Draw to display canvas (only resize display canvas if needed)
+        const brightnessBlock = document.getElementById('brightnessBlock');
+        const blockRect = brightnessBlock.getBoundingClientRect();
+        
+        if (this.thresholdCanvas.width !== blockRect.width || this.thresholdCanvas.height !== blockRect.height) {
+            this.thresholdCanvas.width = blockRect.width;
+            this.thresholdCanvas.height = blockRect.height;
+        }
+        
+        this.thresholdCtx.drawImage(this.tempCanvas, 0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
     }
 
     trackBrightness() {
@@ -430,9 +434,8 @@ class WebcamTheremin {
         // Update chart
         this.updateChart();
 
-        // Update threshold display
-        this.processThresholdImage();
-        // No requestAnimationFrame; handled by setInterval
+        // Update threshold display (pass the imageData to avoid redrawing)
+        this.processThresholdImage(imageData);
     }
 
     updateUI(brightnessPercent) {
