@@ -11,9 +11,6 @@
     align-items: flex-start;
 }
 
-#videoElement {
-    display: none;
-}
 
 .brightness-display {
     width: 30%;
