@@ -387,7 +387,8 @@ class WebcamTheremin {
             this.thresholdCanvas.width = blockRect.width;
             this.thresholdCanvas.height = blockRect.height;
         }
-        
+            this.thresholdCtx.clearRect(0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
+
         this.thresholdCtx.drawImage(this.tempCanvas, 0, 0, this.thresholdCanvas.width, this.thresholdCanvas.height);
     }
 
