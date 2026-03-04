@@ -396,8 +396,12 @@ class WebcamTheremin {
     trackBrightness() {
         if (!this.isTracking) return;
 
-        // Draw video frame to canvas
+        // Flip video horizontally when drawing to canvas
+        this.ctx.save();
+        this.ctx.translate(this.canvas.width, 0);
+        this.ctx.scale(-1, 1);
         this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.restore();
 
         // Get image data
         const imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
