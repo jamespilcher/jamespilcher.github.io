@@ -106,8 +106,9 @@ class WebcamTheremin {
 
         // Brightness tracking
         this.brightnessHistory = [];
+        this.frequencyHistory = []; // Store autotuned frequency values for chart
         this.maxHistoryLength = 100;
-        this.currentBrightness = 0;        
+        this.currentBrightness = 0;
         // Threshold image processing (separate from brightness measurement)
         this.thresholdCanvas = null;
         this.thresholdCtx = null;
@@ -421,9 +422,13 @@ class WebcamTheremin {
         this.currentBrightness = brightnessPercent;
 
         // Update history
-        this.brightnessHistory.push(brightnessPercent);
-        if (this.brightnessHistory.length > this.maxHistoryLength) {
-            this.brightnessHistory.shift();
+        // Map brightness to musical note index
+        const noteIndex = Math.floor((brightnessPercent / 100) * (this.musicalNotes.length - 1));
+        const clampedIndex = Math.max(0, Math.min(this.musicalNotes.length - 1, noteIndex));
+        const selectedNote = this.musicalNotes[clampedIndex];
+        this.frequencyHistory.push(selectedNote.freq);
+        if (this.frequencyHistory.length > this.maxHistoryLength) {
+            this.frequencyHistory.shift();
         }
 
         // Update UI
@@ -496,7 +501,7 @@ class WebcamTheremin {
     }
 
     updateChart() {
-        if (this.brightnessHistory.length === 0) return;
+        if (this.frequencyHistory.length === 0) return;
 
         // Get current chart dimensions
         const chartWidth = this.chart.width;
@@ -519,20 +524,22 @@ class WebcamTheremin {
             this.chartCtx.stroke();
         }
         
-        // Draw brightness line
-        if (this.brightnessHistory.length > 1) {
+        // Draw frequency line
+        if (this.frequencyHistory.length > 1) {
+            // Get min/max frequency from current scale
+            const minFreq = Math.min(...this.musicalNotes.map(n => n.freq));
+            const maxFreq = Math.max(...this.musicalNotes.map(n => n.freq));
             this.chartCtx.lineWidth = 2;
             this.chartCtx.beginPath();
-            
-            for (let i = 0; i < this.brightnessHistory.length; i++) {
+            for (let i = 0; i < this.frequencyHistory.length; i++) {
                 const x = (i / (this.maxHistoryLength - 1)) * chartWidth;
-                const y = chartHeight - (this.brightnessHistory[i] / 100) * chartHeight;
-                
+                // Scale frequency to chart Y-axis
+                const freq = this.frequencyHistory[i];
+                const y = chartHeight - ((freq - minFreq) / (maxFreq - minFreq)) * chartHeight;
                 // Change color based on current note fade state
-                if (i === this.brightnessHistory.length - 1) {
+                if (i === this.frequencyHistory.length - 1) {
                     const currentTime = Date.now();
                     const noteDuration = currentTime - this.currentNoteStartTime;
-                    
                     if (noteDuration > this.maxNoteDuration) {
                         this.chartCtx.strokeStyle = '#999999'; // Gray for silent
                     } else if (this.isNoteFading) {
@@ -543,36 +550,33 @@ class WebcamTheremin {
                 } else {
                     this.chartCtx.strokeStyle = '#2196F3'; // Blue for historical data
                 }
-                
                 if (i === 0) {
                     this.chartCtx.moveTo(x, y);
                 } else {
                     this.chartCtx.lineTo(x, y);
                 }
-                
                 // Stroke each segment to apply color changes
                 if (i > 0) {
                     this.chartCtx.stroke();
-                    if (i < this.brightnessHistory.length - 1) {
+                    if (i < this.frequencyHistory.length - 1) {
                         this.chartCtx.beginPath();
                         this.chartCtx.moveTo(x, y);
                     }
                 }
             }
-            
             this.chartCtx.stroke();
         }
-        
         // Draw current point
-        if (this.brightnessHistory.length > 0) {
-            const lastIndex = this.brightnessHistory.length - 1;
+        if (this.frequencyHistory.length > 0) {
+            const lastIndex = this.frequencyHistory.length - 1;
             const x = (lastIndex / (this.maxHistoryLength - 1)) * chartWidth;
-            const y = chartHeight - (this.brightnessHistory[lastIndex] / 100) * chartHeight;
-            
+            const minFreq = Math.min(...this.musicalNotes.map(n => n.freq));
+            const maxFreq = Math.max(...this.musicalNotes.map(n => n.freq));
+            const freq = this.frequencyHistory[lastIndex];
+            const y = chartHeight - ((freq - minFreq) / (maxFreq - minFreq)) * chartHeight;
             // Color the current point based on fade state
             const currentTime = Date.now();
             const noteDuration = currentTime - this.currentNoteStartTime;
-            
             if (noteDuration > this.maxNoteDuration) {
                 this.chartCtx.fillStyle = '#666666'; // Dark gray for silent
             } else if (this.isNoteFading) {
@@ -580,7 +584,6 @@ class WebcamTheremin {
             } else {
                 this.chartCtx.fillStyle = '#FF4444'; // Red for normal
             }
-            
             this.chartCtx.beginPath();
             this.chartCtx.arc(x, y, 4, 0, 2 * Math.PI);
             this.chartCtx.fill();
