@@ -1,0 +1,58 @@
+<!doctype html>
+
+<meta
+  name="viewport"
+  content="width=device-width, height=device-height, initial-scale=1"
+/>
+
+<html lang="en">
+  <head>
+    <title>tunerFish</title>
+    <link rel="stylesheet" href="res/styles.css" />
+    <link rel="stylesheet" href="../../res/main.css" />
+    <link rel="icon" href="../../../res/jim.png" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-REWLQQ5D58");
+    </script>
+  </head>
+
+  <body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+      <div class="blogtitle">
+        <i>tunerFish</i>
+      </div>
+      <br />
+
+      <div id="tunerInterface" class="tuner-interface">
+        <div class="dial-container">
+          <canvas id="dialCanvas"></canvas>
+        </div>
+
+        <div class="controls-row">
+          <button id="startButton">start</button>
+          <label for="referenceSelector">A4 reference</label>
+          <select id="referenceSelector">
+            <option value="432">432 Hz</option>
+            <option value="440" selected>440 Hz</option>
+            <option value="442">442 Hz</option>
+            <option value="444">444 Hz</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <script src="res/tuner.js"></script>
+    <script src="../../footer.js"></script>
+  </body>
+</html>
