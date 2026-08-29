@@ -53,6 +53,11 @@ class CorkscrewSimulator {
       this.drawCorkscrew(this.wingAngle);
     });
 
+    // Nothing else touches the preview canvas until the camera/pose model
+    // finish loading and loop() takes over, so draw the loading text once
+    // up front rather than leaving the canvas blank during that wait.
+    this.drawPreview(null);
+
     this.start();
   }
 
@@ -202,6 +207,12 @@ class CorkscrewSimulator {
       ctx.translate(w, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(this.video, 0, 0, w, h);
+    } else {
+      ctx.fillStyle = "white";
+      ctx.font = "16px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("Loading...", w / 2, h / 2);
     }
     ctx.restore();
 
