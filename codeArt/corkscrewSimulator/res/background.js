@@ -12,7 +12,7 @@ const BG_IMAGES = [
   "res/assets/bg/traitors.png",
 ];
 
-const CYCLE_INTERVAL_MS = 5000;
+const CYCLE_INTERVAL_MS = 3000;
 const FADE_MS = 2000;
 
 function shuffle(array) {
