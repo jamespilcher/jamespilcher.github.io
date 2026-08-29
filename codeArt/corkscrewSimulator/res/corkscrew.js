@@ -56,6 +56,7 @@ class CorkscrewSimulator {
     // Nothing else touches the preview canvas until the camera/pose model
     // finish loading and loop() takes over, so draw the loading text once
     // up front rather than leaving the canvas blank during that wait.
+    this.previewStatus = "Loading...";
     this.drawPreview(null);
 
     this.start();
@@ -84,15 +85,29 @@ class CorkscrewSimulator {
   }
 
   async start() {
+    this.previewStatus = "Requesting camera";
+    this.drawPreview(null);
+    try {
+      await this.setupCamera();
+    } catch (error) {
+      console.error("Error accessing webcam:", error);
+      this.previewStatus = "Camera access failed";
+      this.drawPreview(null);
+      return;
+    }
+
+    this.previewStatus = "Loading...";
+    this.drawPreview(null);
     try {
       await this.setupPoseLandmarker();
-      await this.setupCamera();
-      this.isRunning = true;
-      this.loop();
     } catch (error) {
-      console.error("Error starting corkscrew simulator:", error);
-      alert("Could not access webcam or load pose tracking. Please check permissions.");
+      console.error("Error loading pose tracking:", error);
+      alert("Could not load pose tracking.");
+      return;
     }
+
+    this.isRunning = true;
+    this.loop();
   }
 
   async setupPoseLandmarker() {
@@ -203,7 +218,7 @@ class CorkscrewSimulator {
 
     ctx.save();
     ctx.clearRect(0, 0, w, h);
-    if (this.video.videoWidth) {
+    if (this.isRunning && this.video.videoWidth) {
       ctx.translate(w, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(this.video, 0, 0, w, h);
@@ -212,7 +227,7 @@ class CorkscrewSimulator {
       ctx.font = "16px sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      ctx.fillText("Loading...", w / 2, h / 2);
+      ctx.fillText(this.previewStatus, w / 2, h / 2);
     }
     ctx.restore();
 
