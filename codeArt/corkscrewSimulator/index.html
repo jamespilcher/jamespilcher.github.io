@@ -1,0 +1,55 @@
+<!doctype html>
+
+<meta
+  name="viewport"
+  content="width=device-width, height=device-height, initial-scale=1"
+/>
+
+<html lang="en">
+  <head>
+    <title>corkscrewSim</title>
+    <link rel="stylesheet" href="res/styles.css" />
+    <link rel="stylesheet" href="../../res/main.css" />
+    <link rel="icon" href="../../../res/jim.png" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-REWLQQ5D58"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-REWLQQ5D58");
+    </script>
+  </head>
+
+  <body>
+    <script src="../../navbar.js"></script>
+    <div class="container">
+      <div class="blogtitle">
+        <i>corkscrewSim</i>
+      </div>
+      <br />
+
+      <div id="corkscrewInterface" class="corkscrew-interface">
+        <div class="corkscrew-canvas-wrap">
+          <div id="bgLayerA" class="bg-layer"></div>
+          <div id="bgLayerB" class="bg-layer"></div>
+          <canvas id="corkscrewCanvas" width="320" height="400"></canvas>
+        </div>
+
+        <div class="webcam-preview-box">
+          <video id="videoElement" playsinline style="display: none"></video>
+          <canvas id="webcamPreview" width="200" height="150"></canvas>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="res/corkscrew.js"></script>
+    <script src="res/background.js"></script>
+    <script src="../../footer.js"></script>
+  </body>
+</html>
