@@ -45,12 +45,12 @@ class BackgroundCycler {
       });
     });
 
-    // Warm the cache for the next image a cycle ahead of when it's actually
-    // needed. Without this, assigning background-image at the moment of the
-    // swap starts the fetch cold - on a slow connection the next cycle can
-    // reassign that layer's background-image before the previous one
-    // finished downloading, cancelling the in-flight request.
-    this.preload(this.order[1]);
+    // Warm the cache for every image up front. Without this, assigning
+    // background-image at the moment of the swap starts the fetch cold - on
+    // a slow connection the next cycle can reassign that layer's
+    // background-image before the previous one finished downloading,
+    // cancelling the in-flight request.
+    images.forEach((src) => this.preload(src));
   }
 
   preload(src) {
@@ -79,9 +79,6 @@ class BackgroundCycler {
     this.activeLayer.classList.remove("bg-layer-visible");
 
     [this.activeLayer, this.inactiveLayer] = [this.inactiveLayer, this.activeLayer];
-
-    const upcomingSrc = this.order[(this.index + 1) % this.order.length];
-    this.preload(upcomingSrc);
   }
 }
 
