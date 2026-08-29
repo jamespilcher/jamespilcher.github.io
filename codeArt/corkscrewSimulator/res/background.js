@@ -28,6 +28,7 @@ class BackgroundCycler {
   constructor(images) {
     this.order = shuffle(images);
     this.index = 0;
+    this.preloaded = new Map(); // src -> Image, so each file is only fetched once
 
     this.layerA = document.getElementById("bgLayerA");
     this.layerB = document.getElementById("bgLayerB");
@@ -43,6 +44,20 @@ class BackgroundCycler {
         layer.style.transitionDuration = `${FADE_MS}ms`;
       });
     });
+
+    // Warm the cache for the next image a cycle ahead of when it's actually
+    // needed. Without this, assigning background-image at the moment of the
+    // swap starts the fetch cold - on a slow connection the next cycle can
+    // reassign that layer's background-image before the previous one
+    // finished downloading, cancelling the in-flight request.
+    this.preload(this.order[1]);
+  }
+
+  preload(src) {
+    if (this.preloaded.has(src)) return;
+    const img = new Image();
+    img.src = src;
+    this.preloaded.set(src, img);
   }
 
   start() {
@@ -64,6 +79,9 @@ class BackgroundCycler {
     this.activeLayer.classList.remove("bg-layer-visible");
 
     [this.activeLayer, this.inactiveLayer] = [this.inactiveLayer, this.activeLayer];
+
+    const upcomingSrc = this.order[(this.index + 1) % this.order.length];
+    this.preload(upcomingSrc);
   }
 }
 
