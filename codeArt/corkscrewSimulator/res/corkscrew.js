@@ -19,7 +19,7 @@ const SMOOTHING = 0.15; // exponential smoothing factor per frame
 const ARM_MOUNT_TILT = (30 * Math.PI) / 180; // corrects the arm sprites' mounted angle at the body hinges
 const ARM_SCALE = 1.2;
 const MISSING_LANDMARKS_HOLD_FRAMES = 10; // ride out brief tracking dropouts before decaying to rest
-const FRAME_EDGE_MARGIN = 0.04; // landmarks within this of the video edge are treated as cut off
+const FRAME_EDGE_MARGIN = 0.05; // landmarks past the video edge by more than this are treated as cut off
 
 // Sprite rig, all in the 500x500 coordinate space the assets were authored in.
 const SPRITE_SIZE = 500;
@@ -222,10 +222,10 @@ class CorkscrewSimulator {
       const p = landmarks[idx];
       if (!p) return false;
       return (
-        p.x < FRAME_EDGE_MARGIN ||
-        p.x > 1 - FRAME_EDGE_MARGIN ||
-        p.y < FRAME_EDGE_MARGIN ||
-        p.y > 1 - FRAME_EDGE_MARGIN
+        p.x < -FRAME_EDGE_MARGIN ||
+        p.x > 1 + FRAME_EDGE_MARGIN ||
+        p.y < -FRAME_EDGE_MARGIN ||
+        p.y > 1 + FRAME_EDGE_MARGIN
       );
     };
     return [LEFT_ELBOW, LEFT_WRIST, RIGHT_ELBOW, RIGHT_WRIST].some(nearEdge);
