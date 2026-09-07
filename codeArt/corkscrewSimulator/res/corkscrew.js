@@ -19,6 +19,7 @@ const SMOOTHING = 0.15; // exponential smoothing factor per frame
 const ARM_MOUNT_TILT = (30 * Math.PI) / 180; // corrects the arm sprites' mounted angle at the body hinges
 const ARM_SCALE = 1.2;
 const MISSING_LANDMARKS_HOLD_FRAMES = 10; // ride out brief tracking dropouts before decaying to rest
+const FRAME_EDGE_MARGIN = 0.04; // landmarks within this of the video edge are treated as cut off
 
 // Sprite rig, all in the 500x500 coordinate space the assets were authored in.
 const SPRITE_SIZE = 500;
@@ -45,6 +46,7 @@ class CorkscrewSimulator {
 
     this.wingAngle = REST_ANGLE; // current smoothed drive value, in [0,1]
     this.missingLandmarkFrames = 0;
+    this.armsOutOfFrame = false;
 
     this.sprites = {};
     this.spritesLoaded = false;
@@ -165,6 +167,7 @@ class CorkscrewSimulator {
       }
 
       this.updateWingAngle(this.lastLandmarks);
+      this.armsOutOfFrame = this.checkArmsOutOfFrame(this.lastLandmarks);
     }
 
     this.drawPreview(this.lastLandmarks);
@@ -209,6 +212,23 @@ class CorkscrewSimulator {
       target = Math.min(leftFlap, rightFlap);
     }
     this.wingAngle += (target - this.wingAngle) * SMOOTHING;
+  }
+
+  // True if a wrist or elbow lands close enough to the video edge that the
+  // camera is likely clipping the arm - a signal to step back / reframe.
+  checkArmsOutOfFrame(landmarks) {
+    if (!landmarks) return false;
+    const nearEdge = (idx) => {
+      const p = landmarks[idx];
+      if (!p) return false;
+      return (
+        p.x < FRAME_EDGE_MARGIN ||
+        p.x > 1 - FRAME_EDGE_MARGIN ||
+        p.y < FRAME_EDGE_MARGIN ||
+        p.y > 1 - FRAME_EDGE_MARGIN
+      );
+    };
+    return [LEFT_ELBOW, LEFT_WRIST, RIGHT_ELBOW, RIGHT_WRIST].some(nearEdge);
   }
 
   drawPreview(landmarks) {
@@ -266,6 +286,20 @@ class CorkscrewSimulator {
         ctx.fill();
       }
     );
+
+    if (this.armsOutOfFrame) {
+      ctx.save();
+      ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+      ctx.fillRect(0, 0, w, 20);
+      ctx.fillRect(0, h - 20, w, 20);
+      ctx.fillStyle = "#ffcc00";
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("step back", w / 2, 10);
+      ctx.fillText("can't see full arms", w / 2, h - 10);
+      ctx.restore();
+    }
   }
 
   drawCorkscrew(wingAngleAmount) {
