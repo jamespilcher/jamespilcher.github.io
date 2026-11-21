@@ -31,25 +31,25 @@ div.block {
     display: inline-block;
 }
 
-#lightBlue {
+.lightBlue {
     background-color: hsl(195, 53%, 30%);
 }
-#blue {
+.blue {
     background-color: hsl(240, 26%, 23%);
 }
-#orange {
+.orange {
     background-color: hsl(39, 64%, 33%);
 }
-#yellow {
+.yellow {
     background-color: hsl(60, 20%, 50%);
 }
-#green {
+.green {
     background-color: hsl(120, 41%, 23%);
 }
-#purple {
+.purple {
     background-color: hsl(300, 20%, 20%);
 }
-#red {
+.red {
     background-color: hsl(0, 100%, 20%);
 }
 

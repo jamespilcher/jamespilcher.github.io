@@ -26,33 +26,22 @@ function start() {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     ]
 
+    var colours = ['', 'lightBlue', 'orange', 'blue', 'yellow', 'green', 'purple', 'red'];
+    var board = document.getElementById('tetris-bg');
+    board.innerHTML = ("<div class='block'></div>".repeat(10) + "<br>").repeat(world.length);
+    var cells = board.querySelectorAll('.block');
+    var drawnColours = [];
+
     function drawWorld() {
-        document.getElementById('tetris-bg').innerHTML = "";
         for (var y = 0; y < world.length; y++) {
             for (var x = 0; x < 10; x++) {
-                if (world[y][x] == 0) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block'></div>";
-                } else if (world[y][x] == 1 || world[y][x] == -1 || world[y][x] === 11) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='lightBlue'></div>";
-                } else if (world[y][x] === 2 || world[y][x] == -2 || world[y][x] === 12) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='orange'></div>";
-                } else if (world[y][x] === 3 || world[y][x] == -3 || world[y][x] === 13) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='blue'></div>";
-                } else if (world[y][x] === 4 || world[y][x] == -4 || world[y][x] === 14) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='yellow'></div>";
-                } else if (world[y][x] === 5 || world[y][x] == -5 || world[y][x] === 15) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='green'></div>";
-                } else if (world[y][x] === 6 || world[y][x] == -6 || world[y][x] === 16) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='purple'></div>";
-                } else if (world[y][x] === 7 || world[y][x] == -7 || world[y][x] === 17) {
-                    document.getElementById('tetris-bg').innerHTML += "<div class='block' id='red'></div>";
+                var i = y * 10 + x;
+                var colour = colours[Math.abs(world[y][x]) % 10];
+                if (drawnColours[i] !== colour) {
+                    cells[i].className = 'block ' + colour;
+                    drawnColours[i] = colour;
                 }
             }
-            document.getElementById('tetris-bg').innerHTML += "<br>";
-
-        }
-        if (!endLoop) {
-            setTimeout(drawWorld, 50);
         }
     }
 
@@ -63,7 +52,6 @@ function start() {
         currentPiece = gamePieces[randomIndex];
         currentIndex = 0;
         var piece = currentPiece[0];
-        console.log(piece);
         for (var k = 0; k < 4; k++) {
             for (var i = 0; i < 4; i++) {
                 if ((world[k][3 + i] != 0) && (piece[k][i] != 0)) {
@@ -130,7 +118,6 @@ function start() {
         } else {
             nextIndex = currentIndex + 1;
         }
-        console.log(nextIndex);
         var nextShape = currentPiece[nextIndex];
         for (var y = 0; y < world.length; y++) {
             for (var x = 0; x < 10; x++) {
@@ -153,7 +140,6 @@ function start() {
 
             }
         }
-        console.log(canRotate)
         if (canRotate) {
             for (var y = 0; y < world.length; y++) {
                 for (var x = 0; x < 10; x++) {
@@ -235,6 +221,7 @@ function start() {
         } else if (e.keyCode === 38) {
             rotatePiece();
         }
+        drawWorld();
     }
 
     function movePiecesDown() {
@@ -264,6 +251,7 @@ function start() {
     var endLoop = false;
     function gameLoop() {
         movePiecesDown();
+        drawWorld();
         if (!endLoop) {
             switch (score) {
                 case 5:
