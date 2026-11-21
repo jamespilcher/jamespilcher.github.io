@@ -1,4 +1,13 @@
+function fitBoardToScreen() {
+    var board = document.getElementById('tetris-bg');
+    var roomForScore = 60;
+    var cell = Math.floor((window.innerHeight - board.offsetTop - roomForScore) / 18);
+    board.style.setProperty('--cell', Math.max(15, Math.min(30, cell)) + 'px');
+}
+fitBoardToScreen();
+
 function start() {
+    fitBoardToScreen();
     document.getElementById('score').style.display = 'unset';
     document.getElementById('gameOver').innerHTML = "";
 
@@ -222,6 +231,42 @@ function start() {
             rotatePiece();
         }
         drawWorld();
+    }
+
+    var touchX;
+    var touchY;
+    var dragged;
+    board.ontouchstart = function (e) {
+        touchX = e.touches[0].clientX;
+        touchY = e.touches[0].clientY;
+        dragged = false;
+    }
+    board.ontouchmove = function (e) {
+        var cell = cells[0].offsetWidth;
+        var x = e.touches[0].clientX;
+        var y = e.touches[0].clientY;
+        while (x - touchX >= cell) {
+            movePiecesRight();
+            touchX += cell;
+            dragged = true;
+        }
+        while (touchX - x >= cell) {
+            movePiecesLeft();
+            touchX -= cell;
+            dragged = true;
+        }
+        while (y - touchY >= cell) {
+            movePiecesDown();
+            touchY += cell;
+            dragged = true;
+        }
+        drawWorld();
+    }
+    board.ontouchend = function () {
+        if (!dragged && !endLoop) {
+            rotatePiece();
+            drawWorld();
+        }
     }
 
     function movePiecesDown() {

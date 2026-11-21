@@ -2,6 +2,7 @@
     --cell: 30px;
     --grid-line: rgb(226, 211, 190);
     position: relative;
+    touch-action: none;
     line-height: 0px;
     text-align: left;
     margin: auto auto;
