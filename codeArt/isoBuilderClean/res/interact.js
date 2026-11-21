@@ -56,7 +56,9 @@ function UserPlaceBlock(){
 function getBlock(){
     gridPos = layerZeroCoordinate(lastMousePosition.x, lastMousePosition.y)
     blockCoords = selectedBlock(gridPos.x_grid, gridPos.y_grid, gridPos.left)
-    currentBlock = world[blockCoords.layer,blockCoords.y,blockCoords.x]
+    if (blockCoords.layer > 0){
+        currentBlock = world[blockCoords.layer][blockCoords.y][blockCoords.x]
+    }
     return false;
 
 }
