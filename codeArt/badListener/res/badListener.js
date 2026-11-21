@@ -263,15 +263,17 @@ function generateSentence() {
   return output;
 }
 
+let botIsTyping = false;
+
 function userInputBox() {
   conversation.innerHTML += "<div class='message left' id='inputBox'><b>[YOU]</b><br>" + 
                             "<input type='text' id='messageInput' placeholder='_____________________'></div>";
   
   userInput = document.getElementById('messageInput');
   userInput.addEventListener('keydown', function(event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode == 13 && !botIsTyping) {
       appendUserReply(userInput.value.trim());
-      inputBox.remove();
+      userInput.value = "";
       appendBotReply()
     }
   });
@@ -280,11 +282,14 @@ function userInputBox() {
 }
 
 function appendUserReply(userInput) {
-  conversation.innerHTML += "<div class='message left'>" + userInput + "</div>";
+  inputBox.insertAdjacentHTML('beforebegin', "<div class='message left'>" + userInput + "</div>");
 }
 
 function appendBotReply() {
-  conversation.innerHTML += "<div class='message right' id='botReplyMessage'>.</div>";
+  botIsTyping = true;
+  // The input box is made invisible, not removed, so it keeps focus and a phone keyboard stays open.
+  inputBox.style.opacity = 0;
+  inputBox.insertAdjacentHTML('beforebegin', "<div class='message right' id='botReplyMessage'>.</div>");
   botReply = generateSentence()
   i = 0
   output = ""
@@ -293,8 +298,11 @@ function appendBotReply() {
   var timer = setInterval(function () {
     if (i == botReply.length){
       clearInterval(timer);
-      userInputBox();
       botReplyMessage.removeAttribute('id');
+      botIsTyping = false;
+      inputBox.style.opacity = 1;
+      userInput.focus();
+      window.scrollTo(0, document.body.scrollHeight);
       return
     }
     output += botReply.charAt(i);
