@@ -219,7 +219,9 @@ function start() {
 
     }
     document.onkeydown = function (e) {
-        e.preventDefault();
+        if (endLoop || e.ctrlKey || e.metaKey || e.altKey) {
+            return;
+        }
         if (e.keyCode === 37 || e.keyCode === 65) {
             movePiecesLeft();
         }
@@ -229,7 +231,10 @@ function start() {
             movePiecesDown();
         } else if (e.keyCode === 38 || e.keyCode === 87) {
             rotatePiece();
+        } else {
+            return;
         }
+        e.preventDefault();
         drawWorld();
     }
 
