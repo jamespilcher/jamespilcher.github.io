@@ -1,40 +1,56 @@
 #tetris-bg{
-    background-repeat: no-repeat;
+    --cell: 30px;
+    --grid-line: rgb(226, 211, 190);
+    position: relative;
+    touch-action: none;
     line-height: 0px;
     text-align: left;
     margin: auto auto;
-    width : 300px;
-    height : 540px;
-    z-index: 100;
+    width: calc(10 * var(--cell));
+    height: calc(18 * var(--cell));
+    background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: var(--cell) var(--cell);
+    border-right: 1px solid var(--grid-line);
     border-bottom: 2px solid rgb(177, 18, 18);
 }
 
+/* Pieces spawn in the top 3 rows. The game ends when a new piece cannot fit there. */
+#tetris-bg::before {
+    content: "";
+    position: absolute;
+    top: calc(3 * var(--cell));
+    left: 0;
+    width: 100%;
+    border-top: 2px solid rgb(177, 18, 18);
+}
 
 div.block {
-    width: 30px;
-    height: 30px;
+    width: var(--cell);
+    height: var(--cell);
     display: inline-block;
 }
 
-#lightBlue {
+.lightBlue {
     background-color: hsl(195, 53%, 30%);
 }
-#blue {
+.blue {
     background-color: hsl(240, 26%, 23%);
 }
-#orange {
+.orange {
     background-color: hsl(39, 64%, 33%);
 }
-#yellow {
+.yellow {
     background-color: hsl(60, 20%, 50%);
 }
-#green {
+.green {
     background-color: hsl(120, 41%, 23%);
 }
-#purple {
+.purple {
     background-color: hsl(300, 20%, 20%);
 }
-#red {
+.red {
     background-color: hsl(0, 100%, 20%);
 }
 
