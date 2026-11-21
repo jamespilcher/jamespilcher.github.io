@@ -211,14 +211,14 @@ function start() {
     }
     document.onkeydown = function (e) {
         e.preventDefault();
-        if (e.keyCode === 37) {
+        if (e.keyCode === 37 || e.keyCode === 65) {
             movePiecesLeft();
         }
-        else if (e.keyCode === 39) {
+        else if (e.keyCode === 39 || e.keyCode === 68) {
             movePiecesRight();
-        } else if (e.keyCode === 40) {
+        } else if (e.keyCode === 40 || e.keyCode === 83) {
             movePiecesDown();
-        } else if (e.keyCode === 38) {
+        } else if (e.keyCode === 38 || e.keyCode === 87) {
             rotatePiece();
         }
         drawWorld();
