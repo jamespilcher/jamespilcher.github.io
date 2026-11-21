@@ -97,7 +97,7 @@ function start() {
             }
             if (ace) {
                 world.splice(y, 1);
-                world.splice(0, 0, [0, 0, 0, 0, 0, 0, 0, 0])
+                world.splice(0, 0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
                 y++;
             }
         }
