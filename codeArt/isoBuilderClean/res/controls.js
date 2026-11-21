@@ -1,50 +1,36 @@
-leftMouseDown = false
-rightMouseDown = false
+const holdDelay = 400
+let repeatTimer
 toolCanvas.addEventListener('click', UserSelectBlock);
+
+function stopRepeating(){
+    clearTimeout(repeatTimer)
+}
+
+function repeatWhileHeld(action, interval){
+    function repeat(){
+        action()
+        repeatTimer = setTimeout(repeat, interval)
+    }
+    stopRepeating()
+    action()
+    repeatTimer = setTimeout(repeat, holdDelay)
+}
 
 canvas.addEventListener('mousedown', function(evt){
     evt.preventDefault()
-    evt.stopPropagation()
-    function placingBlock(){
-        UserPlaceBlock()
-        leftMouseDown = setTimeout(placingBlock, 100);
-    }
-    function deletingBlock(){
-        UserDeleteBlock()
-        rightMouseDown = setTimeout(deletingBlock, 200);
-    }
-
     if (evt.button == 0){
-        placingBlock()
+        repeatWhileHeld(UserPlaceBlock, 100)
     }
-    console.log("daf")
-
     if (evt.button == 1){
-        console.log("middle")
         getBlock()
     }
     if (evt.button == 2){
-        deletingBlock()
+        repeatWhileHeld(UserDeleteBlock, 200)
     }
-    return false
+});
 
-    });
-
-canvas.addEventListener('mouseup', function(evt){
-    evt.preventDefault()
-    evt.stopPropagation()
-
-    if (leftMouseDown) {
-        clearTimeout(leftMouseDown);
-        leftMouseDown = false;
-    }
-    if (rightMouseDown) {
-        clearTimeout(rightMouseDown);
-        rightMouseDown = false;
-    }
-    return false
-
-  });
+window.addEventListener('mouseup', stopRepeating)
+window.addEventListener('blur', stopRepeating)
 
 canvas.addEventListener('contextmenu', function(evt){
     evt.preventDefault()
