@@ -313,3 +313,4 @@ function appendBotReply() {
   window.scrollTo(0, document.body.scrollHeight);
 }
 userInputBox();
+userInput.focus();
