@@ -1,0 +1,18 @@
+#feed {
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    background-color: black;
+    touch-action: manipulation;
+}
+
+#feed:fullscreen {
+    max-width: none;
+    object-fit: contain;
+}
+
+.feedhint {
+    text-align: center;
+    color: #828282;
+}
